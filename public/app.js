@@ -12,15 +12,19 @@ function logIt(message, error) {
     logs.appendChild(tmp);
 }
 
-// var willCall = false;
-var firstIn = false
-// var connected = false;
 // Create an object to save various objects to without polluting the global namespace.
 var VideoChat = {
     connected: false,
+    firstInChat : false,
     localICECandidates: [],
+    remoteVideo: document.getElementById('remote-video'),
+    localVideo: document.getElementById('local-video'),
+    // videoButton: document.getElementById('get-video'),
+    // screenButton: document.getElementById('get-screen'),
+    // callButton: document.getElementById('call'),
 
-    // Initialise our connection to the WebSocket.
+
+// Initialise our connection to the WebSocket.
     socket: io(),
 
     // Call to getUserMedia (provided by adapter.js for cross browser compatibility)
@@ -51,18 +55,17 @@ var VideoChat = {
 
     // The onMediaStream function receives the media stream as an argument.
     onMediaStream: function (stream) {
-        VideoChat.localVideo = document.getElementById('local-video');
         VideoChat.localVideo.volume = 0; // Turn the volume down to 0 to avoid echoes.
         VideoChat.localStream = stream;
-        VideoChat.videoButton.setAttribute('disabled', 'disabled');
-        VideoChat.screenButton.setAttribute('disabled', 'disabled');
+        // VideoChat.videoButton.setAttribute('disabled', 'disabled');
+        // VideoChat.screenButton.setAttribute('disabled', 'disabled');
         // Add the stream as video's srcObject.
         VideoChat.localVideo.srcObject = stream;
         // Now we're ready to join the chat room.
         VideoChat.socket.emit('join', 'test');
         VideoChat.socket.on('offer', VideoChat.onOffer);
         VideoChat.socket.on('ready', VideoChat.readyToCall);
-        VideoChat.socket.on('firstin', () => firstIn = true);
+        VideoChat.socket.on('firstin', () => VideoChat.firstInChat = true);
     },
 
     // There's not much to do in this demo if there is no media stream. So let's just stop.
@@ -72,8 +75,8 @@ var VideoChat = {
 
     // When we are ready to call, enable the Call button.
     readyToCall: function (event) {
-        VideoChat.callButton.removeAttribute('disabled');
-        if (firstIn) {
+        // VideoChat.callButton.removeAttribute('disabled');
+        if (VideoChat.firstInChat) {
             // alert("firstin is calling")
             VideoChat.startCall()
         }
@@ -85,7 +88,7 @@ var VideoChat = {
         logIt('>>> Sending token request...');
         VideoChat.socket.on('token', VideoChat.onToken(VideoChat.createOffer));
         VideoChat.socket.emit('token');
-        VideoChat.callButton.disabled = true
+        // VideoChat.callButton.disabled = true
     },
 
     // When we receive the ephemeral token back from the server.
@@ -165,12 +168,11 @@ var VideoChat = {
             VideoChat.peerConnection.setRemoteDescription(rtcOffer);
             VideoChat.peerConnection.createAnswer(
                 function (answer) {
-                    console.log(answer);
                     VideoChat.peerConnection.setLocalDescription(answer);
                     VideoChat.socket.emit('answer', JSON.stringify(answer));
                 },
                 function (err) {
-                    // Handle a failed answer creation.
+                    logIt("Failed answer creation.");
                     logIt(err, true);
                 }
             );
@@ -193,12 +195,11 @@ var VideoChat = {
         VideoChat.peerConnection.setRemoteDescription(rtcAnswer);
         VideoChat.connected = true;
         VideoChat.localICECandidates.forEach(candidate => {
-            // The caller now knows that the callee is ready to accept new
-            // ICE candidates, so sending the buffer over
+            // The caller now knows that the callee is ready to accept new ICE candidates, so sending the buffer over
             logIt(`>>> Sending local ICE candidate (${candidate.address})`);
             VideoChat.socket.emit('candidate', JSON.stringify(candidate));
         });
-        // Resest the buffer of local ICE candidates. This is not really needed
+        // Reset the buffer of local ICE candidates. This is not really needed
         // in this specific client, but it's good practice
         VideoChat.localICECandidates = [];
     },
@@ -207,22 +208,12 @@ var VideoChat = {
     // browser, add it to the other video element on the page.
     onAddStream: function (event) {
         logIt('<<< Received new stream from remote. Adding it...');
-        VideoChat.remoteVideo = document.getElementById('remote-video');
         VideoChat.remoteVideo.srcObject = event.stream;
-        // VideoChat.remoteVideo.volume = 1;
     }
 };
-
-// Get the video button and add a click listener to start the getUserMedia
-// process
-VideoChat.videoButton = document.getElementById('get-video');
-VideoChat.videoButton.addEventListener('click', VideoChat.requestMediaStream, false);
-
-VideoChat.screenButton = document.getElementById('get-screen');
-VideoChat.screenButton.addEventListener('click', VideoChat.requestScreenStream, false);
-
-VideoChat.callButton = document.getElementById('call');
-VideoChat.callButton.addEventListener('click', VideoChat.startCall, false);
+// VideoChat.videoButton.addEventListener('click', VideoChat.requestMediaStream, false);
+// VideoChat.screenButton.addEventListener('click', VideoChat.requestScreenStream, false);
+// VideoChat.callButton.addEventListener('click', VideoChat.startCall, false);
 
 // auto get media
 // VideoChat.requestScreenStream();
