@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>Video Chat</title>
+    <style>
+        body {
+            background: #ececec;
+            display: flex;
+            height: 100vh;
+            margin: 0;
+            align-items: center;
+            padding: 0 50px;
+        }
+        video {
+            background: white;
+            margin: 0 5%;
+            box-sizing: border-box;
+            border-radius: 10px;
+            padding: 0;
+            box-shadow:rgba(118, 143, 255, 0.4) 0px 16px 24px 0px;
+
+        }
+        #local-video{
+            width:20%;
+            height: auto
+        }
+        #remote-video{
+            width:70%;
+            height: auto
+        }
+        div#logs p {
+            margin: 0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 9px;
+        }
+
+        div#logs p.error {
+            color: red;
+        }
+    </style>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+<div>
+    <button id="get-video">Share Webcam</button>
+    <button id="get-screen">Share Screen</button>
+    <button id="call" disabled="disabled">Call</button>
+    <button id="will-call">Will Call</button>
+</div>
+
+
+<video id="remote-video" height="500" autoplay></video>
+<video id="local-video" height="150" autoplay muted></video>
+
+
+<p>Log messages:</p>
+<div id="logs">
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>
