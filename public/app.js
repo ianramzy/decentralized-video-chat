@@ -2,8 +2,8 @@ if (!location.hash) {
     // Generate random room name if needed
     var adjectives = ["small", "big", "large", "smelly", "new", "happy", "shiny", "old", "clean", "nice", "bad", "cool", "hot", "cold", "warm", "hungry", "slow", "fast"]
     var nouns = ["dog", "bat", "wrench", "apple", "pear", "ghost", "cat", "wolf", "squid", "goat", "snail", "hat", "sock", "plum", "bear", "snake", "turtle", "horse","spoon","fork","spider","tree","chair","table"]
-    var adjective = adjectives[Math.floor(Math.random() * adjectives.length)]
-    var noun = nouns[Math.floor(Math.random() * nouns.length)]
+    var adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
+    var noun = nouns[Math.floor(Math.random() * nouns.length)];
     location.hash = adjective + noun
 }
 const roomHash = location.hash.substring(1);
@@ -104,7 +104,7 @@ var VideoChat = {
         console.log("startCall");
         logIt('>>> Sending token request...');
         VideoChat.socket.on('token', VideoChat.onToken(VideoChat.createOffer));
-        VideoChat.socket.emit('token');
+        VideoChat.socket.emit('token', roomHash);
         // VideoChat.callButton.disabled = true
     },
 
@@ -137,7 +137,7 @@ var VideoChat = {
             logIt(`<<< Received local ICE candidate from STUN/TURN server (${event.candidate.address})`);
             if (VideoChat.connected) {
                 logIt(`>>> Sending local ICE candidate (${event.candidate.address})`);
-                VideoChat.socket.emit('candidate', JSON.stringify(event.candidate));
+                VideoChat.socket.emit('candidate', JSON.stringify(event.candidate), roomHash);
             } else {
                 // If we are not 'connected' to the other peer, we are buffering the local ICE candidates.
                 // This most likely is happening on the "caller" side.
@@ -167,7 +167,7 @@ var VideoChat = {
                 // and send it over the socket connection to initiate the peerConnection
                 // on the other side.
                 VideoChat.peerConnection.setLocalDescription(offer);
-                VideoChat.socket.emit('offer', JSON.stringify(offer));
+                VideoChat.socket.emit('offer', JSON.stringify(offer), roomHash);
             },
             function (err) {
                 logIt("failed offer creation");
@@ -191,7 +191,7 @@ var VideoChat = {
             VideoChat.peerConnection.createAnswer(
                 function (answer) {
                     VideoChat.peerConnection.setLocalDescription(answer);
-                    VideoChat.socket.emit('answer', JSON.stringify(answer));
+                    VideoChat.socket.emit('answer', JSON.stringify(answer), roomHash);
                 },
                 function (err) {
                     logIt("Failed answer creation.");
@@ -207,7 +207,7 @@ var VideoChat = {
         console.log("onOffer");
         logIt('<<< Received offer');
         VideoChat.socket.on('token', VideoChat.onToken(VideoChat.createAnswer(offer)));
-        VideoChat.socket.emit('token');
+        VideoChat.socket.emit('token', roomHash);
     },
 
     // When an answer is received, add it to the peerConnection as the remote
@@ -221,7 +221,7 @@ var VideoChat = {
         VideoChat.localICECandidates.forEach(candidate => {
             // The caller now knows that the callee is ready to accept new ICE candidates, so sending the buffer over
             logIt(`>>> Sending local ICE candidate (${candidate.address})`);
-            VideoChat.socket.emit('candidate', JSON.stringify(candidate));
+            VideoChat.socket.emit('candidate', JSON.stringify(candidate), roomHash);
         });
         // Reset the buffer of local ICE candidates. This is not really needed
         // in this specific client, but it's good practice

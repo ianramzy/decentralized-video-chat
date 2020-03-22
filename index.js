@@ -1,10 +1,6 @@
 require('dotenv').config();
 
-// Twilio init
-var twilio = require('twilio')(
-    process.env.TWILIO_ACCOUNT_SID,
-    process.env.TWILIO_AUTH_TOKEN
-);
+var twilio = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 var express = require('express');
 var app = express();
 var http = require('http').createServer(app);
@@ -12,10 +8,10 @@ var io = require('socket.io')(http);
 
 app.use(express.static('public'));
 
-function log(msg, room){
-    console.log(room + " - " + msg)
-
+function log(msg, room) {
+    console.log(room + ": " + msg)
 }
+
 // When a socket connects, set up the specific listeners we will use.
 io.on('connection', function (socket) {
     // When a client tries to join a room, only allow them if they are first or
@@ -26,10 +22,8 @@ io.on('connection', function (socket) {
         var numClients = typeof clients !== 'undefined' ? clients.length : 0;
         if (numClients === 0) {
             socket.join(room);
-            // socket.emit("roomtest", room).to(room)
         } else if (numClients === 1) {
             socket.join(room);
-            // socket.emit("roomtest", room).to(room)
             // When the client is second to join the room, both clients are ready.
             log('Broadcasting ready message', room);
             socket.broadcast.to(room).emit('willInitiateCall', room);
@@ -43,35 +37,34 @@ io.on('connection', function (socket) {
 
     // When receiving the token message, use the Twilio REST API to request an
     // token to get ephemeral credentials to use the TURN server.
-    socket.on('token', function () {
-        console.log('Received token request');
+    socket.on('token', function (room) {
+        log('Received token request', room);
         twilio.tokens.create(function (err, response) {
             if (err) {
-                console.log(err);
+                log(err, room);
             } else {
-                // Return the token to the browser.
-                console.log('Token generated. Returning it to the client');
-                socket.emit('token', response);
+                log('Token generated. Returning it to the browser client', room);
+                socket.emit('token', response).to(room);
             }
         });
     });
 
     // Relay candidate messages
-    socket.on('candidate', function (candidate) {
-        console.log('Received candidate. Broadcasting...');
-        socket.broadcast.emit('candidate', candidate);
+    socket.on('candidate', function (candidate, room) {
+        log('Received candidate. Broadcasting...', room);
+        socket.broadcast.to(room).emit('candidate', candidate);
     });
 
     // Relay offers
-    socket.on('offer', function (offer) {
-        console.log('Received offer. Broadcasting...');
-        socket.broadcast.emit('offer', offer);
+    socket.on('offer', function (offer, room) {
+        log('Received offer. Broadcasting...', room);
+        socket.broadcast.to(room).emit('offer', offer);
     });
 
     // Relay answers
-    socket.on('answer', function (answer) {
-        console.log('Received answer. Broadcasting...');
-        socket.broadcast.emit('answer', answer);
+    socket.on('answer', function (answer, room) {
+        log('Received answer. Broadcasting...', room);
+        socket.broadcast.to(room).emit('answer', answer);
     });
 });
 
