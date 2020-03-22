@@ -4,8 +4,7 @@ if (!location.hash) {
     var nouns = ["dog", "bat", "wrench", "apple", "pear", "ghost", "cat", "wolf", "squid", "goat", "snail", "hat", "sock", "plum", "bear", "snake", "turtle", "horse","spoon","fork","spider","tree","chair","table"]
     var adjective = adjectives[Math.floor(Math.random() * adjectives.length)]
     var noun = nouns[Math.floor(Math.random() * nouns.length)]
-    // var num = Math.floor(Math.ran1dom() * 100)
-    location.hash = adjective + "-" + noun
+    location.hash = adjective + noun
 }
 const roomHash = location.hash.substring(1);
 
@@ -72,7 +71,9 @@ var VideoChat = {
         VideoChat.localVideo.srcObject = stream;
         // Now we're ready to join the chat room.
         VideoChat.socket.emit('join', roomHash);
-        // VideoChat.socket.emit('join', 'test'); default
+        // VideoChat.socket.on('roomtest', (passedRoom) => alert("youre in room: " + passedRoom));
+        VideoChat.socket.on('temp', () => alert("temp called"));
+        VideoChat.socket.on('full', VideoChat.chatRoomFull);
         VideoChat.socket.on('offer', VideoChat.onOffer);
         VideoChat.socket.on('ready', VideoChat.readyToCall);
         VideoChat.socket.on('willInitiateCall', () => VideoChat.willInitiateCall = true);
@@ -81,6 +82,12 @@ var VideoChat = {
     // There's not much to do in this demo if there is no media stream. So let's just stop.
     noMediaStream: function () {
         logIt('No media stream for us.');
+    },
+
+    chatRoomFull: function(){
+        alert("Chat room is full. Check to make sure you don't have multiple open tabs");
+        // VideoChat.socket.disconnect()
+        // todo handle this better
     },
 
     // When we are ready to call, enable the Call button.
