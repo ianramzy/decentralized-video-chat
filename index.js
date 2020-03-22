@@ -5,8 +5,18 @@ var express = require('express');
 var app = express();
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
+var path = require('path');
+var public = path.join(__dirname, 'public');
 
 app.use(express.static('public'));
+
+app.get('/', function(req, res) {
+    res.sendFile(path.join(public, 'chat.html'));
+});
+
+app.get('/landing', function(req, res) {
+    res.sendFile(path.join(public, 'landing.html'));
+});
 
 function log(msg, room) {
     console.log(room + ": " + msg)
@@ -71,3 +81,4 @@ io.on('connection', function (socket) {
 http.listen(3000, function () {
     console.log("http://localhost:3000");
 });
+
