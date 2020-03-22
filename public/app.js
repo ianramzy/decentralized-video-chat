@@ -1,7 +1,10 @@
 if (!location.hash) {
     // Generate random room name if needed
-    var adjectives = ["small", "big", "large", "smelly", "new", "happy", "shiny", "old", "clean", "nice", "bad", "cool", "hot", "cold", "warm", "hungry", "slow", "fast"]
-    var nouns = ["dog", "bat", "wrench", "apple", "pear", "ghost", "cat", "wolf", "squid", "goat", "snail", "hat", "sock", "plum", "bear", "snake", "turtle", "horse","spoon","fork","spider","tree","chair","table"]
+    var adjectives = ["small", "big", "large", "smelly", "new", "happy", "shiny", "old", "clean", "nice", "bad", "cool",
+        "hot", "cold", "warm", "hungry", "slow", "fast", "red", "white", "black", "blue", "green"];
+    var nouns = ["dog", "bat", "wrench", "apple", "pear", "ghost", "cat", "wolf", "squid", "goat", "snail", "hat",
+        "sock", "plum", "bear", "snake", "turtle", "horse", "spoon", "fork", "spider", "tree", "chair", "table",
+        "couch", "towel"];
     var adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
     var noun = nouns[Math.floor(Math.random() * nouns.length)];
     location.hash = adjective + noun
@@ -23,7 +26,7 @@ function logIt(message, error) {
 // Create an object to save various objects to without polluting the global namespace.
 var VideoChat = {
     connected: false,
-    willInitiateCall : false,
+    willInitiateCall: false,
     localICECandidates: [],
     // Initialise our connection to the WebSocket.
     socket: io(),
@@ -84,7 +87,7 @@ var VideoChat = {
         logIt('No media stream for us.');
     },
 
-    chatRoomFull: function(){
+    chatRoomFull: function () {
         alert("Chat room is full. Check to make sure you don't have multiple open tabs");
         // VideoChat.socket.disconnect()
         // todo handle this better
