@@ -1,15 +1,26 @@
+if (!location.hash) {
+    // Generate random room name if needed
+    var adjectives = ["small", "big", "large", "smelly", "new", "happy", "shiny", "old", "clean", "nice", "bad", "cool", "hot", "cold", "warm", "hungry", "slow", "fast"]
+    var nouns = ["dog", "bat", "wrench", "apple", "pear", "ghost", "cat", "wolf", "squid", "goat", "snail", "hat", "sock", "plum", "bear", "snake", "turtle", "horse","spoon","fork","spider","tree","chair","table"]
+    var adjective = adjectives[Math.floor(Math.random() * adjectives.length)]
+    var noun = nouns[Math.floor(Math.random() * nouns.length)]
+    // var num = Math.floor(Math.ran1dom() * 100)
+    location.hash = adjective + "-" + noun
+}
+const roomHash = location.hash.substring(1);
+
 function logIt(message, error) {
     // Print on console
     console.log(message);
 
     // Add to logs on page
-    let logs = document.getElementById('logs');
-    let tmp = document.createElement('P');
-    tmp.innerText = message;
-    if (error) {
-        tmp.classList.add('error');
-    }
-    logs.appendChild(tmp);
+    // let logs = document.getElementById('logs');
+    // let tmp = document.createElement('P');
+    // tmp.innerText = message;
+    // if (error) {
+    //     tmp.classList.add('error');
+    // }
+    // logs.appendChild(tmp);
 }
 
 // Create an object to save various objects to without polluting the global namespace.
@@ -17,6 +28,8 @@ var VideoChat = {
     connected: false,
     firstInChat : false,
     localICECandidates: [],
+    // Initialise our connection to the WebSocket.
+    socket: io(),
     remoteVideo: document.getElementById('remote-video'),
     localVideo: document.getElementById('local-video'),
     // videoButton: document.getElementById('get-video'),
@@ -24,8 +37,7 @@ var VideoChat = {
     // callButton: document.getElementById('call'),
 
 
-// Initialise our connection to the WebSocket.
-    socket: io(),
+
 
     // Call to getUserMedia (provided by adapter.js for cross browser compatibility)
     // asking for access to both the video and audio streams. If the request is

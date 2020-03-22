@@ -16,13 +16,14 @@ io.on('connection', function(socket){
   // When a client tries to join a room, only allow them if they are first or
   // second in the room. Otherwise it is full.
   socket.on('join', function(room){
+
     console.log('A client joined')
     var clients = io.sockets.adapter.rooms[room];
     var numClients = typeof clients !== 'undefined' ? clients.length : 0;
-    if(numClients == 0){
+    if(numClients === 0){
       socket.join(room);
       socket.emit('firstin', room);
-    }else if(numClients == 1){
+    }else if(numClients === 1){
       socket.join(room);
       // When the client is second to join the room, both clients are ready.
       console.log('Broadcasting ready message')
@@ -37,13 +38,13 @@ io.on('connection', function(socket){
   // When receiving the token message, use the Twilio REST API to request an
   // token to get ephemeral credentials to use the TURN server.
   socket.on('token', function(){
-    console.log('Received token request')
+    console.log('Received token request');
     twilio.tokens.create(function(err, response){
       if(err){
         console.log(err);
       }else{
         // Return the token to the browser.
-        console.log('Token generated. Returning it to the client')
+        console.log('Token generated. Returning it to the client');
         socket.emit('token', response);
       }
     });
@@ -51,19 +52,19 @@ io.on('connection', function(socket){
 
   // Relay candidate messages
   socket.on('candidate', function(candidate){
-    console.log('Received candidate. Broadcasting...')
+    console.log('Received candidate. Broadcasting...');
     socket.broadcast.emit('candidate', candidate);
   });
 
   // Relay offers
   socket.on('offer', function(offer){
-    console.log('Received offer. Broadcasting...')
+    console.log('Received offer. Broadcasting...');
     socket.broadcast.emit('offer', offer);
   });
 
   // Relay answers
   socket.on('answer', function(answer){
-    console.log('Received answer. Broadcasting...')
+    console.log('Received answer. Broadcasting...');
     socket.broadcast.emit('answer', answer);
   });
 });
