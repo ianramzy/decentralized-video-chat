@@ -32,9 +32,6 @@ var VideoChat = {
     socket: io(),
     remoteVideo: document.getElementById('remote-video'),
     localVideo: document.getElementById('local-video'),
-    // videoButton: document.getElementById('get-video'),
-    // screenButton: document.getElementById('get-screen'),
-    // callButton: document.getElementById('call'),
 
     // Call to getUserMedia (provided by adapter.js for cross browser compatibility)
     // asking for access to both the video and audio streams. If the request is
@@ -66,15 +63,11 @@ var VideoChat = {
     // The onMediaStream function receives the media stream as an argument.
     onMediaStream: function (stream) {
         console.log("onMediaStream");
-        // VideoChat.localVideo.volume = 0; // Turn the volume down to 0 to avoid echoes.
         VideoChat.localStream = stream;
-        // VideoChat.videoButton.setAttribute('disabled', 'disabled');
-        // VideoChat.screenButton.setAttribute('disabled', 'disabled');
         // Add the stream as video's srcObject.
         VideoChat.localVideo.srcObject = stream;
         // Now we're ready to join the chat room.
         VideoChat.socket.emit('join', roomHash);
-        // VideoChat.socket.on('roomtest', (passedRoom) => alert("youre in room: " + passedRoom));
         VideoChat.socket.on('temp', () => alert("temp called"));
         VideoChat.socket.on('full', VideoChat.chatRoomFull);
         VideoChat.socket.on('offer', VideoChat.onOffer);
@@ -88,7 +81,7 @@ var VideoChat = {
     },
 
     chatRoomFull: function () {
-        alert("Chat room is full. Check to make sure you don't have multiple open tabs");
+        alert("Chat room is full. Check to make sure you don't have multiple open tabs, or try with a new room link");
         // VideoChat.socket.disconnect()
         // todo handle this better
     },
@@ -96,7 +89,6 @@ var VideoChat = {
     // When we are ready to call, enable the Call button.
     readyToCall: function (event) {
         console.log("readyToCall");
-        // VideoChat.callButton.removeAttribute('disabled');
         if (VideoChat.willInitiateCall) {
             VideoChat.startCall()
         }
@@ -108,7 +100,6 @@ var VideoChat = {
         logIt('>>> Sending token request...');
         VideoChat.socket.on('token', VideoChat.onToken(VideoChat.createOffer));
         VideoChat.socket.emit('token', roomHash);
-        // VideoChat.callButton.disabled = true
     },
 
     // When we receive the ephemeral token back from the server.
@@ -239,9 +230,6 @@ var VideoChat = {
         VideoChat.remoteVideo.srcObject = event.stream;
     }
 };
-// VideoChat.videoButton.addEventListener('click', VideoChat.requestMediaStream, false);
-// VideoChat.screenButton.addEventListener('click', VideoChat.requestScreenStream, false);
-// VideoChat.callButton.addEventListener('click', VideoChat.startCall, false);
 
 // auto get media
 // VideoChat.requestScreenStream();
