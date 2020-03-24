@@ -8,16 +8,22 @@
 </head>
 <body>
 
-<div class="spinner">
-    <div class="double-bounce1"></div>
-    <div class="double-bounce2"></div>
+
+<div class="videos">
+    <video id="remote-video" height="500" autoplay ondblclick={this.requestFullscreen()}></video>
+    <video id="local-video" height="150" autoplay muted></video>
 </div>
 
 
-<video id="remote-video" height="500" autoplay
-       style="background-image: url(preview.gif);"
-       ondblclick={this.requestFullscreen()}></video>
-<video id="local-video" height="150" autoplay muted></video>
+<div style="position: absolute; left: 50%; margin-left:-200px; bottom: 0px; z-index: 1">
+    <div class="buttons">
+        <div class="center">
+            <a href="http://example.com" class="round-button">Back</a>
+            <a href="http://example.com" class="round-button">Fullscreen</a>
+            <a href="http://example.com" class="round-button">Mute</a>
+        </div>
+    </div>
+</div>
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/chat.js"></script>

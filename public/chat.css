@@ -1,12 +1,20 @@
-body {
-    /*background: #ececec;*/
-    /*background: #16171B;*/
-    background: #16171B;
+@import url("https://fonts.googleapis.com/css?family=Fira+Sans:600|Heebo:400,500,700&display=swap");
+
+
+.videos {
     display: flex;
     height: 100vh;
     margin: 0;
+    padding: 0;
     align-items: center;
-    padding: 0 50px;
+    /*padding: 0 50px;*/
+}
+
+body {
+    background: #16171B;
+    margin: 0;
+    padding: 0;
+    /*background: #ececec;*/
 }
 
 video {
@@ -28,4 +36,33 @@ video {
 #remote-video {
     width: 70%;
     height: auto
+}
+
+
+.buttons {
+    width: 520px;
+    bottom: 0px;
+    position: absolute;
+    left: 50%;
+}
+
+
+.round-button {
+    display:block;
+    width:100px;
+    height:60px;
+    line-height:60px;
+    border-radius: 4px;
+    background: #292B32;
+    text-align:center;
+    text-decoration: none;
+    color: white;
+    transition: 0.2s;
+    margin: 20px;
+    font-family: "Heebo", sans-serif;
+    font-weight: 400;
+    float:left;
+}
+.round-button:hover {
+    background: #3d3f47;
 }
