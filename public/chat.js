@@ -235,3 +235,47 @@ var VideoChat = {
 // VideoChat.requestScreenStream();
 VideoChat.requestMediaStream();
 
+
+function openFullscreen() {
+    if (VideoChat.remoteVideo.requestFullscreen) {
+        VideoChat.remoteVideo.requestFullscreen();
+    } else if (VideoChat.remoteVideo.mozRequestFullScreen) { /* Firefox */
+        VideoChat.remoteVideo.mozRequestFullScreen();
+    } else if (VideoChat.remoteVideo.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+        VideoChat.remoteVideo.webkitRequestFullscreen();
+    } else if (VideoChat.remoteVideo.msRequestFullscreen) { /* IE/Edge */
+        VideoChat.remoteVideo.msRequestFullscreen();
+    }
+}
+
+
+function muteMicrophone() {
+    var muted = !VideoChat.localStream.getAudioTracks()[0].enabled;
+    VideoChat.localStream.getAudioTracks()[0].enabled = muted;
+    var mutedButton = document.getElementById("muteButton");
+    if (!muted) {
+        mutedButton.innerText = "Unmute"
+    } else {
+        mutedButton.innerText = "Mute"
+    }
+}
+
+
+var timedelay = 1;
+
+function delayCheck() {
+    if (timedelay === 5) {
+        $('#buttons').fadeOut();
+        timedelay = 1;
+    }
+    timedelay = timedelay + 1;
+}
+
+$(document).mousemove(function () {
+    $('#buttons').fadeIn();
+    timedelay = 1;
+    clearInterval(_delay);
+    _delay = setInterval(delayCheck, 500);
+});
+// page loads starts delay timer
+_delay = setInterval(delayCheck, 500);

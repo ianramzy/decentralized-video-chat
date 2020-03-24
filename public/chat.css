@@ -38,42 +38,47 @@ video {
     height: auto;
     background-image: url(loader.gif);
     background-size: 400px auto;
-    background-repeat:no-repeat;
+    background-repeat: no-repeat;
     background-position: center center;
 }
 
 
-.video-overlay{
+.video-overlay {
     z-index: 1;
 
 }
 
 
-
 .buttons {
-    width: 520px;
+    width: 700px;
+    margin-left: -350px;
     bottom: 0px;
     position: absolute;
     left: 50%;
 }
 
+.buttons a {
+    cursor: pointer;
+}
+
 
 .round-button {
-    display:block;
-    width:100px;
-    height:60px;
-    line-height:60px;
+    display: block;
+    width: 100px;
+    height: 60px;
+    line-height: 60px;
     border-radius: 4px;
     background: #292B32;
-    text-align:center;
+    text-align: center;
     text-decoration: none;
     color: white;
     transition: 0.2s;
     margin: 20px;
     font-family: "Heebo", sans-serif;
     font-weight: 400;
-    float:left;
+    float: left;
 }
+
 .round-button:hover {
     background: #3d3f47;
 }
