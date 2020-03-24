@@ -15,7 +15,7 @@ app.get('/', function (req, res) {
 });
 
 app.get('/landing', function (req, res) {
-    res.sendFile(path.join(public, 'landing.html'));
+    res.sendFile(path.join(public, 'landing/landing.html'));
 });
 
 function log(msg, room) {
