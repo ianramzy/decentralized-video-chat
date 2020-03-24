@@ -1,4 +1,4 @@
-if (!location.hash) {
+if (window.location.pathname === "/") {
     // Generate random room name if needed
     var adjectives = ["small", "big", "large", "smelly", "new", "happy", "shiny", "old", "clean", "nice", "bad", "cool",
         "hot", "cold", "warm", "hungry", "slow", "fast", "red", "white", "black", "blue", "green"];
@@ -7,9 +7,11 @@ if (!location.hash) {
         "couch", "towel"];
     var adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
     var noun = nouns[Math.floor(Math.random() * nouns.length)];
-    location.hash = adjective + noun
+    noun = noun.charAt(0).toUpperCase() + noun.substring(1);
+    adjective = adjective.charAt(0).toUpperCase() + adjective.substring(1);
+    window.location.href = window.location.href + adjective + noun;
 }
-const roomHash = location.hash.substring(1);
+const roomHash = window.location.pathname;
 
 function logIt(message, error) {
     // console.log(message);

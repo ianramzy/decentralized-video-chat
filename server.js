@@ -18,6 +18,11 @@ app.get('/landing', function (req, res) {
     res.sendFile(path.join(public, 'landing/landing.html'));
 });
 
+app.get('/*', function (req, res) {
+    res.sendFile(path.join(public, 'chat.html'));
+});
+
+
 function log(msg, room) {
     console.log(room + ": " + msg)
 }
