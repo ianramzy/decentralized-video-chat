@@ -35,8 +35,19 @@ video {
 
 #remote-video {
     width: 70%;
-    height: auto
+    height: auto;
+    background-image: url(loader.gif);
+    background-size: 400px auto;
+    background-repeat:no-repeat;
+    background-position: center center;
 }
+
+
+.video-overlay{
+    z-index: 1;
+
+}
+
 
 
 .buttons {

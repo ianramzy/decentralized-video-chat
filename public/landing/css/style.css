@@ -1141,8 +1141,8 @@ textarea.form-input {
 }
 
 .invert-color .form-checkbox input:checked, .invert-color .form-radio input:checked {
-    background-color: !important;
-    border-color: !important
+    /*background-color: !important;*/
+    /*border-color: !important*/
 }
 
 .form-group {
