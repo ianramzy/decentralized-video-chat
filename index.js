@@ -10,11 +10,11 @@ var public = path.join(__dirname, 'public');
 
 app.use(express.static('public'));
 
-app.get('/', function(req, res) {
+app.get('/', function (req, res) {
     res.sendFile(path.join(public, 'chat.html'));
 });
 
-app.get('/landing', function(req, res) {
+app.get('/landing', function (req, res) {
     res.sendFile(path.join(public, 'landing.html'));
 });
 
@@ -79,8 +79,8 @@ io.on('connection', function (socket) {
 });
 
 
-port = process.env.PORT || 3000
+var port = process.env.PORT || 3000;
 http.listen(port, function () {
-    console.log("http://localhost:"+port);
+    console.log("http://localhost:" + port);
 });
 
