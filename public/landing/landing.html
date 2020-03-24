@@ -7,6 +7,48 @@
     <title>Neon Chat</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="shortcut icon" href="images/logo.svg">
+    <style>
+        .pulse {
+            /*margin:100px;*/
+            /*display: block;*/
+            /*width: 22px;*/
+            /*height: 22px;*/
+            /*border-radius: 50%;*/
+            /*background: #cca92c;*/
+            /*cursor: pointer;*/
+            box-shadow: 0 0 0 rgba(120, 120, 120, 0.4);
+            animation: pulse 4s infinite;
+        }
+        .pulse:hover {
+            animation: none;
+        }
+
+        @-webkit-keyframes pulse {
+            0% {
+                -webkit-box-shadow: 0 0 0 0 rgba(120, 120, 120, 0.4);
+            }
+            70% {
+                -webkit-box-shadow: 0 0 0 15px rgba(120, 120, 120, 0);
+            }
+            100% {
+                -webkit-box-shadow: 0 0 0 0 rgba(120, 120, 120, 0);
+            }
+        }
+        @keyframes pulse {
+            0% {
+                -moz-box-shadow: 0 0 0 0 rgba(120, 120, 120, 0.4);
+                box-shadow: 0 0 0 0 rgba(120, 120, 120, 0.4);
+            }
+            70% {
+                -moz-box-shadow: 0 0 0 10px rgba(120, 120, 120, 0);
+                box-shadow: 0 0 0 15px rgba(120, 120, 120, 0);
+            }
+            100% {
+                -moz-box-shadow: 0 0 0 0 rgba(120, 120, 120, 0);
+                box-shadow: 0 0 0 0 rgba(120, 120, 120, 0);
+            }
+        }
+    </style>
 </head>
 <body class="has-animations">
 <div class="body-wrap">
@@ -45,7 +87,9 @@
                                     calling provides real-time HD quality and latency simply
                                     not available with traditional technology.</p>
                                 <div class="reveal-from-bottom" data-reveal-delay="450"><a
-                                        class="button button-primary button-wide-mobile" href="/">Try now</a>
+                                        class="button button-primary button-wide-mobile pulse"
+                                        style="border:0; background: linear-gradient(100deg, #376DF9 0, #FF5FA0 75%, #FFC55A 100%);"
+                                        href="/">Try now</a>
                                 </div>
                             </div>
                             <style>@media (min-width: 641px) {
@@ -205,10 +249,12 @@
             <div class="container">
                 <div class="section-inner has-top-divider">
                     <div class="container-xs">
-                        <div class="section-header center-content"><h2 class="m-0">Tired of the old ways of
+                        <div class="section-header center-content"><h2 class="m-0">Tired of the old way of
                             chatting? </h2></div>
                         <div class="center-content">
-                            <a class="button button-primary button-wide-mobile" href="/">Try now</a>
+                            <a class="button button-primary button-wide-mobile pulse"
+                               style="border:0; background: linear-gradient(100deg, #376DF9 0, #FF5FA0 75%, #FFC55A 100%);"
+                               href="/">Try now</a>
 
                         </div>
                     </div>

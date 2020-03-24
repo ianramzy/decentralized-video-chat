@@ -1,0 +1,31 @@
+body {
+    /*background: #ececec;*/
+    /*background: #16171B;*/
+    background: #16171B;
+    display: flex;
+    height: 100vh;
+    margin: 0;
+    align-items: center;
+    padding: 0 50px;
+}
+
+video {
+    background: #292B32;
+    /*background: white;*/
+    margin: 0 5%;
+    box-sizing: border-box;
+    border-radius: 10px;
+    padding: 0;
+    /*box-shadow: rgba(118, 143, 255, 0.4) 0px 16px 24px 0px;*/
+
+}
+
+#local-video {
+    width: 20%;
+    height: auto
+}
+
+#remote-video {
+    width: 70%;
+    height: auto
+}
