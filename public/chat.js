@@ -239,6 +239,7 @@ var VideoChat = {
         console.log("onAddStream");
         logIt('<<< Received new stream from remote. Adding it...');
         VideoChat.remoteVideo.srcObject = event.stream;
+        Snackbar.close();
     }
 };
 
@@ -285,7 +286,7 @@ function pauseVideo() {
 
 }
 
-
+//Show and hide buttons automatically
 var timedelay = 1;
 
 function delayCheck() {
@@ -303,3 +304,23 @@ $(document).mousemove(function () {
     _delay = setInterval(delayCheck, 500);
 });
 _delay = setInterval(delayCheck, 500);
+
+
+// Show share URL
+Snackbar.show({
+    text: 'Share this URL with a friend to get started',
+    actionText: 'Copy URL',
+    width: '355px',
+    pos: 'top-left',
+    actionTextColor: '#8688ff',
+    duration: 50000,
+    backgroundColor :'#292B32',
+    onActionClick: function (element) {
+        var copyContent = window.location.href;
+        $('<input id="some-element">').val(copyContent).appendTo('body').select();
+        document.execCommand('copy');
+        var toRemove = document.querySelector('#some-element');
+        toRemove.parentNode.removeChild(toRemove);
+        $(element).css('opacity', 0); //Set opacity of element to 0 to close Snackbar
+    }
+});

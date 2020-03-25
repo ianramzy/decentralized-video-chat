@@ -6,6 +6,7 @@
     <link rel="shortcut icon" href="landing/images/logo.svg">
     <link rel="stylesheet" href="chat.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script src="snackbar.js"></script>
 
 </head>
 <body>
@@ -23,9 +24,9 @@
         <a class="round-button" onclick="{openFullscreen()}">Fullscreen</a>
         <a class="round-button" onclick="{muteMicrophone()}" id="muteButton">Mute </a>
         <a class="round-button" onclick="{pauseVideo()}" id="videoPauseButton">Pause </a>
-        <a class="round-button" onclick="{alert('hangup')}">Share Screen </a>
     </div>
 </div>
+
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/chat.js"></script>
