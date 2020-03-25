@@ -1,17 +1,28 @@
 if (window.location.pathname === "/") {
-    // Generate random room name if needed
-    var adjectives = ["small", "big", "large", "smelly", "new", "happy", "shiny", "old", "clean", "nice", "bad", "cool",
-        "hot", "cold", "warm", "hungry", "slow", "fast", "red", "white", "black", "blue", "green"];
-    var nouns = ["dog", "bat", "wrench", "apple", "pear", "ghost", "cat", "wolf", "squid", "goat", "snail", "hat",
-        "sock", "plum", "bear", "snake", "turtle", "horse", "spoon", "fork", "spider", "tree", "chair", "table",
-        "couch", "towel"];
-    var adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
-    var noun = nouns[Math.floor(Math.random() * nouns.length)];
-    noun = noun.charAt(0).toUpperCase() + noun.substring(1);
-    adjective = adjective.charAt(0).toUpperCase() + adjective.substring(1);
-    window.location.href = window.location.href + adjective + noun;
+    window.location.href = "/landing/newroom";
 }
 const roomHash = window.location.pathname;
+
+
+var isWebRTCSupported =
+    navigator.getUserMedia ||
+    navigator.webkitGetUserMedia ||
+    navigator.mozGetUserMedia ||
+    navigator.msGetUserMedia ||
+    window.RTCPeerConnection;
+
+// try {
+//     window.RTCPeerConnection.peerConnection.addStream
+// } catch (e) {
+//     alert("Your browser doesn't support Neon Chat. Please use Chrome or Firefox.");
+//     window.location.href = "/landing";
+// }
+
+if (!isWebRTCSupported) {
+    alert("Your browser doesn't support Neon Chat. Please use Chrome or Firefox.");
+    window.location.href = "/landing";
+}
+
 
 function logIt(message, error) {
     // console.log(message);
@@ -47,7 +58,9 @@ var VideoChat = {
                 VideoChat.onMediaStream(stream);
             })
             .catch(error => {
-                VideoChat.noMediaStream(error);
+                console.log(error);
+                logIt('No media stream for us.');
+                alert("Please check your webcam browser privacy settings.")
             });
     },
 
@@ -58,7 +71,9 @@ var VideoChat = {
                 VideoChat.onMediaStream(stream);
             })
             .catch(error => {
-                VideoChat.noMediaStream(error);
+                console.log(error);
+                logIt('No media stream for us.');
+                alert("Please check your screen sharing browser privacy settings.")
             });
     },
 
@@ -77,15 +92,10 @@ var VideoChat = {
         VideoChat.socket.on('willInitiateCall', () => VideoChat.willInitiateCall = true);
     },
 
-    // There's not much to do in this demo if there is no media stream. So let's just stop.
-    noMediaStream: function () {
-        logIt('No media stream for us.');
-    },
 
     chatRoomFull: function () {
         alert("Chat room is full. Check to make sure you don't have multiple open tabs, or try with a new room link");
-        // VideoChat.socket.disconnect()
-        // todo handle this better
+        window.location.href = "/landing/newroom";
     },
 
     // When we are ready to call, enable the Call button.
@@ -125,8 +135,7 @@ var VideoChat = {
         };
     },
 
-    // When the peerConnection generates an ice candidate, send it over the socket
-    // to the peer.
+    // When the peerConnection generates an ice candidate, send it over the socket to the peer.
     onIceCandidate: function (event) {
         console.log("onIceCandidate");
         if (event.candidate) {
@@ -262,6 +271,20 @@ function muteMicrophone() {
     }
 }
 
+function pauseVideo() {
+    var muted = !VideoChat.localStream.getAudioTracks()[0].enabled;
+    var videoPaused = !VideoChat.localStream.getVideoTracks()[0].enabled;
+    VideoChat.localStream.getAudioTracks()[0].enabled = muted;
+    VideoChat.localStream.getVideoTracks()[0].enabled = videoPaused;
+    var pausedButton = document.getElementById("videoPauseButton");
+    if (!muted) {
+        pausedButton.innerText = "Unpause"
+    } else {
+        pausedButton.innerText = "Pause"
+    }
+
+}
+
 
 var timedelay = 1;
 
@@ -279,5 +302,4 @@ $(document).mousemove(function () {
     clearInterval(_delay);
     _delay = setInterval(delayCheck, 500);
 });
-// page loads starts delay timer
 _delay = setInterval(delayCheck, 500);

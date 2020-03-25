@@ -16,7 +16,7 @@ app.get('/landing/newroom', function (req, res) {
 });
 
 app.get('/landing', function (req, res) {
-    res.sendFile(path.join(public, 'landing/landing2.html'));
+    res.sendFile(path.join(public, 'landing/landing.html'));
 });
 
 app.get('/newroom', function (req, res) {
