@@ -10,12 +10,17 @@ var public = path.join(__dirname, 'public');
 
 app.use(express.static('public'));
 
-app.get('/', function (req, res) {
-    res.sendFile(path.join(public, 'chat.html'));
+
+app.get('/landing/newroom', function (req, res) {
+    res.sendFile(path.join(public, 'landing/newroom.html'));
 });
 
 app.get('/landing', function (req, res) {
-    res.sendFile(path.join(public, 'landing/landing.html'));
+    res.sendFile(path.join(public, 'landing/landing2.html'));
+});
+
+app.get('/newroom', function (req, res) {
+    res.sendFile(path.join(public, 'landing/newroom.html'));
 });
 
 app.get('/*', function (req, res) {

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Neon Chat</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="shortcut icon" href="images/logo.svg">
+    <style>
+        .pulse {
+            box-shadow: 0 0 0 rgba(120, 120, 120, 0.4);
+            animation: pulse 4s infinite;
+        }
+
+        .pulse:hover {
+            animation: none;
+        }
+
+        @-webkit-keyframes pulse {
+            0% {
+                -webkit-box-shadow: 0 0 0 0 rgba(120, 120, 120, 0.4);
+            }
+            70% {
+                -webkit-box-shadow: 0 0 0 15px rgba(120, 120, 120, 0);
+            }
+            100% {
+                -webkit-box-shadow: 0 0 0 0 rgba(120, 120, 120, 0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                -moz-box-shadow: 0 0 0 0 rgba(120, 120, 120, 0.4);
+                box-shadow: 0 0 0 0 rgba(120, 120, 120, 0.4);
+            }
+            70% {
+                -moz-box-shadow: 0 0 0 10px rgba(120, 120, 120, 0);
+                box-shadow: 0 0 0 15px rgba(120, 120, 120, 0);
+            }
+            100% {
+                -moz-box-shadow: 0 0 0 0 rgba(120, 120, 120, 0);
+                box-shadow: 0 0 0 0 rgba(120, 120, 120, 0);
+            }
+        }
+    </style>
+</head>
+<body class="has-animations">
+<div class="body-wrap">
+    <header class="site-header reveal-from-top">
+        <div class="container">
+            <div class="site-header-inner">
+                <div class="brand"><h1 class="m-0"><a href="landing.html"><img src="images/logo.svg" alt="Neon"
+                                                                               width="32"
+                                                                               height="32"></a></h1></div>
+                <button id="header-nav-toggle" class="header-nav-toggle" aria-controls="primary-menu"
+                        aria-expanded="false"><span class="screen-reader">Menu</span> <span class="hamburger"><span
+                        class="hamburger-inner"></span></span></button>
+            </div>
+        </div>
+    </header>
+    <main class="site-content">
+
+        <section class="hero section illustration-section-01">
+            <div class="container">
+                <div class="hero-inner section-inner">
+                    <div class="split-wrap invert-mobile">
+                        <div class="split-item">
+                            <div class="hero-content split-item-content center-content-mobile">
+                                <h1 class="mt-0 mb-16 reveal-from-bottom" data-reveal-delay="150">
+                                    Get chat room. <br> Share URL. <br> Start chatting.</h1>
+                                <p class="mt-0 mb-32 reveal-from-bottom" data-reveal-delay="300">
+                                    Each chat has its own disposable URL, just get a room and share your custom link.
+                                    It's really that easy.
+                                </p>
+                            </div>
+                            <style>@media (min-width: 641px) {
+                                .hero .split-wrap .split-item {
+                                    min-height: 492px
+                                }
+                            }</style>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta section center-content-mobile reveal-from-bottom">
+            <div class="container">
+                <div class="cta-inner section-inner cta-split">
+                    <div class="cta-slogan"><h3 class="m-0">Pick a room name.<br> How about this one?</h3></div>
+                    <div class="cta-action">
+                        <div class="mb-24" style="margin-top: 30px">
+                            <label class="form-label screen-reader" for="input-01">This is a label</label>
+                            <div class="form-group-desktop">
+                                <input class="form-input" type="text" id="input-01" value="PurpleSquid">
+                                <button class="button button-primary pulse"
+                                        onclick="{window.location.href = '/' + document.getElementById('input-01').value}">
+                                    Go To My Room
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+    </main>
+    <footer class="site-footer center-content-mobile">
+        <div class="container">
+            <div class="site-footer-inner">
+                <div class="footer-top space-between text-xxs">
+                    <div class="brand"><a href="landing.html"><img src="images/logo.svg" alt="Neon" width="32"
+                                                                   height="32"></a>
+                    </div>
+                </div>
+                <div class="footer-bottom space-between text-xxs invert-order-desktop">
+                    <nav class="footer-nav">
+                        <ul class="list-reset">
+                            <li><a href="https://ianramzy.com">Another Project By Ian Ramzy</a></li>
+                        </ul>
+                    </nav>
+                    <div class="footer-copyright">&copy; 2020 Neon Chat, all rights reserved</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+<script src="js/main.min.js"></script>
+<script>
+    var adjectives = ["small", "big", "large", "smelly", "new", "happy", "shiny", "old", "clean", "nice", "bad", "cool",
+        "hot", "cold", "warm", "hungry", "slow", "fast", "red", "white", "black", "blue", "green"];
+    var nouns = ["dog", "bat", "wrench", "apple", "pear", "ghost", "cat", "wolf", "squid", "goat", "snail", "hat",
+        "sock", "plum", "bear", "snake", "turtle", "horse", "spoon", "fork", "spider", "tree", "chair", "table",
+        "couch", "towel"];
+    var adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
+    var noun = nouns[Math.floor(Math.random() * nouns.length)];
+    noun = noun.charAt(0).toUpperCase() + noun.substring(1);
+    adjective = adjective.charAt(0).toUpperCase() + adjective.substring(1);
+    document.getElementById('input-01').value = adjective + noun;
+</script>
+</body>
+</html>
