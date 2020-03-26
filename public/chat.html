@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Neon Chat</title>
-    <link rel="shortcut icon" href="landing/images/logo.svg">
-    <link rel="stylesheet" href="chat.css">
+    <link rel="shortcut icon" href="images/logo.svg">
+    <link rel="stylesheet" href="../css/chat.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
-    <script src="snackbar.js"></script>
+    <script src="js/snackbar.js"></script>
     <meta property="og:title" content="Neonchat - Decentralized video calls">
     <meta property="og:description" content="Decentralized video
                                     calling provides real-time HD quality and latency simply
@@ -25,7 +25,7 @@
 
 <div class="buttons" id="buttons">
     <div class="center">
-        <a href="/landing" class="round-button">Back</a>
+        <a href="/" class="round-button">Back</a>
         <a class="round-button" onclick="{openFullscreen()}">Fullscreen</a>
         <a class="round-button" onclick="{muteMicrophone()}" id="muteButton">Mute </a>
 <!--        <a class="round-button" onclick="{pauseVideo()}" id="videoPauseButton">Pause </a>-->
@@ -34,6 +34,6 @@
 
 
 <script src="/socket.io/socket.io.js"></script>
-<script src="/chat.js"></script>
+<script src="../js/chat.js"></script>
 </body>
 </html>

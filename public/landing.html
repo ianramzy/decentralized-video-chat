@@ -5,49 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Neon Chat</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/landing.css">
     <link rel="shortcut icon" href="images/logo.svg">
     <meta property="og:title" content="Neonchat - Decentralized video calls">
     <meta property="og:description" content="Decentralized video
                                     calling provides real-time HD quality and latency simply
                                     not available with traditional technology.">
-    <meta property="og:image" content="https://neonchat.io/public/landing/preview.png">
-    <meta property="og:url" content="https://neonchat.io/landing">
-    <style>
-        .pulse {
-            box-shadow: 0 0 0 rgba(120, 120, 120, 0.4);
-            animation: pulse 4s infinite;
-        }
-        .pulse:hover {
-            animation: none;
-        }
-
-        @-webkit-keyframes pulse {
-            0% {
-                -webkit-box-shadow: 0 0 0 0 rgba(120, 120, 120, 0.4);
-            }
-            70% {
-                -webkit-box-shadow: 0 0 0 15px rgba(120, 120, 120, 0);
-            }
-            100% {
-                -webkit-box-shadow: 0 0 0 0 rgba(120, 120, 120, 0);
-            }
-        }
-        @keyframes pulse {
-            0% {
-                -moz-box-shadow: 0 0 0 0 rgba(120, 120, 120, 0.4);
-                box-shadow: 0 0 0 0 rgba(120, 120, 120, 0.4);
-            }
-            70% {
-                -moz-box-shadow: 0 0 0 10px rgba(120, 120, 120, 0);
-                box-shadow: 0 0 0 15px rgba(120, 120, 120, 0);
-            }
-            100% {
-                -moz-box-shadow: 0 0 0 0 rgba(120, 120, 120, 0);
-                box-shadow: 0 0 0 0 rgba(120, 120, 120, 0);
-            }
-        }
-    </style>
+    <meta property="og:image" content="https://neonchat.io/images/preview.png">
+    <meta property="og:url" content="https://neonchat.io/">
 </head>
 <body class="has-animations">
 <div class="body-wrap">
@@ -55,24 +20,14 @@
         <div class="container">
             <div class="site-header-inner">
                 <div class="brand">
-                    <h1 class="m-0"><a href="/landing"><img src="images/logo.svg" alt="Neon"
-                                                                               width="32"
-                                                                               height="32"></a>
+                    <h1 class="m-0"><a href="/"><img src="images/logo.svg" alt="Neon"
+                                                     width="32"
+                                                     height="32"></a>
                     </h1>
                 </div>
                 <button id="header-nav-toggle" class="header-nav-toggle" aria-controls="primary-menu"
                         aria-expanded="false"><span class="screen-reader">Menu</span> <span class="hamburger"><span
                         class="hamburger-inner"></span></span></button>
-                <!--                <nav id="header-nav" class="header-nav">-->
-                <!--                    <div class="header-nav-inner">-->
-                <!--                        <ul class="list-reset text-xxs header-nav-right">-->
-                <!--                            <li><a href="additional.html">Secondary page</a></li>-->
-                <!--                        </ul>-->
-                <!--                        <ul class="list-reset header-nav-right">-->
-                <!--                            <li><a class="button button-primary button-sm" href="signup.html">Sign up</a></li>-->
-                <!--                        </ul>-->
-                <!--                    </div>-->
-                <!--                </nav>-->
             </div>
         </div>
     </header>
@@ -83,7 +38,8 @@
                     <div class="split-wrap invert-mobile">
                         <div class="split-item">
                             <div class="hero-content split-item-content center-content-mobile"><h1
-                                    class="mt-0 mb-16 reveal-from-bottom" data-reveal-delay="150">Neon Chat.<br>The most advanced
+                                    class="mt-0 mb-16 reveal-from-bottom" data-reveal-delay="150">Neon Chat.<br>The most
+                                advanced
                                 video chat ever created.</h1>
                                 <p class="mt-0 mb-32 reveal-from-bottom" data-reveal-delay="300">Decentralized video
                                     calling provides real-time HD quality and latency simply
@@ -91,7 +47,7 @@
                                 <div class="reveal-from-bottom" data-reveal-delay="450"><a
                                         class="button button-primary button-wide-mobile pulse"
                                         style="border:0; background: linear-gradient(100deg, #376DF9 0, #FF5FA0 75%, #FFC55A 100%);"
-                                        href="/landing/newroom">Try now</a>
+                                        href="/newroom">Try now</a>
                                 </div>
                             </div>
                             <style>@media (min-width: 641px) {
@@ -256,7 +212,7 @@
                         <div class="center-content">
                             <a class="button button-primary button-wide-mobile pulse"
                                style="border:0; background: linear-gradient(100deg, #376DF9 0, #FF5FA0 75%, #FFC55A 100%);"
-                               href="/landing/newroom">Try now</a>
+                               href="/newroom">Try now</a>
                         </div>
                     </div>
                 </div>
@@ -339,8 +295,8 @@
         <div class="container">
             <div class="site-footer-inner">
                 <div class="footer-top space-between text-xxs">
-                    <div class="brand"><a href="/landing"><img src="images/logo.svg" alt="Neon" width="32"
-                                                                   height="32"></a>
+                    <div class="brand">
+                        <a href="/"><img src="images/logo.svg" alt="Neon" width="32" height="32"></a>
                     </div>
                     <!--                    <div class="footer-social">-->
                     <!--                        <ul class="list-reset">-->
@@ -385,6 +341,6 @@
         </div>
     </footer>
 </div>
-<script src="js/main.min.js"></script>
+<script src="js/landing.js"></script>
 </body>
 </html>

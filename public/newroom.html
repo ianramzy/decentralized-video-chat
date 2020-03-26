@@ -5,14 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Neon Chat</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/landing.css">
     <link rel="shortcut icon" href="images/logo.svg">
     <meta property="og:title" content="Neonchat - Decentralized video calls">
     <meta property="og:description" content="Decentralized video
                                     calling provides real-time HD quality and latency simply
                                     not available with traditional technology.">
-    <meta property="og:image" content="https://neonchat.io/public/landing/preview.png">
-    <meta property="og:url" content="https://neonchat.io/landing">
+    <meta property="og:image" content="https://neonchat.io/images/review.png">
+    <meta property="og:url" content="https://neonchat.io/">
     <style>
         .pulse {
             box-shadow: 0 0 0 rgba(120, 120, 120, 0.4);
@@ -56,7 +56,7 @@
     <header class="site-header reveal-from-top">
         <div class="container">
             <div class="site-header-inner">
-                <div class="brand"><h1 class="m-0"><a href="/landing"><img src="images/logo.svg" alt="Neon"
+                <div class="brand"><h1 class="m-0"><a href="/"><img src="images/logo.svg" alt="Neon"
                                                                                width="32"
                                                                                height="32"></a></h1></div>
                 <button id="header-nav-toggle" class="header-nav-toggle" aria-controls="primary-menu"
@@ -101,7 +101,7 @@
                             <div class="form-group-desktop">
                                 <input class="form-input" type="text" id="input-01" value="PurpleSquid">
                                 <button class="button button-primary pulse"
-                                        onclick="{window.location.href = '/' + document.getElementById('input-01').value}">
+                                        onclick="{window.location.href = '/room/' + document.getElementById('input-01').value}">
                                     Go To My Room
                                 </button>
                             </div>
@@ -117,8 +117,8 @@
         <div class="container">
             <div class="site-footer-inner">
                 <div class="footer-top space-between text-xxs">
-                    <div class="brand"><a href="/landing"><img src="images/logo.svg" alt="Neon" width="32"
-                                                                   height="32"></a>
+                    <div class="brand">
+                        <a href="/"><img src="images/logo.svg" alt="Neon" width="32" height="32"></a>
                     </div>
                 </div>
                 <div class="footer-bottom space-between text-xxs invert-order-desktop">
@@ -133,18 +133,7 @@
         </div>
     </footer>
 </div>
-<script src="js/main.min.js"></script>
-<script>
-    var adjectives = ["small", "big", "large", "smelly", "new", "happy", "shiny", "old", "clean", "nice", "bad", "cool",
-        "hot", "cold", "warm", "hungry", "slow", "fast", "red", "white", "black", "blue", "green"];
-    var nouns = ["dog", "bat", "wrench", "apple", "pear", "ghost", "cat", "wolf", "squid", "goat", "snail", "hat",
-        "sock", "plum", "bear", "snake", "turtle", "horse", "spoon", "fork", "spider", "tree", "chair", "table",
-        "couch", "towel", "panda", "bread", "grape","cake","brick", "rat", "mouse"];
-    var adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
-    var noun = nouns[Math.floor(Math.random() * nouns.length)];
-    noun = noun.charAt(0).toUpperCase() + noun.substring(1);
-    adjective = adjective.charAt(0).toUpperCase() + adjective.substring(1);
-    document.getElementById('input-01').value = adjective + noun;
-</script>
+<script src="js/landing.js"></script>
+<script src="js/newroom.js"></script>
 </body>
 </html>

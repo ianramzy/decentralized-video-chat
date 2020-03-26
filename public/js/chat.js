@@ -1,7 +1,9 @@
-if (window.location.pathname === "/") {
+if (window.location.pathname === "/room") {
     window.location.href = "/landing/newroom";
 }
-const roomHash = window.location.pathname;
+
+url = window.location.href;
+const roomHash = url.substring(url.lastIndexOf('/') + 1);
 
 
 var isWebRTCSupported =
@@ -20,7 +22,7 @@ var isWebRTCSupported =
 
 if (!isWebRTCSupported) {
     alert("Your browser doesn't support Neon Chat. Please use Chrome or Firefox.");
-    window.location.href = "/landing";
+    window.location.href = "/";
 }
 
 
@@ -95,7 +97,7 @@ var VideoChat = {
 
     chatRoomFull: function () {
         alert("Chat room is full. Check to make sure you don't have multiple open tabs, or try with a new room link");
-        window.location.href = "/landing/newroom";
+        window.location.href = "/newroom";
     },
 
     // When we are ready to call, enable the Call button.
@@ -314,7 +316,7 @@ Snackbar.show({
     pos: 'top-left',
     actionTextColor: '#8688ff',
     duration: 50000,
-    backgroundColor :'#292B32',
+    backgroundColor: '#292B32',
     onActionClick: function (element) {
         var copyContent = window.location.href;
         $('<input id="some-element">').val(copyContent).appendTo('body').select();

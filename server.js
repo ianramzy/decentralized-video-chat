@@ -10,24 +10,21 @@ var public = path.join(__dirname, 'public');
 
 // enable ssl redirect
 app.use(sslRedirect());
-app.use(express.static('public'));
 
 
-app.get('/landing/newroom', function (req, res) {
-    res.sendFile(path.join(public, 'landing/newroom.html'));
-});
-
-app.get('/landing', function (req, res) {
-    res.sendFile(path.join(public, 'landing/landing.html'));
+app.get('/', function (req, res) {
+    res.sendFile(path.join(public, 'landing.html'));
 });
 
 app.get('/newroom', function (req, res) {
-    res.sendFile(path.join(public, 'landing/newroom.html'));
+    res.sendFile(path.join(public, 'newroom.html'));
 });
 
-app.get('/*', function (req, res) {
+app.get('/room/*', function (req, res) {
     res.sendFile(path.join(public, 'chat.html'));
 });
+
+app.use(express.static('public'));
 
 
 function log(msg, room) {
