@@ -12,6 +12,7 @@
   "dependencies": {
     "dotenv": "^8.1.0",
     "express": "^4.17.1",
+    "heroku-ssl-redirect": "0.0.4",
     "socket.io": "^2.2.0",
     "twilio": "^3.34.0"
   }
