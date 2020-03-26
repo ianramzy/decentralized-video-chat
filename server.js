@@ -8,6 +8,19 @@ var io = require('socket.io')(http);
 var path = require('path');
 var public = path.join(__dirname, 'public');
 
+// Enforce HTTPS
+app.use((req, res, next) => {
+    if (process.env.NODE_ENV === 'production') {
+        if (req.headers.host === 'neonchat.io')
+            return res.redirect(301, 'https://neonchat.io');
+        if (req.headers['x-forwarded-proto'] !== 'https')
+            return res.redirect('https://' + req.headers.host + req.url);
+        else
+            return next();
+    } else
+        return next();
+});
+
 app.use(express.static('public'));
 
 
