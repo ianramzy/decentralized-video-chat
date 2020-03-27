@@ -3,7 +3,7 @@ if (window.location.pathname === "/room") {
 }
 
 url = window.location.href;
-const roomHash = url.substring(url.lastIndexOf('/') + 1);
+const roomHash = url.substring(url.lastIndexOf('/') + 1).toLowerCase();
 
 
 var isWebRTCSupported =
@@ -27,7 +27,7 @@ if (!isWebRTCSupported) {
 
 
 function logIt(message, error) {
-    // console.log(message);
+    console.log(message);
     // Add to logs on page
     // let logs = document.getElementById('logs');
     // let tmp = document.createElement('P');
@@ -53,6 +53,7 @@ var VideoChat = {
     // accepted callback to the onMediaStream function, otherwise callback to the
     // noMediaStream function.
     requestMediaStream: function (event) {
+
         console.log("requestMediaStream");
         navigator.mediaDevices
             .getUserMedia({video: true, audio: true})
@@ -61,8 +62,9 @@ var VideoChat = {
             })
             .catch(error => {
                 console.log(error);
-                logIt('No media stream for us.');
-                alert("Please check your webcam browser privacy settings.")
+                logIt('Failed to get local webcam video, check webcam privacy settings');
+                setTimeout(VideoChat.requestMediaStream, 1000);
+                // alert("Please check your webcam browser privacy settings.")
             });
     },
 
@@ -84,10 +86,26 @@ var VideoChat = {
         console.log("onMediaStream");
         VideoChat.localStream = stream;
         // Add the stream as video's srcObject.
+        Snackbar.show({
+            text: 'Share this URL with a friend to get started',
+            actionText: 'Copy URL',
+            width: '355px',
+            pos: 'top-left',
+            actionTextColor: '#8688ff',
+            duration: 500000,
+            backgroundColor: '#292B32',
+            onActionClick: function (element) {
+                var copyContent = window.location.href;
+                $('<input id="some-element">').val(copyContent).appendTo('body').select();
+                document.execCommand('copy');
+                var toRemove = document.querySelector('#some-element');
+                toRemove.parentNode.removeChild(toRemove);
+                $(element).css('opacity', 0); //Set opacity of element to 0 to close Snackbar
+            }
+        });
         VideoChat.localVideo.srcObject = stream;
         // Now we're ready to join the chat room.
         VideoChat.socket.emit('join', roomHash);
-        VideoChat.socket.on('temp', () => alert("temp called"));
         VideoChat.socket.on('full', VideoChat.chatRoomFull);
         VideoChat.socket.on('offer', VideoChat.onOffer);
         VideoChat.socket.on('ready', VideoChat.readyToCall);
@@ -102,6 +120,7 @@ var VideoChat = {
 
     // When we are ready to call, enable the Call button.
     readyToCall: function (event) {
+        // Show share URL
         console.log("readyToCall");
         if (VideoChat.willInitiateCall) {
             VideoChat.startCall()
@@ -245,10 +264,6 @@ var VideoChat = {
     }
 };
 
-// auto get media
-// VideoChat.requestScreenStream();
-VideoChat.requestMediaStream();
-
 
 function openFullscreen() {
     if (VideoChat.remoteVideo.requestFullscreen) {
@@ -275,10 +290,7 @@ function muteMicrophone() {
 }
 
 function pauseVideo() {
-    var muted = !VideoChat.localStream.getAudioTracks()[0].enabled;
-    var videoPaused = !VideoChat.localStream.getVideoTracks()[0].enabled;
-    VideoChat.localStream.getAudioTracks()[0].enabled = muted;
-    VideoChat.localStream.getVideoTracks()[0].enabled = videoPaused;
+    VideoChat.localStream.getVideoTracks()[0].enabled = !VideoChat.localStream.getVideoTracks()[0].enabled;
     var pausedButton = document.getElementById("videoPauseButton");
     if (!muted) {
         pausedButton.innerText = "Unpause"
@@ -308,21 +320,25 @@ $(document).mousemove(function () {
 _delay = setInterval(delayCheck, 500);
 
 
-// Show share URL
+// Show accept webcam snackbar
 Snackbar.show({
-    text: 'Share this URL with a friend to get started',
-    actionText: 'Copy URL',
-    width: '355px',
-    pos: 'top-left',
+    text: 'Please allow microphone and webcam access',
+    actionText: 'Show Me How',
+    width: '455px',
+    pos: 'top-right',
     actionTextColor: '#8688ff',
     duration: 50000,
     backgroundColor: '#292B32',
     onActionClick: function (element) {
-        var copyContent = window.location.href;
-        $('<input id="some-element">').val(copyContent).appendTo('body').select();
-        document.execCommand('copy');
-        var toRemove = document.querySelector('#some-element');
-        toRemove.parentNode.removeChild(toRemove);
-        $(element).css('opacity', 0); //Set opacity of element to 0 to close Snackbar
+        window.open('https://getacclaim.zendesk.com/hc/en-us/articles/360001547832-Setting-the-default-camera-on-your-browser', '_blank');
     }
 });
+
+
+
+
+// auto get media
+// VideoChat.requestScreenStream();
+VideoChat.requestMediaStream();
+
+

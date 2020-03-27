@@ -36,7 +36,7 @@ video {
 #remote-video {
     width: 70%;
     height: auto;
-    background-image: url(loader.gif);
+    background-image: url(../images/loader.gif);
     background-size: 400px auto;
     background-repeat: no-repeat;
     background-position: center center;

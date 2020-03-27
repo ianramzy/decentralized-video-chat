@@ -13,6 +13,14 @@
                                     not available with traditional technology.">
     <meta property="og:image" content="https://neonchat.io/public/landing/preview.png">
     <meta property="og:url" content="https://neonchat.io/landing">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-162048272-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-162048272-1');
+    </script>
 </head>
 <body>
 
@@ -34,6 +42,7 @@
 
 
 <script src="/socket.io/socket.io.js"></script>
+<script src="../js/snackbar.js"></script>
 <script src="../js/chat.js"></script>
 </body>
 </html>
