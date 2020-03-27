@@ -1,141 +1,56 @@
 @import url("https://fonts.googleapis.com/css?family=Fira+Sans:600|Heebo:400,500,700&display=swap");
 
-
-.videos {
-    display: flex;
-    height: 100vh;
-    margin: 0;
-    padding: 0;
-    align-items: center;
-}
-
 body {
     background: #16171B;
     margin: 0;
     padding: 0;
 }
 
-video {
-    background: #292B32;
-    margin: 0 5%;
-    box-sizing: border-box;
-    border-radius: 10px;
+.videos {
+    height: 80vh;
+    width: 80vw;
     padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+
+video {
+    /*background: #292B32;*/
+    background: #16171a;
 }
 
 
 #local-video {
     width: 20%;
     height: auto;
+    position: absolute;
+    z-index: 100;
+    right: 14px;
+    bottom: 10px;
+    border-radius: 20px;
     -webkit-transform: scaleX(-1);
     transform: scaleX(-1);
     background: #16171a;
 }
 
 #remote-video {
-    width: 70%;
-    height: auto;
+    max-height: 100%;
+    max-width: 100%;
+    min-width: 100%;
+    min-height: 100%;
+    border-radius: 10px;
+    object-fit: cover;
     background-image: url(../images/loader.gif);
     background-size: 400px auto;
     background-repeat: no-repeat;
     background-position: center center;
-}
-
-
-.snackbar-container {
     box-shadow: 9px 9px 16px #0a0b0c, -9px -9px 16px #222328;
-    transition: all .5s ease;
-    transition-property: top, right, bottom, left, opacity;
-    font-family: "Heebo", sans-serif;
-    font-size: 14px;
-    min-height: 14px;
-    position: fixed;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #fff;
-    line-height: 22px;
-    padding: 18px 24px;
-    bottom: -100px;
-    top: -100px;
-    opacity: 0;
-    z-index: 9999
-}
 
-.snackbar-container .action {
-    background: inherit;
-    display: inline-block;
-    border: none;
-    font-size: inherit;
-    text-transform: uppercase;
-    color: #4caf50;
-    margin: 0 0 0 24px;
-    padding: 0;
-    min-width: min-content;
-    cursor: pointer
-}
-
-@media (min-width: 640px) {
-    .snackbar-container {
-        min-width: 288px;
-        max-width: 568px;
-        display: inline-flex;
-        border-radius: 2px;
-        margin: 24px
-    }
-}
-
-@media (max-width: 640px) {
-    .snackbar-container {
-        left: 0;
-        right: 0;
-        width: 100%
-    }
-}
-
-.snackbar-pos.bottom-center {
-    top: auto !important;
-    bottom: 0;
-    left: 50%;
-    transform: translate(-50%, 0)
-}
-
-.snackbar-pos.bottom-left {
-    top: auto !important;
-    bottom: 0;
-    left: 0
-}
-
-.snackbar-pos.bottom-right {
-    top: auto !important;
-    bottom: 0;
-    right: 0
-}
-
-.snackbar-pos.top-left {
-    bottom: auto !important;
-    top: 0;
-    left: 0
-}
-
-.snackbar-pos.top-center {
-    bottom: auto !important;
-    top: 0;
-    left: 50%;
-    transform: translate(-50%, 0)
-}
-
-.snackbar-pos.top-right {
-    bottom: auto !important;
-    top: 0;
-    right: 0
-}
-
-@media (max-width: 640px) {
-    .snackbar-pos.bottom-center, .snackbar-pos.top-center {
-        left: 0;
-        transform: none
-    }
 }
 
 
@@ -154,16 +69,13 @@ button:hover {
     color: white;
     border-radius: 100px;
     background: #16171a;
-    /*box-shadow:  9px 9px 16px #1e1f21, -9px -9px 16px #2f3035;*/
-
 }
 
 .multi-button {
     position: absolute;
-    right: 50px;
-    top: 50px;
+    right: calc(5vw - 40px);
+    top: 10vh;
     z-index: 999;
-    /*border-radius: 50px;*/
     border-radius: 10px;
     background: #16171a;
     box-shadow: 9px 9px 16px #0a0b0c, -9px -9px 16px #222328;
@@ -171,7 +83,6 @@ button:hover {
     display: grid;
     grid-gap: 0.5rem;
     width: 50px;
-    margin-left: 200px;
 }
 
 .HoverState {
@@ -182,6 +93,9 @@ button:hover {
     white-space: nowrap;
     top: 25px;
     font-weight: bold;
+    background: #16171a;
+    padding: 10px;
+    border-radius: 10px;
 }
 
 .buttonContainer {

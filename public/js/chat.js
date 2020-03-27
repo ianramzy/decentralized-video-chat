@@ -93,7 +93,7 @@ var VideoChat = {
             pos: 'top-left',
             actionTextColor: '#8688ff',
             duration: 500000,
-            backgroundColor: '#292B32',
+            backgroundColor: '#16171a',
             onActionClick: function (element) {
                 var copyContent = window.location.href;
                 $('<input id="some-element">').val(copyContent).appendTo('body').select();
@@ -263,19 +263,37 @@ var VideoChat = {
         logIt('<<< Received new stream from remote. Adding it...');
         VideoChat.remoteVideo.srcObject = event.stream;
         Snackbar.close();
+        VideoChat.remoteVideo.style.background = 'none';
     }
 };
 
 
+var isFullscreen = false;
+
 function openFullscreen() {
-    if (VideoChat.remoteVideo.requestFullscreen) {
-        VideoChat.remoteVideo.requestFullscreen();
-    } else if (VideoChat.remoteVideo.mozRequestFullScreen) { /* Firefox */
-        VideoChat.remoteVideo.mozRequestFullScreen();
-    } else if (VideoChat.remoteVideo.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
-        VideoChat.remoteVideo.webkitRequestFullscreen();
-    } else if (VideoChat.remoteVideo.msRequestFullscreen) { /* IE/Edge */
-        VideoChat.remoteVideo.msRequestFullscreen();
+    var elem = document.getElementsByClassName("videos")[0];
+    if (!isFullscreen) {
+        isFullscreen = true;
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        } else if (elem.mozRequestFullScreen) { /* Firefox */
+            elem.mozRequestFullScreen();
+        } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+            elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) { /* IE/Edge */
+            elem.msRequestFullscreen();
+        }
+    } else {
+        isFullscreen = false;
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) { /* Firefox */
+            document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) { /* IE/Edge */
+            document.msExitFullscreen();
+        }
     }
 }
 
