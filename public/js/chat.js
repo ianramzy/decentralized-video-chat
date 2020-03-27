@@ -69,17 +69,6 @@ var VideoChat = {
         });
     },
 
-    requestScreenStream: function (event) {
-        navigator.mediaDevices.getDisplayMedia({
-            video: true,
-            audio: true
-        }).then(stream => {
-            VideoChat.onMediaStream(stream);
-        }).catch(error => {
-            logIt(error);
-            logIt('No media stream for us.');
-        });
-    },
 
     // The onMediaStream function receives the media stream as an argument.
     onMediaStream: function (stream) {
@@ -365,11 +354,6 @@ Snackbar.show({
 });
 
 
-// auto get media
-// VideoChat.requestScreenStream();
-VideoChat.requestMediaStream();
-
-
 //Neomorphic buttons
 $(".HoverState").hide();
 $(document).ready(function () {
@@ -381,4 +365,48 @@ $(document).ready(function () {
         $(".HoverState").hide();
     });
 });
-//Neomorphic buttons
+
+
+var mode = "camera";
+
+function swap() {
+    const swapIcon = document.getElementById("swap-icon");
+    const swapText = document.getElementById("swap-text");
+    if (mode === "camera") {
+        mode = "screen";
+        swapIcon.classList.remove("fa-desktop");
+        swapIcon.classList.add("fa-camera");
+        swapText.innerText = "Share Webcam";
+        navigator.mediaDevices.getDisplayMedia({
+            video: true,
+            audio: true
+        }).then(function (stream) {
+            switchStreamHelper(stream);
+        });
+    } else {
+        mode = "camera";
+        swapIcon.classList.remove("fa-camera");
+        swapIcon.classList.add("fa-desktop");
+        swapText.innerText = "Share Screen";
+        navigator.mediaDevices.getUserMedia({
+            video: true,
+            audio: true
+        }).then(function (stream) {
+            switchStreamHelper(stream);
+        });
+    }
+}
+
+function switchStreamHelper(stream) {
+    let videoTrack = stream.getVideoTracks()[0];
+    var sender = VideoChat.peerConnection.getSenders().find(function (s) {
+        return s.track.kind === videoTrack.kind;
+    });
+    sender.replaceTrack(videoTrack);
+    VideoChat.localStream = videoTrack;
+    VideoChat.localVideo.srcObject = stream;
+}
+
+
+// auto get media
+VideoChat.requestMediaStream();
