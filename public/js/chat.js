@@ -282,39 +282,49 @@ function openFullscreen() {
 function muteMicrophone() {
     var muted = VideoChat.localStream.getAudioTracks()[0].enabled;
     VideoChat.localStream.getAudioTracks()[0].enabled = !muted;
-    const mutedButton = document.getElementById("muteButton");
+    const micIcon = document.getElementById("mic-icon");
+    const micText = document.getElementById("mic-text");
     if (muted) {
-        mutedButton.innerText = "Unmute"
+        micIcon.classList.remove("fa-microphone");
+        micIcon.classList.add("fa-microphone-slash");
+        micText.innerText = "Unmute"
     } else {
-        mutedButton.innerText = "Mute"
+        micIcon.classList.add("fa-microphone");
+        micIcon.classList.remove("fa-microphone-slash");
+        micText.innerText = "Mute"
     }
 }
 
 function pauseVideo() {
     var paused = VideoChat.localStream.getVideoTracks()[0].enabled;
     VideoChat.localStream.getVideoTracks()[0].enabled = !paused;
-    const pausedButton = document.getElementById("videoPauseButton");
+    const micIcon = document.getElementById("video-icon");
+    const micText = document.getElementById("video-text");
     if (paused) {
-        pausedButton.innerText = "Unpause"
+        micIcon.classList.remove("fa-video");
+        micIcon.classList.add("fa-video-slash");
+        micText.innerText = "Unpause Video"
     } else {
-        pausedButton.innerText = "Pause"
+        micIcon.classList.add("fa-video");
+        micIcon.classList.remove("fa-video-slash");
+        micText.innerText = "Pause Video"
     }
-
 }
+
 
 //Show and hide buttons automatically
 var timedelay = 1;
 
 function delayCheck() {
     if (timedelay === 5) {
-        $('#buttons').fadeOut();
+        $('.multi-button').fadeOut();
         timedelay = 1;
     }
     timedelay = timedelay + 1;
 }
 
 $(document).mousemove(function () {
-    $('#buttons').fadeIn();
+    $('.multi-button').fadeIn();
     timedelay = 1;
     clearInterval(_delay);
     _delay = setInterval(delayCheck, 500);
@@ -342,3 +352,15 @@ Snackbar.show({
 VideoChat.requestMediaStream();
 
 
+//Neomorphic buttons
+$(".HoverState").hide();
+$(document).ready(function () {
+    $(".hoverButton").mouseover(function () {
+        $(".HoverState").hide();
+        $(this).next().show();
+    });
+    $(".hoverButton").mouseout(function () {
+        $(".HoverState").hide();
+    });
+});
+//Neomorphic buttons

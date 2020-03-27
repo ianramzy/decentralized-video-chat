@@ -7,32 +7,29 @@
     margin: 0;
     padding: 0;
     align-items: center;
-    /*padding: 0 50px;*/
 }
 
 body {
     background: #16171B;
     margin: 0;
     padding: 0;
-    /*background: #ececec;*/
 }
 
 video {
     background: #292B32;
-    /*background: white;*/
     margin: 0 5%;
     box-sizing: border-box;
     border-radius: 10px;
     padding: 0;
-    /*box-shadow: rgba(118, 143, 255, 0.4) 0px 16px 24px 0px;*/
-
 }
+
 
 #local-video {
     width: 20%;
     height: auto;
     -webkit-transform: scaleX(-1);
     transform: scaleX(-1);
+    background: #16171a;
 }
 
 #remote-video {
@@ -45,42 +42,8 @@ video {
 }
 
 
-.buttons {
-    width: 700px;
-    margin-left: -350px;
-    bottom: 0px;
-    position: absolute;
-    left: 50%;
-}
-
-.buttons a {
-    cursor: pointer;
-}
-
-
-.round-button {
-    display: block;
-    width: 100px;
-    height: 60px;
-    line-height: 60px;
-    border-radius: 4px;
-    background: #292B32;
-    text-align: center;
-    text-decoration: none;
-    color: white;
-    transition: 0.2s;
-    margin: 20px;
-    font-family: "Heebo", sans-serif;
-    font-weight: 400;
-    float: left;
-}
-
-.round-button:hover {
-    background: #3d3f47;
-}
-
-
 .snackbar-container {
+    box-shadow: 9px 9px 16px #0a0b0c, -9px -9px 16px #222328;
     transition: all .5s ease;
     transition-property: top, right, bottom, left, opacity;
     font-family: "Heebo", sans-serif;
@@ -174,3 +137,56 @@ video {
         transform: none
     }
 }
+
+
+/*Neomorphic buttons*/
+button {
+    border: none;
+    font-size: 2rem;
+    transition: all .3s ease-in-out;
+    color: gray;
+    background: transparent;
+    cursor: pointer;
+    padding: 10px;
+}
+
+button:hover {
+    color: white;
+    border-radius: 100px;
+    background: #16171a;
+    /*box-shadow:  9px 9px 16px #1e1f21, -9px -9px 16px #2f3035;*/
+
+}
+
+.multi-button {
+    position: absolute;
+    right: 50px;
+    top: 50px;
+    z-index: 999;
+    /*border-radius: 50px;*/
+    border-radius: 10px;
+    background: #16171a;
+    box-shadow: 9px 9px 16px #0a0b0c, -9px -9px 16px #222328;
+    padding: 15px;
+    display: grid;
+    grid-gap: 0.5rem;
+    width: 50px;
+    margin-left: 200px;
+}
+
+.HoverState {
+    color: white;
+    font-family: "Heebo", sans-serif;
+    position: absolute;
+    right: 70px;
+    white-space: nowrap;
+    top: 25px;
+    font-weight: bold;
+}
+
+.buttonContainer {
+    position: relative;
+    margin: 0 auto;
+}
+
+/*Neomorphic buttons*/

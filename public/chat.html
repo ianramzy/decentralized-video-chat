@@ -5,6 +5,7 @@
     <title>Neon Chat</title>
     <link rel="shortcut icon" href="images/logo.svg">
     <link rel="stylesheet" href="../css/chat.css">
+    <script src="https://kit.fontawesome.com/9d7bb7e31a.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
     <meta property="og:title" content="Join your friends call - Neonchat">
     <meta property="og:description" content="Click the link to join this chat room using Neonchat">
@@ -14,7 +15,11 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-162048272-1"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
         gtag('js', new Date());
         gtag('config', 'UA-162048272-1');
     </script>
@@ -28,12 +33,30 @@
 </div>
 
 
-<div class="buttons" id="buttons">
-    <div class="center">
-        <a href="/" class="round-button">Back</a>
-        <a class="round-button" onclick="{openFullscreen()}">Fullscreen</a>
-        <a class="round-button" onclick="{muteMicrophone()}" id="muteButton">Mute </a>
-        <a class="round-button" onclick="{pauseVideo()}" id="videoPauseButton">Pause </a>
+<div class="multi-button">
+    <div class="buttonContainer">
+        <button class="hoverButton" onclick="{muteMicrophone()}">
+            <i id="mic-icon" class="fas fa-microphone fa-xs"></i>
+        </button>
+        <div class="HoverState" id="mic-text">Mute</div>
+    </div>
+    <div class="buttonContainer">
+        <button class="hoverButton" onclick="{openFullscreen()}">
+            <i class="fas fa-compress fa-xs"></i>
+        </button>
+        <div class="HoverState">Fullscreen</div>
+    </div>
+    <div class="buttonContainer">
+        <button class="hoverButton" onclick="{pauseVideo()}">
+            <i class="fas fa-video fa-xs" id="video-icon"></i>
+        </button>
+        <div class="HoverState" id="video-text">Pause Video</div>
+    </div>
+    <div class="buttonContainer">
+        <button class="hoverButton" onclick="{window.location.href = '/newroom'}">
+            <i class="fas fa-phone-slash fa-xs"></i>
+        </button>
+        <div class="HoverState">End Call</div>
     </div>
 </div>
 
