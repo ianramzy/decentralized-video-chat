@@ -6,6 +6,23 @@ url = window.location.href;
 const roomHash = url.substring(url.lastIndexOf('/') + 1).toLowerCase();
 
 
+function getBrowserName() {
+    var name = "Unknown";
+    if (window.navigator.userAgent.indexOf("MSIE") !== -1) {
+    } else if (window.navigator.userAgent.indexOf("Firefox") !== -1) {
+        name = "Firefox";
+    } else if (window.navigator.userAgent.indexOf("Opera") !== -1) {
+        name = "Opera";
+    } else if (window.navigator.userAgent.indexOf("Chrome") !== -1) {
+        name = "Chrome";
+    } else if (window.navigator.userAgent.indexOf("Safari") !== -1) {
+        name = "Safari";
+    }
+    return name;
+}
+
+var browserName = getBrowserName();
+
 var isWebRTCSupported =
     navigator.getUserMedia ||
     navigator.webkitGetUserMedia ||
@@ -13,14 +30,8 @@ var isWebRTCSupported =
     navigator.msGetUserMedia ||
     window.RTCPeerConnection;
 
-// try {
-//     window.RTCPeerConnection.peerConnection.addStream
-// } catch (e) {
-//     alert("Your browser doesn't support Neon Chat. Please use Chrome or Firefox.");
-//     window.location.href = "/landing";
-// }
-
-if (!isWebRTCSupported) {
+// Handle IE
+if (!isWebRTCSupported || browserName === "Safari" || browserName === "MSIE") {
     alert("Your browser doesn't support Neon Chat. Please use Chrome or Firefox.");
     window.location.href = "/";
 }
@@ -28,14 +39,6 @@ if (!isWebRTCSupported) {
 
 function logIt(message, error) {
     console.log(message);
-    // Add to logs on page
-    // let logs = document.getElementById('logs');
-    // let tmp = document.createElement('P');
-    // tmp.innerText = message;
-    // if (error) {
-    //     tmp.classList.add('error');
-    // }
-    // logs.appendChild(tmp);
 }
 
 // Create an object to save various objects to without polluting the global namespace.
@@ -53,32 +56,29 @@ var VideoChat = {
     // accepted callback to the onMediaStream function, otherwise callback to the
     // noMediaStream function.
     requestMediaStream: function (event) {
-
         logIt("requestMediaStream");
-        navigator.mediaDevices
-            .getUserMedia({video: true, audio: true})
-            .then(stream => {
-                VideoChat.onMediaStream(stream);
-            })
-            .catch(error => {
-                logIt(error);
-                logIt('Failed to get local webcam video, check webcam privacy settings');
-                setTimeout(VideoChat.requestMediaStream, 1000);
-                // alert("Please check your webcam browser privacy settings.")
-            });
+        navigator.mediaDevices.getUserMedia({
+            video: true,
+            audio: true
+        }).then(stream => {
+            VideoChat.onMediaStream(stream);
+        }).catch(error => {
+            logIt(error);
+            logIt('Failed to get local webcam video, check webcam privacy settings');
+            setTimeout(VideoChat.requestMediaStream, 1000);
+        });
     },
 
     requestScreenStream: function (event) {
-        navigator.mediaDevices
-            .getDisplayMedia({video: true, audio: true})
-            .then(stream => {
-                VideoChat.onMediaStream(stream);
-            })
-            .catch(error => {
-                logIt(error);
-                logIt('No media stream for us.');
-                alert("Please check your screen sharing browser privacy settings.")
-            });
+        navigator.mediaDevices.getDisplayMedia({
+            video: true,
+            audio: true
+        }).then(stream => {
+            VideoChat.onMediaStream(stream);
+        }).catch(error => {
+            logIt(error);
+            logIt('No media stream for us.');
+        });
     },
 
     // The onMediaStream function receives the media stream as an argument.
@@ -278,7 +278,6 @@ function openFullscreen() {
         VideoChat.remoteVideo.msRequestFullscreen();
     }
 }
-
 
 function muteMicrophone() {
     var muted = VideoChat.localStream.getAudioTracks()[0].enabled;
