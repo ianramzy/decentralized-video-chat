@@ -279,10 +279,10 @@ function openFullscreen() {
 
 
 function muteMicrophone() {
-    var muted = !VideoChat.localStream.getAudioTracks()[0].enabled;
-    VideoChat.localStream.getAudioTracks()[0].enabled = muted;
-    var mutedButton = document.getElementById("muteButton");
-    if (!muted) {
+    var muted = VideoChat.localStream.getAudioTracks()[0].enabled;
+    VideoChat.localStream.getAudioTracks()[0].enabled = !muted;
+    const mutedButton = document.getElementById("muteButton");
+    if (muted) {
         mutedButton.innerText = "Unmute"
     } else {
         mutedButton.innerText = "Mute"
@@ -290,9 +290,10 @@ function muteMicrophone() {
 }
 
 function pauseVideo() {
-    VideoChat.localStream.getVideoTracks()[0].enabled = !VideoChat.localStream.getVideoTracks()[0].enabled;
-    var pausedButton = document.getElementById("videoPauseButton");
-    if (!muted) {
+    var paused = VideoChat.localStream.getVideoTracks()[0].enabled;
+    VideoChat.localStream.getVideoTracks()[0].enabled = !paused;
+    const pausedButton = document.getElementById("videoPauseButton");
+    if (paused) {
         pausedButton.innerText = "Unpause"
     } else {
         pausedButton.innerText = "Pause"
