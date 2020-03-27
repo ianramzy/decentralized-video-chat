@@ -54,14 +54,14 @@ var VideoChat = {
     // noMediaStream function.
     requestMediaStream: function (event) {
 
-        console.log("requestMediaStream");
+        logIt("requestMediaStream");
         navigator.mediaDevices
             .getUserMedia({video: true, audio: true})
             .then(stream => {
                 VideoChat.onMediaStream(stream);
             })
             .catch(error => {
-                console.log(error);
+                logIt(error);
                 logIt('Failed to get local webcam video, check webcam privacy settings');
                 setTimeout(VideoChat.requestMediaStream, 1000);
                 // alert("Please check your webcam browser privacy settings.")
@@ -75,7 +75,7 @@ var VideoChat = {
                 VideoChat.onMediaStream(stream);
             })
             .catch(error => {
-                console.log(error);
+                logIt(error);
                 logIt('No media stream for us.');
                 alert("Please check your screen sharing browser privacy settings.")
             });
@@ -83,12 +83,12 @@ var VideoChat = {
 
     // The onMediaStream function receives the media stream as an argument.
     onMediaStream: function (stream) {
-        console.log("onMediaStream");
+        logIt("onMediaStream");
         VideoChat.localStream = stream;
         // Add the stream as video's srcObject.
         Snackbar.show({
             text: 'Share this URL with a friend to get started',
-            actionText: 'Copy URL',
+            actionText: 'Copy Link',
             width: '355px',
             pos: 'top-left',
             actionTextColor: '#8688ff',
@@ -120,16 +120,16 @@ var VideoChat = {
 
     // When we are ready to call, enable the Call button.
     readyToCall: function (event) {
-        // Show share URL
-        console.log("readyToCall");
+        logIt("readyToCall");
         if (VideoChat.willInitiateCall) {
+            logIt("Initiating call")
             VideoChat.startCall()
         }
     },
 
     // Set up a callback to run when we have the ephemeral token to use Twilio's TURN server.
     startCall: function (event) {
-        console.log("startCall");
+        logIt("startCall");
         logIt('>>> Sending token request...');
         VideoChat.socket.on('token', VideoChat.onToken(VideoChat.createOffer));
         VideoChat.socket.emit('token', roomHash);
@@ -137,13 +137,15 @@ var VideoChat = {
 
     // When we receive the ephemeral token back from the server.
     onToken: function (callback) {
-        console.log("onToken");
+        logIt("onToken");
         return function (token) {
             logIt('<<< Received token');
             // Set up a new RTCPeerConnection using the token's iceServers.
             VideoChat.peerConnection = new RTCPeerConnection({iceServers: token.iceServers});
             // Add the local video stream to the peerConnection.
-            VideoChat.peerConnection.addStream(VideoChat.localStream);
+            VideoChat.localStream.getTracks().forEach(function (track) {
+                VideoChat.peerConnection.addTrack(track, VideoChat.localStream);
+            });
             // Set up callbacks for the connection generating iceCandidates or
             // receiving the remote media stream.
             VideoChat.peerConnection.onicecandidate = VideoChat.onIceCandidate;
@@ -158,7 +160,7 @@ var VideoChat = {
 
     // When the peerConnection generates an ice candidate, send it over the socket to the peer.
     onIceCandidate: function (event) {
-        console.log("onIceCandidate");
+        logIt("onIceCandidate");
         if (event.candidate) {
             logIt(`<<< Received local ICE candidate from STUN/TURN server (${event.candidate.address})`);
             if (VideoChat.connected) {
@@ -177,7 +179,7 @@ var VideoChat = {
     // When receiving a candidate over the socket, turn it back into a real
     // RTCIceCandidate and add it to the peerConnection.
     onCandidate: function (candidate) {
-        console.log("onCandidate");
+        logIt("onCandidate");
         rtcCandidate = new RTCIceCandidate(JSON.parse(candidate));
         logIt(`<<< Received remote ICE candidate (${rtcCandidate.address} - ${rtcCandidate.relatedAddress})`);
         VideoChat.peerConnection.addIceCandidate(rtcCandidate);
@@ -185,7 +187,7 @@ var VideoChat = {
 
     // Create an offer that contains the media capabilities of the browser.
     createOffer: function () {
-        console.log("createOffer");
+        logIt("createOffer");
         logIt('>>> Creating offer...');
         VideoChat.peerConnection.createOffer(
             function (offer) {
@@ -208,7 +210,7 @@ var VideoChat = {
     // description to the peerConnection object. Then the answer is created in the
     // same manner as the offer and sent over the socket.
     createAnswer: function (offer) {
-        console.log("createAnswer");
+        logIt("createAnswer");
         return function () {
             logIt('>>> Creating answer...');
             VideoChat.connected = true;
@@ -230,7 +232,7 @@ var VideoChat = {
     // When a browser receives an offer, set up a callback to be run when the
     // ephemeral token is returned from Twilio.
     onOffer: function (offer) {
-        console.log("onOffer");
+        logIt("onOffer");
         logIt('<<< Received offer');
         VideoChat.socket.on('token', VideoChat.onToken(VideoChat.createAnswer(offer)));
         VideoChat.socket.emit('token', roomHash);
@@ -239,7 +241,7 @@ var VideoChat = {
     // When an answer is received, add it to the peerConnection as the remote
     // description.
     onAnswer: function (answer) {
-        console.log("onAnswer");
+        logIt("onAnswer");
         logIt('<<< Received answer');
         var rtcAnswer = new RTCSessionDescription(JSON.parse(answer));
         VideoChat.peerConnection.setRemoteDescription(rtcAnswer);
@@ -257,7 +259,7 @@ var VideoChat = {
     // When the peerConnection receives the actual media stream from the other
     // browser, add it to the other video element on the page.
     onAddStream: function (event) {
-        console.log("onAddStream");
+        logIt("onAddStream");
         logIt('<<< Received new stream from remote. Adding it...');
         VideoChat.remoteVideo.srcObject = event.stream;
         Snackbar.close();
@@ -334,8 +336,6 @@ Snackbar.show({
         window.open('https://getacclaim.zendesk.com/hc/en-us/articles/360001547832-Setting-the-default-camera-on-your-browser', '_blank');
     }
 });
-
-
 
 
 // auto get media
