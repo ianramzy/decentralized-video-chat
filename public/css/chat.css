@@ -30,7 +30,9 @@ video {
 
 #local-video {
     width: 20%;
-    height: auto
+    height: auto;
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
 }
 
 #remote-video {
