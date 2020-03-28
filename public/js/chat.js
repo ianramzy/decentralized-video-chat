@@ -57,6 +57,7 @@ var VideoChat = {
     // noMediaStream function.
     requestMediaStream: function (event) {
         logIt("requestMediaStream");
+        VideoChat.rePositionLocalVideo();
         navigator.mediaDevices.getUserMedia({
             video: true,
             audio: true
@@ -256,24 +257,22 @@ var VideoChat = {
         VideoChat.remoteVideo.style.background = 'none';
         VideoChat.connected = true;
         $('#remote-video-text').text("");
-
+        $('#local-video-text').fadeOut();
 
         var timesRun = 0;
-        var interval = setInterval(function(){
+        var interval = setInterval(function () {
             timesRun += 1;
-            if(timesRun === 20){
+            if (timesRun === 20) {
                 clearInterval(interval);
             }
             VideoChat.rePositionLocalVideo()
         }, 300);
-
-
     },
 
-    rePositionLocalVideo: function(){
+    rePositionLocalVideo: function () {
         var bounds = $("#remote-video").position();
-        bounds.top +=  10;
-        bounds.left +=  10;
+        bounds.top += 10;
+        bounds.left += 10;
         $("#moveable").css(bounds)
     }
 };
@@ -441,7 +440,5 @@ function switchStreamHelper(stream) {
 
 $("#moveable").draggable({containment: 'window'});
 
-
 // auto get media
 VideoChat.requestMediaStream();
-VideoChat.rePositionLocalVideo()
