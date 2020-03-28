@@ -1,24 +1,36 @@
-# Video Chat
 
-A simple video chat between two clients as an example of how to connect two browsers via WebRTC using Twilio STUN/TURN infrastructure.
 
-Read the blog post to see how to build this: [Getting Started with WebRTC using Node.js, Socket.io and Twilio’s NAT Traversal Service](https://www.twilio.com/blog/2014/12/set-phasers-to-stunturn-getting-started-with-webrtc-using-node-js-socket-io-and-twilios-nat-traversal-service.html).
+
+# Decentralized Video Chat
+[![Author](https://img.shields.io/badge/Author-ianramzy-brightgreen.svg)](https://ianramzy.com)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg) 
+[![Donate](https://img.shields.io/badge/Donate-PayPal-brightgreen.svg)](https://paypal.me/ianramzy)
+![GitHub repo size](https://img.shields.io/github/repo-size/ianramzy/decentralized-video-chat.svg)
+[![Repo Link](https://img.shields.io/badge/Repo-Link-black.svg)](https://github.com/ianramzy/decentralized-video-chat)
+# → https://neonchat.io
+
+Decentralized video chat platform powered by WebRTC using Twilio STUN/TURN infrastructure.
 
 # Quick start
 * Clone this repo
 ```
-git clone https://github.com/philnash/video-chat.git
-cd video-chat
+git clone https://github.com/ianramzy/decentralized-video-chat
+cd decentralized-video-chat
 ```
 * Install dependencies
 ```
 npm install
 ```
-* Create a `.env` file copying `.env.template`. Fill in your `Account SID` and `Auth Token` from your [Twilio console](https://www.twilio.com/console)
+* Create a `.env` file copying `.env.template` (You copy the file using the command below). 
+* Fill in your `Account SID` and `Auth Token` from your [Twilio console](https://www.twilio.com/console)
+It takes 2 minutes to sign up for a free account.
+```
+cp .env.template .env
+```
 * Start the server
 ```
 npm start
 ```
-* Open two browsers on your laptop and point them `localhost:3000`. If you want to use a client on another computer/mobile, make sure you publish your server on an HTTPS connection (otherwise the camera may not work). You can use a service like [ngrok](https://ngrok.com/) for that.
-* Click on the "Get Video" button on both browsers
-* Click on button "Call" on one of the browser, to establish the video call
+* Open two browsers on your laptop and point them `localhost:3000`. 
+* If you want to use a client on another computer, make sure you publish your server on an HTTPS connection.
+ You can use a service like [ngrok](https://ngrok.com/) for that.
