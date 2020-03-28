@@ -9,10 +9,15 @@
 [![Repo Link](https://img.shields.io/badge/Repo-Link-black.svg)](https://github.com/ianramzy/decentralized-video-chat)
 # → https://neonchat.io
 
-Decentralized video chat platform powered by WebRTC using Twilio STUN/TURN infrastructure.
+Decentralized video chat platform powered by WebRTC using Twilio STUN/TURN infrastructure. 
+Neon Chat provides video quality and latency simply not available with traditional 
+technology.
 
-# Quick start
-* You will need to have Node.js installed, this project has been tested with Node version 10.X.X and 12.X.X but 
+![alt-text-1](public/images/githubpreview.png "Video Calling") 
+
+
+## Quick start
+* You will need to have Node.js installed, this project has been tested with Node version 10.X and 12.X but 
 probably works with more versions
 * Clone this repo
 ```
@@ -31,6 +36,6 @@ npm start
 * If you want to use a client on another computer, make sure you publish your server on an HTTPS connection.
  You can use a service like [ngrok](https://ngrok.com/) for that.
  
- # Quick Deployment
+ ## Quick Deployment
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/ianramzy/decentralized-video-chat)
 
