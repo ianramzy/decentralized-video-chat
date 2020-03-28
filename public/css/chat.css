@@ -6,9 +6,64 @@ body {
     padding: 0;
 }
 
-.videos {
-    height: 80vh;
-    width: 80vw;
+
+video {
+    background: #16171a;
+}
+
+#moveable {
+    z-index: 100;
+    right: 14px;
+    bottom: 10px;
+    position: absolute;
+    width: 15%;
+    cursor: move;
+
+}
+
+#moveable p {
+    z-index: 101;
+    position: absolute;
+    color: white;
+    font-family: "Heebo", sans-serif;
+    white-space: nowrap;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+    background: rgba(0, 0, 0, 0.38);
+    padding: 10px;
+    transition: 0.5s;
+
+}
+
+#local-video {
+    width: 100%;
+    height: auto;
+    border-radius: 20px;
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    background: #16171a;
+}
+
+#remote-video-text {
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: calc(40%);
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    z-index: 1;
+
+    color: white;
+    font-family: "Heebo", sans-serif;
+    white-space: nowrap;
+    font-weight: bold;
+}
+
+#remote-video {
     padding: 0;
     margin: 0;
     position: absolute;
@@ -16,35 +71,13 @@ body {
     left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
-}
-
-
-video {
-    /*background: #292B32;*/
-    background: #16171a;
-}
-
-
-#local-video {
-    width: 20%;
+    width: 70%;
     height: auto;
-    position: absolute;
-    z-index: 100;
-    right: 14px;
-    bottom: 10px;
-    border-radius: 20px;
-    -webkit-transform: scaleX(-1);
-    transform: scaleX(-1);
-    background: #16171a;
-}
 
-#remote-video {
     max-height: 100%;
     max-width: 100%;
-    min-width: 100%;
-    min-height: 100%;
+
     border-radius: 10px;
-    object-fit: cover;
     background-image: url(../images/loader.gif);
     background-size: 400px auto;
     background-repeat: no-repeat;
@@ -74,7 +107,7 @@ button:hover {
 .multi-button {
     position: absolute;
     right: calc(5vw - 40px);
-    top: 10vh;
+    top: calc(50vh - 175px);
     z-index: 999;
     border-radius: 10px;
     background: #16171a;

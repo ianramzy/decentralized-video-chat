@@ -62,6 +62,8 @@ var VideoChat = {
             audio: true
         }).then(stream => {
             VideoChat.onMediaStream(stream);
+            $('#local-video-text').text("Drag Me");
+            setTimeout(() => $('#local-video-text').hide(), 5000);
         }).catch(error => {
             logIt(error);
             logIt('Failed to get local webcam video, check webcam privacy settings');
@@ -202,7 +204,7 @@ var VideoChat = {
         logIt("createAnswer");
         return function () {
             logIt('>>> Creating answer...');
-            VideoChat.connected = true;
+            // VideoChat.connected = true;
             rtcOffer = new RTCSessionDescription(JSON.parse(offer));
             VideoChat.peerConnection.setRemoteDescription(rtcOffer);
             VideoChat.peerConnection.createAnswer(
@@ -232,9 +234,11 @@ var VideoChat = {
     onAnswer: function (answer) {
         logIt("onAnswer");
         logIt('<<< Received answer');
+
         var rtcAnswer = new RTCSessionDescription(JSON.parse(answer));
         VideoChat.peerConnection.setRemoteDescription(rtcAnswer);
         VideoChat.connected = true;
+        // should prolly move conneted = true to onaddstream
         VideoChat.localICECandidates.forEach(candidate => {
             // The caller now knows that the callee is ready to accept new ICE candidates, so sending the buffer over
             logIt(`>>> Sending local ICE candidate (${candidate.address})`);
@@ -253,6 +257,7 @@ var VideoChat = {
         VideoChat.remoteVideo.srcObject = event.stream;
         Snackbar.close();
         VideoChat.remoteVideo.style.background = 'none';
+        $('#remote-video-text').text("");
     }
 };
 
@@ -260,7 +265,7 @@ var VideoChat = {
 var isFullscreen = false;
 
 function openFullscreen() {
-    var elem = document.getElementsByClassName("videos")[0];
+    var elem = document.getElementById("remote-video");
     if (!isFullscreen) {
         isFullscreen = true;
         if (elem.requestFullscreen) {
@@ -370,6 +375,10 @@ $(document).ready(function () {
 var mode = "camera";
 
 function swap() {
+    if (!VideoChat.connected) {
+        alert("You must join a call before you can share your screen.");
+        return
+    }
     const swapIcon = document.getElementById("swap-icon");
     const swapText = document.getElementById("swap-text");
     if (mode === "camera") {
@@ -399,10 +408,13 @@ function swap() {
 
 function switchStreamHelper(stream) {
     let videoTrack = stream.getVideoTracks()[0];
-    var sender = VideoChat.peerConnection.getSenders().find(function (s) {
-        return s.track.kind === videoTrack.kind;
-    });
-    sender.replaceTrack(videoTrack);
+    if (VideoChat.connected) {
+        var sender = VideoChat.peerConnection.getSenders().find(function (s) {
+            return s.track.kind === videoTrack.kind;
+        });
+        sender.replaceTrack(videoTrack);
+    }
+
     VideoChat.localStream = videoTrack;
     VideoChat.localVideo.srcObject = stream;
 }
@@ -410,3 +422,9 @@ function switchStreamHelper(stream) {
 
 // auto get media
 VideoChat.requestMediaStream();
+
+
+$("#moveable").draggable({containment: 'window'});
+
+
+setInterval(() => console.log(VideoChat.remoteVideo.srcObject), 2000);

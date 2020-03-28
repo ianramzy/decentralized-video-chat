@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../css/snackbar.css">
     <script src="https://kit.fontawesome.com/9d7bb7e31a.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
     <meta property="og:title" content="Join your friends call - Neonchat">
     <meta property="og:description" content="Click the link to join this chat room using Neonchat">
     <meta property="og:image" content="https://neonchat.io/images/preview.png">
@@ -27,12 +28,14 @@
 </head>
 <body>
 
+<p id="remote-video-text">Waiting for peer to connect...</p>
+<video id="remote-video" autoplay ondblclick={openFullscreen()}></video>
 
-<div class="videos">
-    <video id="remote-video" autoplay ondblclick={openFullscreen()}></video>
+
+<div id="moveable">
+    <p id="local-video-text">No webcam input</p>
     <video id="local-video" autoplay muted></video>
 </div>
-
 
 <div class="multi-button">
     <div class="buttonContainer">
@@ -54,16 +57,16 @@
         <div class="HoverState" id="video-text">Pause Video</div>
     </div>
     <div class="buttonContainer">
+        <button class="hoverButton" id="share-button" onclick="{swap()}">
+            <i id="swap-icon" class="fas fa-desktop fa-xs"></i>
+        </button>
+        <div class="HoverState" id="swap-text">Share Screen</div>
+    </div>
+    <div class="buttonContainer">
         <button class="hoverButton" onclick="{window.location.href = '/newroom'}">
             <i class="fas fa-phone-slash fa-xs"></i>
         </button>
         <div class="HoverState">End Call</div>
-    </div>
-    <div class="buttonContainer">
-        <button class="hoverButton" onclick="{swap()}">
-            <i id="swap-icon" class="fas fa-desktop fa-xs"></i>
-        </button>
-        <div class="HoverState" id="swap-text">Share Screen</div>
     </div>
 </div>
 
