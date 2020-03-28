@@ -12,9 +12,15 @@ technology.
 
 ![screenshot](public/images/githubpreview.png "Video Calling")
 
+## Features
+* Screen sharing
+* Auto-scaling video quality
+* No download required, entirely browser based
+* Direct peer to peer connection ensures lowest latency
+* Single use disposable chat rooms
+
 ## Quick start
-* You will need to have Node.js installed, this project has been tested with Node version 10.X and 12.X but 
-probably works with more versions
+* You will need to have Node.js installed, this project has been tested with Node version 10.X and 12.X
 * Clone this repo
 ```
 git clone https://github.com/ianramzy/decentralized-video-chat
@@ -28,8 +34,8 @@ npm install
 ```
 npm start
 ```
-* Open two browsers on your laptop and point them `localhost:3000`. 
-* If you want to use a client on another computer, make sure you publish your server on an HTTPS connection.
+* Open `localhost:3000` in Chrome or Firefox. 
+* If you want to use a client on another computer/network, make sure you publish your server on an HTTPS connection.
  You can use a service like [ngrok](https://ngrok.com/) for that.
  
  ## Quick Deployment

@@ -6,6 +6,14 @@ url = window.location.href;
 const roomHash = url.substring(url.lastIndexOf('/') + 1).toLowerCase();
 
 
+
+// audio: {
+//     echoCancellation: {exact: hasEchoCancellation}
+// },
+
+
+
+
 function getBrowserName() {
     var name = "Unknown";
     if (window.navigator.userAgent.indexOf("MSIE") !== -1) {
@@ -30,7 +38,6 @@ var isWebRTCSupported =
     navigator.msGetUserMedia ||
     window.RTCPeerConnection;
 
-// Handle IE
 if (!isWebRTCSupported || browserName === "Safari" || browserName === "MSIE") {
     alert("Your browser doesn't support Neon Chat. Please use Chrome or Firefox.");
     window.location.href = "/";
@@ -427,7 +434,7 @@ function swap() {
 function switchStreamHelper(stream) {
     let videoTrack = stream.getVideoTracks()[0];
     if (VideoChat.connected) {
-        var sender = VideoChat.peerConnection.getSenders().find(function (s) {
+        var sender = VideoChat.peerConnection.getSenders().find(function (s)  {
             return s.track.kind === videoTrack.kind;
         });
         sender.replaceTrack(videoTrack);
@@ -440,5 +447,67 @@ function switchStreamHelper(stream) {
 
 $("#moveable").draggable({containment: 'window'});
 
+
+
+// function speechWrapper() {
+//     try {
+//         var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+//         var recognition = new SpeechRecognition(VideoChat.remoteVideo.srcObject.getAudioTracks()[0]);
+//         // var recognition = new SpeechRecognition();
+//     } catch (e) {
+//         console.error(e);
+//         alert("error importing speech library")
+//     }
+//
+// // If false, the recording will stop after a few seconds of silence.
+// // When true, the silence period is longer (about 15 seconds),
+// // allowing us to keep recording even when the user pauses.
+//     recognition.continuous = true;
+//     recognition.interimResults = true;
+// // recognition.maxAlternatives = 3;
+//
+//     var finalTranscript;
+//     recognition.onresult = (event) => {
+//         let interimTranscript = '';
+//         for (let i = event.resultIndex, len = event.results.length; i < len; i++) {
+//             let transcript = event.results[i][0].transcript;
+//             if (event.results[i].isFinal) {
+//                 finalTranscript += transcript;
+//             } else {
+//                 interimTranscript += transcript;
+//                 $('#remote-video-text').text(interimTranscript);
+//                 console.log(interimTranscript);
+//             }
+//         }
+//     };
+//
+//     recognition.onstart = function () {
+//         console.log("recording on");
+//     };
+//
+//     recognition.onspeechend = function () {
+//         console.log("on speech end");
+//     };
+//
+//     recognition.onerror = function (event) {
+//         if (event.error === 'no-speech') {
+//             console.log("no speech detected");
+//         }
+//     };
+//
+//     recognition.onend = function () {
+//         console.log("on end");
+//     };
+//
+//     // recognition.stop();
+//     recognition.start();
+// }
+
+
 // auto get media
 VideoChat.requestMediaStream();
+
+
+
+
+
