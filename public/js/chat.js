@@ -204,7 +204,6 @@ var VideoChat = {
         logIt("createAnswer");
         return function () {
             logIt('>>> Creating answer...');
-            // VideoChat.connected = true;
             rtcOffer = new RTCSessionDescription(JSON.parse(offer));
             VideoChat.peerConnection.setRemoteDescription(rtcOffer);
             VideoChat.peerConnection.createAnswer(
@@ -237,8 +236,6 @@ var VideoChat = {
 
         var rtcAnswer = new RTCSessionDescription(JSON.parse(answer));
         VideoChat.peerConnection.setRemoteDescription(rtcAnswer);
-        VideoChat.connected = true;
-        // should prolly move conneted = true to onaddstream
         VideoChat.localICECandidates.forEach(candidate => {
             // The caller now knows that the callee is ready to accept new ICE candidates, so sending the buffer over
             logIt(`>>> Sending local ICE candidate (${candidate.address})`);
@@ -257,7 +254,27 @@ var VideoChat = {
         VideoChat.remoteVideo.srcObject = event.stream;
         Snackbar.close();
         VideoChat.remoteVideo.style.background = 'none';
+        VideoChat.connected = true;
         $('#remote-video-text').text("");
+
+
+        var timesRun = 0;
+        var interval = setInterval(function(){
+            timesRun += 1;
+            if(timesRun === 20){
+                clearInterval(interval);
+            }
+            VideoChat.rePositionLocalVideo()
+        }, 300);
+
+
+    },
+
+    rePositionLocalVideo: function(){
+        var bounds = $("#remote-video").position();
+        bounds.top +=  10;
+        bounds.left +=  10;
+        $("#moveable").css(bounds)
     }
 };
 
@@ -425,3 +442,4 @@ $("#moveable").draggable({containment: 'window'});
 
 // auto get media
 VideoChat.requestMediaStream();
+VideoChat.rePositionLocalVideo()

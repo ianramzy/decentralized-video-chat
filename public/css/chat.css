@@ -2,9 +2,33 @@
 
 
 /*Fade in page on load*/
-@-webkit-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-@-moz-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@-webkit-keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@-moz-keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
 /*Fade in page on load*/
 
 
@@ -12,16 +36,16 @@ body {
     background: #16171B;
     margin: 0;
     padding: 0;
-    opacity:0;  /* make things invisible upon start */
-    -webkit-animation:fadeIn ease-in 1;
-    -moz-animation:fadeIn ease-in 1;
-    animation:fadeIn ease-in 1;
-    -webkit-animation-fill-mode:forwards;
-    -moz-animation-fill-mode:forwards;
-    animation-fill-mode:forwards;
-    -webkit-animation-duration:0.3s;
-    -moz-animation-duration:0.3s;
-    animation-duration:0.3s;
+    opacity: 0; /* make things invisible upon start */
+    -webkit-animation: fadeIn ease-in 1;
+    -moz-animation: fadeIn ease-in 1;
+    animation: fadeIn ease-in 1;
+    -webkit-animation-fill-mode: forwards;
+    -moz-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+    -webkit-animation-duration: 0.3s;
+    -moz-animation-duration: 0.3s;
+    animation-duration: 0.3s;
 }
 
 
@@ -52,13 +76,12 @@ video {
 
 #moveable {
     z-index: 100;
-    right: 14px;
-    bottom: 10px;
     position: absolute;
     width: 15%;
     cursor: move;
 
 }
+
 
 #moveable p {
     z-index: 101;
@@ -71,9 +94,9 @@ video {
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
     font-weight: bold;
-    background: rgba(0, 0, 0, 0.38);
+    background: rgba(0, 0, 0, 0.12);
     padding: 10px;
-    transition: 0.5s;
+    border-radius: 5px;
 }
 
 #local-video {
@@ -144,7 +167,7 @@ button:hover {
 
 .multi-button {
     position: absolute;
-    right: calc(5vw - 40px);
+    left: calc(5vw - 40px);
     top: calc(50vh - 175px);
     z-index: 999;
     border-radius: 10px;
@@ -160,7 +183,7 @@ button:hover {
     color: white;
     font-family: "Heebo", sans-serif;
     position: absolute;
-    right: 70px;
+    left: 70px;
     white-space: nowrap;
     top: 25px;
     font-weight: bold;
