@@ -23,12 +23,6 @@ cd decentralized-video-chat
 ```
 npm install
 ```
-* Create a `.env` file copying `.env.template` (You can copy the file using the command below). 
-```
-cp .env.template .env
-```
-* Fill in your `Account SID` and `Auth Token` from your [Twilio console](https://www.twilio.com/console)
-It takes 2 minutes to sign up for a free account.
 * Start the server
 ```
 npm start
