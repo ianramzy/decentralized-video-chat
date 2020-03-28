@@ -63,7 +63,7 @@ var VideoChat = {
         }).then(stream => {
             VideoChat.onMediaStream(stream);
             $('#local-video-text').text("Drag Me");
-            setTimeout(() => $('#local-video-text').hide(), 5000);
+            setTimeout(() => $('#local-video-text').fadeOut(), 5000);
         }).catch(error => {
             logIt(error);
             logIt('Failed to get local webcam video, check webcam privacy settings');
@@ -341,12 +341,13 @@ function pauseVideo() {
 }
 
 
-//Show and hide buttons automatically
+// Fade out / show UI on mouse move
 var timedelay = 1;
 
 function delayCheck() {
     if (timedelay === 5) {
         $('.multi-button').fadeOut();
+        $('#header').fadeOut();
         timedelay = 1;
     }
     timedelay = timedelay + 1;
@@ -354,6 +355,7 @@ function delayCheck() {
 
 $(document).mousemove(function () {
     $('.multi-button').fadeIn();
+    $('#header').fadeIn();
     timedelay = 1;
     clearInterval(_delay);
     _delay = setInterval(delayCheck, 500);
@@ -399,25 +401,25 @@ function swap() {
     const swapIcon = document.getElementById("swap-icon");
     const swapText = document.getElementById("swap-text");
     if (mode === "camera") {
-        mode = "screen";
-        swapIcon.classList.remove("fa-desktop");
-        swapIcon.classList.add("fa-camera");
-        swapText.innerText = "Share Webcam";
         navigator.mediaDevices.getDisplayMedia({
             video: true,
             audio: true
         }).then(function (stream) {
+            mode = "screen";
+            swapIcon.classList.remove("fa-desktop");
+            swapIcon.classList.add("fa-camera");
+            swapText.innerText = "Share Webcam";
             switchStreamHelper(stream);
         });
     } else {
-        mode = "camera";
-        swapIcon.classList.remove("fa-camera");
-        swapIcon.classList.add("fa-desktop");
-        swapText.innerText = "Share Screen";
         navigator.mediaDevices.getUserMedia({
             video: true,
             audio: true
         }).then(function (stream) {
+            mode = "camera";
+            swapIcon.classList.remove("fa-camera");
+            swapIcon.classList.add("fa-desktop");
+            swapText.innerText = "Share Screen";
             switchStreamHelper(stream);
         });
     }

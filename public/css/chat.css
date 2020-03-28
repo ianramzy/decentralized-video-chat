@@ -164,6 +164,10 @@ button {
     padding: 10px;
 }
 
+button:focus {
+    outline: none;
+}
+
 button:hover {
     color: white;
     border-radius: 100px;
