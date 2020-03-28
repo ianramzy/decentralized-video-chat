@@ -12,6 +12,8 @@
 Decentralized video chat platform powered by WebRTC using Twilio STUN/TURN infrastructure.
 
 # Quick start
+* You will need to have Node.js installed, this project has been tested with Node version 10.X.X and 12.X.X but 
+probably works with more versions
 * Clone this repo
 ```
 git clone https://github.com/ianramzy/decentralized-video-chat
@@ -21,12 +23,12 @@ cd decentralized-video-chat
 ```
 npm install
 ```
-* Create a `.env` file copying `.env.template` (You copy the file using the command below). 
-* Fill in your `Account SID` and `Auth Token` from your [Twilio console](https://www.twilio.com/console)
-It takes 2 minutes to sign up for a free account.
+* Create a `.env` file copying `.env.template` (You can copy the file using the command below). 
 ```
 cp .env.template .env
 ```
+* Fill in your `Account SID` and `Auth Token` from your [Twilio console](https://www.twilio.com/console)
+It takes 2 minutes to sign up for a free account.
 * Start the server
 ```
 npm start
