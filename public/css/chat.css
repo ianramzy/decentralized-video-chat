@@ -73,6 +73,11 @@ video {
     padding: 7px;
 }
 
+#header, a {
+    color: white;
+    text-decoration: none;
+}
+
 
 #moveable {
     z-index: 100;
