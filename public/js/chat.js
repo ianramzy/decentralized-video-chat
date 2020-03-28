@@ -420,11 +420,8 @@ function switchStreamHelper(stream) {
 }
 
 
-// auto get media
-VideoChat.requestMediaStream();
-
-
 $("#moveable").draggable({containment: 'window'});
 
 
-setInterval(() => console.log(VideoChat.remoteVideo.srcObject), 2000);
+// auto get media
+VideoChat.requestMediaStream();

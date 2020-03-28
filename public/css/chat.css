@@ -1,15 +1,54 @@
 @import url("https://fonts.googleapis.com/css?family=Fira+Sans:600|Heebo:400,500,700&display=swap");
 
+
+/*Fade in page on load*/
+@-webkit-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@-moz-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+/*Fade in page on load*/
+
+
 body {
     background: #16171B;
     margin: 0;
     padding: 0;
+    opacity:0;  /* make things invisible upon start */
+    -webkit-animation:fadeIn ease-in 1;
+    -moz-animation:fadeIn ease-in 1;
+    animation:fadeIn ease-in 1;
+    -webkit-animation-fill-mode:forwards;
+    -moz-animation-fill-mode:forwards;
+    animation-fill-mode:forwards;
+    -webkit-animation-duration:0.3s;
+    -moz-animation-duration:0.3s;
+    animation-duration:0.3s;
 }
 
 
 video {
     background: #16171a;
 }
+
+#header {
+    position: absolute;
+    color: white;
+    font-family: "Fira Sans", sans-serif;
+    font-weight: 600;
+    white-space: nowrap;
+    top: 40px;
+    left: 80px;
+    margin-left: 30px;
+    margin-top: 30px;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    float: left;
+}
+
+#header p, img {
+    float: left;
+    padding: 7px;
+}
+
 
 #moveable {
     z-index: 100;
@@ -35,7 +74,6 @@ video {
     background: rgba(0, 0, 0, 0.38);
     padding: 10px;
     transition: 0.5s;
-
 }
 
 #local-video {
@@ -137,3 +175,9 @@ button:hover {
 }
 
 /*Neomorphic buttons*/
+
+
+
+
+
+
