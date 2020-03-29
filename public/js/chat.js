@@ -83,7 +83,7 @@ var VideoChat = {
             text: 'Share this URL with a friend to get started',
             actionText: 'Copy Link',
             width: '355px',
-            pos: 'top-left',
+            pos: 'top-center',
             actionTextColor: '#8688ff',
             duration: 500000,
             backgroundColor: '#16171a',
@@ -149,6 +149,7 @@ var VideoChat = {
             VideoChat.socket.on('answer', VideoChat.onAnswer);
             VideoChat.socket.on('requestToggleCaptions', () => toggleSendCaptions());
             VideoChat.socket.on('recieveCaptions', (captions) => VideoChat.recieveCaptions(captions));
+
             callback();
         };
     },
@@ -348,6 +349,7 @@ function muteMicrophone() {
 
 function pauseVideo() {
     var paused = VideoChat.localStream.getVideoTracks()[0].enabled;
+    alert(paused);
     VideoChat.localStream.getVideoTracks()[0].enabled = !paused;
     const micIcon = document.getElementById("video-icon");
     const micText = document.getElementById("video-text");
@@ -462,7 +464,7 @@ function switchStreamHelper(stream) {
 
 
 $("#moveable").draggable({containment: 'window'});
-
+$('#remote-video-text').text("").fadeOut();
 
 var sendingCaptions = false;
 var receivingCaptions = false;
@@ -470,7 +472,7 @@ var receivingCaptions = false;
 
 function requestToggleCaptions() {
     if (!VideoChat.connected) {
-        alert("You must be connected to a peer to use Live Caption")
+        alert("You must be connected to a peer to use Live Caption");
         return
     }
     if (receivingCaptions) {
@@ -562,6 +564,8 @@ function startSpeech() {
 
 // auto get media
 VideoChat.requestMediaStream();
+
+
 
 
 

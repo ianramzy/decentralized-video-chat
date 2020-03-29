@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Neon Chat</title>
-    <link rel="shortcut icon" href="images/logo.svg">
+    <link rel="shortcut icon" href="/images/logo.svg">
     <link rel="stylesheet" href="../css/chat.css">
     <link rel="stylesheet" href="../css/snackbar.css">
     <script src="https://kit.fontawesome.com/9d7bb7e31a.js" crossorigin="anonymous"></script>
@@ -34,16 +34,37 @@
         <img src="/images/logo.svg" alt="Neon" width="48" height="48">
         <p>Neon Chat</p>
     </a>
-
 </div>
 
 
-<div>
-    <p id="remote-video-text">Waiting for peer to connect...</p>
-    <video id="remote-video" autoplay ondblclick={openFullscreen()}></video>
-    <div id="moveable">
-        <p id="local-video-text">No webcam input</p>
-        <video id="local-video" autoplay muted></video>
+<p id="remote-video-text"></p>
+<video id="remote-video" autoplay ondblclick={openFullscreen()}></video>
+<div id="moveable">
+    <p id="local-video-text">No webcam input</p>
+    <video id="local-video" autoplay muted></video>
+</div>
+
+
+<div id="entire-chat">
+    <form class="compose">
+        <textarea type="text" placeholder="Type a message"></textarea>
+    </form>
+    <div id="chat-zone">
+        <div class="chat-messages">
+
+            <div class="message-item customer">
+                <div class="message-bloc">
+                    <div class="message">Have you tried this chat?</div>
+                </div>
+            </div>
+
+            <div class="message-item moderator">
+                <div class="message-bloc">
+                    <div class="message">Not yet! It looks awesome</div>
+                </div>
+            </div>
+
+        </div>
     </div>
 </div>
 
@@ -85,11 +106,36 @@
         </button>
         <div class="HoverState" id="caption-text">Start Live Caption</div>
     </div>
+    <div class="buttonContainer">
+        <button class="hoverButton" onclick="{$('#entire-chat').fadeToggle();}">
+            <i class="fas fa-comment-alt fa-xs"></i>
+        </button>
+        <div class="HoverState">Open Chat</div>
+    </div>
 </div>
 
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="../js/snackbar.js"></script>
 <script src="../js/chat.js"></script>
+<script>
+    $('#entire-chat').hide();
+    var input = document.querySelector('.compose textarea');
+    var socket = io();
+
+    input.addEventListener('keypress', function (event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            socket.emit('chat message', input.value);
+            $('.chat-messages').append('<div class="message-item customer"><div class="message-bloc"><div class="message">' + input.value + '</div></div></div>');
+            input.value = '';
+        }
+    });
+
+    socket.on('chat message', function (msg) {
+        $('.chat-messages').append('<div class="message-item moderator"><div class="message-bloc"><div class="message">' + msg + '</div></div></div>');
+    });
+
+</script>
 </body>
 </html>

@@ -98,6 +98,11 @@ io.on('connection', function (socket) {
         socket.broadcast.to(room).emit('requestToggleCaptions');
     });
 
+    // Relay chat messages
+    socket.on('chat message', function(msg){
+        socket.broadcast.emit('chat message', msg);
+    });
+
 
 });
 

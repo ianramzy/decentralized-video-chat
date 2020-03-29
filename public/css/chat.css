@@ -215,7 +215,117 @@ button:hover {
 /*Neomorphic buttons*/
 
 
+/*simple chat*/
+
+#entire-chat{
+    /*border: blue 1px solid;*/
+    position: absolute;
+    height: 100%;
+    right: 0;
+    width: 13vw;
+    padding: 0;
+}
+
+.compose {
+    width: 100%;
+    height: 10%;
+    overflow: hidden;
+    font-family: "Heebo", sans-serif;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 0;
+    /*z-index: 1;*/
+    border-radius: 20px;
+}
+
+.compose textarea::placeholder {
+    color: white;
+}
 
 
+.compose textarea {
+    font-family: inherit;
+    font-size: inherit;
+    border: none;
+    width: 100%;
+    height: 100%;
+    padding: 16px;
+    resize: none;
+    outline: none;
+    color: white;
+    background: #3a4150;
+
+}
 
 
+#chat-zone {
+    padding-top: 15px;
+    box-sizing: border-box;
+    /*border: red 1px solid;*/
+
+    position: absolute;
+    height: 90%;
+    right: 0;
+    width: 15vw;
+    background: 0 0;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    font-family: "Heebo", sans-serif;
+}
+
+#chat-zone .chat-messages .message-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+    padding: 0 16px 4px;
+    margin-bottom: 20px;
+}
+
+
+#chat-zone .chat-messages .message-item.customer {
+    padding-left: 40px;
+}
+
+
+#chat-zone .message-item.moderator .message-bloc {
+    background-color: #3a4150;
+    color: #fff;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    max-width: 100%;
+    border-radius: 5px 20px 20px 5px;
+}
+
+#chat-zone .message-item.customer .message-bloc {
+    color: rgba(0, 0, 0, .87);
+    background-color: #e0e0e0;
+}
+
+#chat-zone .chat-messages .message-item.customer .message-bloc {
+    margin-left: auto;
+}
+
+#chat-zone .chat-messages .message-item .message-bloc {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    max-width: 100%;
+}
+
+#chat-zone .message-item.customer .message-bloc {
+    border-radius: 20px 20px 5px 20px;
+}
+
+#chat-zone .message-item.moderator .message-bloc {
+    border-radius: 20px 20px 20px 5px;
+}
+
+/*simple chat*/
