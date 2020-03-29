@@ -1,6 +1,12 @@
+// strip url parameters
+if (window.location.href.indexOf('?') > -1) {
+    window.location.href = window.location.href.split('?')[0];
+}
+
 if (window.location.pathname === "/room") {
     window.location.href = "/landing/newroom";
 }
+
 
 url = window.location.href;
 const roomHash = url.substring(url.lastIndexOf('/') + 1).toLowerCase();
@@ -569,7 +575,7 @@ var socket = VideoChat.socket;
 input.addEventListener('keypress', function (event) {
     if (event.keyCode === 13) {
         event.preventDefault();
-        socket.emit('chat message', input.value);
+        socket.emit('chat message', input.value, roomHash);
         $('.chat-messages').append('<div class="message-item customer"><div class="message-bloc"><div class="message">' + input.value + '</div></div></div>');
         $('#chat-zone').scrollTop($('#chat-zone')[0].scrollHeight);
         input.value = '';

@@ -88,7 +88,7 @@ io.on('connection', function (socket) {
 
     // Relay answers
     socket.on('sendCaptions', function (captions, room) {
-        logIt(captions, room);
+        // logIt(captions, room);
         socket.broadcast.to(room).emit('recieveCaptions', captions);
     });
 
@@ -99,8 +99,8 @@ io.on('connection', function (socket) {
     });
 
     // Relay chat messages
-    socket.on('chat message', function(msg){
-        socket.broadcast.emit('chat message', msg);
+    socket.on('chat message', function(msg, room){
+        socket.broadcast.to(room).emit('chat message', msg);
     });
 
 
