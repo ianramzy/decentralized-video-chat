@@ -4,14 +4,7 @@ if (window.location.pathname === "/room") {
 
 url = window.location.href;
 const roomHash = url.substring(url.lastIndexOf('/') + 1).toLowerCase();
-
-
-
-// audio: {
-//     echoCancellation: {exact: hasEchoCancellation}
-// },
-
-
+document.title = 'Neon Chat - ' + url.substring(url.lastIndexOf('/') + 1);
 
 
 function getBrowserName() {
@@ -57,6 +50,7 @@ var VideoChat = {
     socket: io(),
     remoteVideo: document.getElementById('remote-video'),
     localVideo: document.getElementById('local-video'),
+    recognition: undefined,
 
     // Call to getUserMedia (provided by adapter.js for cross browser compatibility)
     // asking for access to both the video and audio streams. If the request is
@@ -153,8 +147,30 @@ var VideoChat = {
             // over the socket connection.
             VideoChat.socket.on('candidate', VideoChat.onCandidate);
             VideoChat.socket.on('answer', VideoChat.onAnswer);
+            VideoChat.socket.on('requestToggleCaptions', () => toggleSendCaptions());
+            VideoChat.socket.on('recieveCaptions', (captions) => VideoChat.recieveCaptions(captions));
             callback();
         };
+    },
+
+    recieveCaptions: function (captions) {
+        //    reset button to start captions
+        $('#remote-video-text').text("").fadeIn();
+        if (!receivingCaptions) {
+            $('#remote-video-text').text("").fadeOut();
+        }
+        if (captions === "notusingchrome") {
+            alert("Other caller must be using chrome for this feature to work");
+            receivingCaptions = false;
+            $('#remote-video-text').text("").fadeOut();
+            $('#caption-text').text("Start Live Caption");
+            return
+        }
+        if (captions.length > 100) {
+            $('#remote-video-text').text(captions.substr(captions.length - 199));
+        } else {
+            $('#remote-video-text').text(captions);
+        }
     },
 
     // When the peerConnection generates an ice candidate, send it over the socket to the peer.
@@ -263,7 +279,7 @@ var VideoChat = {
         Snackbar.close();
         VideoChat.remoteVideo.style.background = 'none';
         VideoChat.connected = true;
-        $('#remote-video-text').text("");
+        $('#remote-video-text').fadeOut();
         $('#local-video-text').fadeOut();
 
         var timesRun = 0;
@@ -434,7 +450,7 @@ function swap() {
 function switchStreamHelper(stream) {
     let videoTrack = stream.getVideoTracks()[0];
     if (VideoChat.connected) {
-        var sender = VideoChat.peerConnection.getSenders().find(function (s)  {
+        var sender = VideoChat.peerConnection.getSenders().find(function (s) {
             return s.track.kind === videoTrack.kind;
         });
         sender.replaceTrack(videoTrack);
@@ -448,60 +464,100 @@ function switchStreamHelper(stream) {
 $("#moveable").draggable({containment: 'window'});
 
 
+var sendingCaptions = false;
+var receivingCaptions = false;
 
-// function speechWrapper() {
-//     try {
-//         var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-//         var recognition = new SpeechRecognition(VideoChat.remoteVideo.srcObject.getAudioTracks()[0]);
-//         // var recognition = new SpeechRecognition();
-//     } catch (e) {
-//         console.error(e);
-//         alert("error importing speech library")
-//     }
-//
-// // If false, the recording will stop after a few seconds of silence.
-// // When true, the silence period is longer (about 15 seconds),
-// // allowing us to keep recording even when the user pauses.
-//     recognition.continuous = true;
-//     recognition.interimResults = true;
-// // recognition.maxAlternatives = 3;
-//
-//     var finalTranscript;
-//     recognition.onresult = (event) => {
-//         let interimTranscript = '';
-//         for (let i = event.resultIndex, len = event.results.length; i < len; i++) {
-//             let transcript = event.results[i][0].transcript;
-//             if (event.results[i].isFinal) {
-//                 finalTranscript += transcript;
-//             } else {
-//                 interimTranscript += transcript;
-//                 $('#remote-video-text').text(interimTranscript);
-//                 console.log(interimTranscript);
-//             }
-//         }
-//     };
-//
-//     recognition.onstart = function () {
-//         console.log("recording on");
-//     };
-//
-//     recognition.onspeechend = function () {
-//         console.log("on speech end");
-//     };
-//
-//     recognition.onerror = function (event) {
-//         if (event.error === 'no-speech') {
-//             console.log("no speech detected");
-//         }
-//     };
-//
-//     recognition.onend = function () {
-//         console.log("on end");
-//     };
-//
-//     // recognition.stop();
-//     recognition.start();
-// }
+
+function requestToggleCaptions() {
+    if (!VideoChat.connected) {
+        alert("You must be connected to a peer to use Live Caption")
+        return
+    }
+    if (receivingCaptions) {
+        $('#remote-video-text').text("").fadeOut();
+        $('#caption-text').text("Start Live Caption");
+        receivingCaptions = false;
+    } else {
+        alert("This is an expirimental feature. Live transcription requires the other user to have chrome.");
+        $('#caption-text').text("End Live Caption");
+        receivingCaptions = true;
+    }
+    VideoChat.socket.emit('requestToggleCaptions', roomHash);
+}
+
+function toggleSendCaptions() {
+    if (sendingCaptions) {
+        sendingCaptions = false;
+        VideoChat.recognition.stop();
+    } else {
+        startSpeech();
+        sendingCaptions = true;
+    }
+}
+
+
+function startSpeech() {
+    try {
+        var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        var recognition = new SpeechRecognition();
+        VideoChat.recognition = recognition;
+    } catch (e) {
+        sendingCaptions = false;
+        logIt(e);
+        logIt("error importing speech library");
+        VideoChat.socket.emit('sendCaptions', "notusingchrome", roomHash);
+
+        return
+    }
+
+    // If false, the recording will stop after a few seconds of silence.
+    // When true, the silence period is longer (about 15 seconds),
+    // allowing us to keep recording even when the user pauses.
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    // recognition.maxAlternatives = 3;
+
+    var finalTranscript;
+    recognition.onresult = (event) => {
+        let interimTranscript = '';
+        for (let i = event.resultIndex, len = event.results.length; i < len; i++) {
+            let transcript = event.results[i][0].transcript;
+            if (event.results[i].isFinal) {
+                finalTranscript += transcript;
+            } else {
+                interimTranscript += transcript;
+                VideoChat.socket.emit('sendCaptions', interimTranscript, roomHash);
+                // console.log(interimTranscript);
+            }
+        }
+    };
+
+    recognition.onstart = function () {
+        console.log("recording on");
+    };
+
+    recognition.onspeechend = function () {
+        console.log("on speech end");
+    };
+
+    recognition.onerror = function (event) {
+        if (event.error === 'no-speech') {
+            console.log("no speech detected");
+        }
+    };
+
+    recognition.onend = function () {
+        console.log("on end");
+        console.log(sendingCaptions);
+        if (sendingCaptions) {
+            startSpeech()
+        } else {
+            VideoChat.recognition.stop();
+        }
+    };
+
+    recognition.start();
+}
 
 
 // auto get media

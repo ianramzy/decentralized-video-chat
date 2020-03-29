@@ -85,6 +85,20 @@ io.on('connection', function (socket) {
         logIt('Received answer. Broadcasting...', room);
         socket.broadcast.to(room).emit('answer', answer);
     });
+
+    // Relay answers
+    socket.on('sendCaptions', function (captions, room) {
+        logIt(captions, room);
+        socket.broadcast.to(room).emit('recieveCaptions', captions);
+    });
+
+    // Relay answers
+    socket.on('requestToggleCaptions', function (room) {
+        logIt("requesting captions", room);
+        socket.broadcast.to(room).emit('requestToggleCaptions');
+    });
+
+
 });
 
 

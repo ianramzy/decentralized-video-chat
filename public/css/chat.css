@@ -114,19 +114,25 @@ video {
 }
 
 #remote-video-text {
-    padding: 0;
+    /*padding: 0;*/
     margin: 0;
+    width: 60vw;
     position: absolute;
-    top: calc(40%);
-    left: 50%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+    top: calc(80%);
+    left: 20vw;
+    /*-ms-transform: translate(-50%, -90%);*/
+    /*transform: translate(-50%, -90%);*/
     z-index: 1;
 
     color: white;
     font-family: "Heebo", sans-serif;
-    white-space: nowrap;
+    font-size: 40px;
+    /*white-space: nowrap;*/
     font-weight: bold;
+    text-align: left;
+    background: rgba(0, 0, 0, 0.20);
+    border-radius: 10px;
+    padding: 10px;
 }
 
 #remote-video {
