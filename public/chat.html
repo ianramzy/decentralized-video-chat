@@ -52,17 +52,17 @@
     <div id="chat-zone">
         <div class="chat-messages">
 
-            <div class="message-item customer">
-                <div class="message-bloc">
-                    <div class="message">Have you tried this chat?</div>
-                </div>
-            </div>
+<!--            <div class="message-item customer">-->
+<!--                <div class="message-bloc">-->
+<!--                    <div class="message">Have you tried this chat?</div>-->
+<!--                </div>-->
+<!--            </div>-->
 
-            <div class="message-item moderator">
-                <div class="message-bloc">
-                    <div class="message">Not yet! It looks awesome</div>
-                </div>
-            </div>
+<!--            <div class="message-item moderator">-->
+<!--                <div class="message-bloc">-->
+<!--                    <div class="message">Not yet! It looks awesome</div>-->
+<!--                </div>-->
+<!--            </div>-->
 
         </div>
     </div>
@@ -119,22 +119,7 @@
 <script src="../js/snackbar.js"></script>
 <script src="../js/chat.js"></script>
 <script>
-    $('#entire-chat').hide();
-    var input = document.querySelector('.compose textarea');
-    var socket = io();
 
-    input.addEventListener('keypress', function (event) {
-        if (event.keyCode === 13) {
-            event.preventDefault();
-            socket.emit('chat message', input.value);
-            $('.chat-messages').append('<div class="message-item customer"><div class="message-bloc"><div class="message">' + input.value + '</div></div></div>');
-            input.value = '';
-        }
-    });
-
-    socket.on('chat message', function (msg) {
-        $('.chat-messages').append('<div class="message-item moderator"><div class="message-bloc"><div class="message">' + msg + '</div></div></div>');
-    });
 
 </script>
 </body>

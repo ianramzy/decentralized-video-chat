@@ -508,7 +508,6 @@ function startSpeech() {
         logIt(e);
         logIt("error importing speech library");
         VideoChat.socket.emit('sendCaptions', "notusingchrome", roomHash);
-
         return
     }
 
@@ -562,12 +561,29 @@ function startSpeech() {
 }
 
 
+// Chat
+$('#entire-chat').hide();
+var input = document.querySelector('.compose textarea');
+var socket = VideoChat.socket;
+
+input.addEventListener('keypress', function (event) {
+    if (event.keyCode === 13) {
+        event.preventDefault();
+        socket.emit('chat message', input.value);
+        $('.chat-messages').append('<div class="message-item customer"><div class="message-bloc"><div class="message">' + input.value + '</div></div></div>');
+        $('#chat-zone').scrollTop($('#chat-zone')[0].scrollHeight);
+        input.value = '';
+    }
+});
+
+socket.on('chat message', function (msg) {
+    $('.chat-messages').append('<div class="message-item moderator"><div class="message-bloc"><div class="message">' + msg + '</div></div></div>');
+    $('#chat-zone').scrollTop($('#chat-zone')[0].scrollHeight);
+    $('#entire-chat').fadeIn();
+});
+// Chat
+
+
 // auto get media
 VideoChat.requestMediaStream();
-
-
-
-
-
-
 
