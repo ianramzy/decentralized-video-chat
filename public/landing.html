@@ -1,341 +1,469 @@
 <!DOCTYPE html>
 <html lang="en" class="no-js">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Neon Chat</title>
-    <link rel="stylesheet" href="css/landing.css">
-    <link rel="shortcut icon" href="images/logo.svg">
-    <meta property="og:title" content="Neonchat - Decentralized video calls">
-    <meta property="og:description" content="Decentralized video
+    <link rel="stylesheet" href="css/landing.css" />
+    <link rel="shortcut icon" href="images/logo.svg" />
+    <meta property="og:title" content="Neonchat - Decentralized video calls" />
+    <meta
+      property="og:description"
+      content="Decentralized video
                                     calling provides real-time HD quality and latency simply
-                                    not available with traditional technology.">
-    <meta property="og:image" content="https://neonchat.io/images/preview.png">
-    <meta property="og:url" content="https://neonchat.io/">
+                                    not available with traditional technology."
+    />
+    <meta
+      property="og:image"
+      content="https://neonchat.io/images/preview.png"
+    />
+    <meta property="og:url" content="https://neonchat.io/" />
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-162048272-1"></script>
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=UA-162048272-1"
+    ></script>
     <script>
-        window.dataLayer = window.dataLayer || [];
+      window.dataLayer = window.dataLayer || [];
 
-        function gtag() {
-            dataLayer.push(arguments);
-        }
+      function gtag() {
+        dataLayer.push(arguments);
+      }
 
-        gtag('js', new Date());
-        gtag('config', 'UA-162048272-1');
+      gtag("js", new Date());
+      gtag("config", "UA-162048272-1");
     </script>
-</head>
-<body class="has-animations">
-<div class="body-wrap">
-    <header class="site-header reveal-from-top">
+  </head>
+  <body class="has-animations">
+    <div class="body-wrap">
+      <header class="site-header reveal-from-top">
         <div class="container">
-            <div class="site-header-inner">
-                <div class="brand">
-                    <h1 class="m-0"><a href="/"><img src="images/logo.svg" alt="Neon"
-                                                     width="32"
-                                                     height="32"></a>
-                    </h1>
-                </div>
-                <button id="header-nav-toggle" class="header-nav-toggle" aria-controls="primary-menu"
-                        aria-expanded="false"><span class="screen-reader">Menu</span> <span class="hamburger"><span
-                        class="hamburger-inner"></span></span></button>
+          <div class="site-header-inner">
+            <div class="brand">
+              <h1 class="m-0">
+                <a href="/"
+                  ><img src="images/logo.svg" alt="Neon" width="32" height="32"
+                /></a>
+              </h1>
             </div>
+            <button
+              id="header-nav-toggle"
+              class="header-nav-toggle"
+              aria-controls="primary-menu"
+              aria-expanded="false"
+            >
+              <span class="screen-reader">Menu</span>
+              <span class="hamburger"
+                ><span class="hamburger-inner"></span
+              ></span>
+            </button>
+          </div>
         </div>
-    </header>
-    <main class="site-content">
+      </header>
+      <main class="site-content">
         <section class="hero section illustration-section-01">
-            <div class="container">
-                <div class="hero-inner section-inner">
-                    <div class="split-wrap invert-mobile">
-                        <div class="split-item">
-                            <div class="hero-content split-item-content center-content-mobile"><h1
-                                    class="mt-0 mb-16 reveal-from-bottom" data-reveal-delay="150">Neon Chat.<br>The most
-                                advanced
-                                video chat ever created.</h1>
-                                <p class="mt-0 mb-32 reveal-from-bottom" data-reveal-delay="300">Decentralized video
-                                    calling provides quality and latency simply
-                                    not available with traditional technology.</p>
-                                <div class="reveal-from-bottom" data-reveal-delay="450"><a
-                                        class="button button-primary button-wide-mobile pulse"
-                                        style="border:0; background: linear-gradient(100deg, #376DF9 0, #FF5FA0 75%, #FFC55A 100%);"
-                                        href="/newroom">Try now</a>
-                                </div>
-                            </div>
-                            <style>@media (min-width: 641px) {
-                                .hero .split-wrap .split-item {
-                                    min-height: 492px
-                                }
-                            }</style>
-                        </div>
+          <div class="container">
+            <div class="hero-inner section-inner">
+              <div class="split-wrap invert-mobile">
+                <div class="split-item">
+                  <div
+                    class="hero-content split-item-content center-content-mobile"
+                  >
+                    <h1
+                      class="mt-0 mb-16 reveal-from-bottom"
+                      data-reveal-delay="150"
+                    >
+                      Neon Chat.<br />The most advanced video chat ever created.
+                    </h1>
+                    <p
+                      class="mt-0 mb-32 reveal-from-bottom"
+                      data-reveal-delay="300"
+                    >
+                      Decentralized video calling provides quality and latency
+                      simply not available with traditional technology.
+                    </p>
+                    <div class="reveal-from-bottom" data-reveal-delay="450">
+                      <a
+                        class="button button-primary button-wide-mobile pulse"
+                        style="
+                          border: 0;
+                          background: linear-gradient(
+                            100deg,
+                            #376df9 0,
+                            #ff5fa0 75%,
+                            #ffc55a 100%
+                          );
+                        "
+                        href="/newroom"
+                        >Try now</a
+                      >
                     </div>
+                  </div>
+                  <style>
+                    @media (min-width: 641px) {
+                      .hero .split-wrap .split-item {
+                        min-height: 492px;
+                      }
+                    }
+                  </style>
                 </div>
+              </div>
             </div>
+          </div>
         </section>
 
         <div>
-            <!--        <section class="clients section reveal-fade">-->
-            <!--            <div class="container">-->
-            <!--                <div class="clients-inner section-inner has-top-divider has-bottom-divider">-->
-            <!--                    <ul class="list-reset">-->
-            <!--                        <li class="reveal-from-top"><img src="images/clients-01.svg" alt="Clients 01"></li>-->
-            <!--                        <li class="reveal-from-bottom" data-reveal-delay="150"><img src="images/clients-02.svg"-->
-            <!--                                                                                    alt="Clients 02"></li>-->
-            <!--                        <li class="reveal-from-top" data-reveal-delay="300"><img src="images/clients-03.svg"-->
-            <!--                                                                                 alt="Clients 03"></li>-->
-            <!--                        <li class="reveal-from-bottom" data-reveal-delay="450"><img src="images/clients-04.svg"-->
-            <!--                                                                                    alt="Clients 04"></li>-->
-            <!--                        <li class="reveal-from-top" data-reveal-delay="600"><img src="images/clients-05.svg"-->
-            <!--                                                                                 alt="Clients 05"></li>-->
-            <!--                    </ul>-->
-            <!--                </div>-->
-            <!--            </div>-->
-            <!--        </section>-->
+          <!--        <section class="clients section reveal-fade">-->
+          <!--            <div class="container">-->
+          <!--                <div class="clients-inner section-inner has-top-divider has-bottom-divider">-->
+          <!--                    <ul class="list-reset">-->
+          <!--                        <li class="reveal-from-top"><img src="images/clients-01.svg" alt="Clients 01"></li>-->
+          <!--                        <li class="reveal-from-bottom" data-reveal-delay="150"><img src="images/clients-02.svg"-->
+          <!--                                                                                    alt="Clients 02"></li>-->
+          <!--                        <li class="reveal-from-top" data-reveal-delay="300"><img src="images/clients-03.svg"-->
+          <!--                                                                                 alt="Clients 03"></li>-->
+          <!--                        <li class="reveal-from-bottom" data-reveal-delay="450"><img src="images/clients-04.svg"-->
+          <!--                                                                                    alt="Clients 04"></li>-->
+          <!--                        <li class="reveal-from-top" data-reveal-delay="600"><img src="images/clients-05.svg"-->
+          <!--                                                                                 alt="Clients 05"></li>-->
+          <!--                    </ul>-->
+          <!--                </div>-->
+          <!--            </div>-->
+          <!--        </section>-->
 
-            <!--        Video-->
-            <!--        <section class="section center-content">-->
-            <!--            <div class="container">-->
-            <!--                <div class="section-inner">-->
-            <!--                    <div class="section-header reveal-from-bottom">-->
-            <!--                        <div class="container-xs"><h2 class="mt-0 mb-16">Built exclusively for you</h2>-->
-            <!--                            <p class="m-0">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore-->
-            <!--                                eu fugiat nulla pariatur excepteur sint — occaecat cupidatat non proident, sunt in culpa-->
-            <!--                                qui.</p></div>-->
-            <!--                    </div>-->
-            <!--                    <div class="reveal-from-bottom"><a class="modal-trigger" aria-controls="modal-01"-->
-            <!--                                                       data-video="https://player.vimeo.com/video/174002812"-->
-            <!--                                                       href="#"><img src="images/video-placeholder.svg" alt="Video"-->
-            <!--                                                                     width="712" height="400"></a></div>-->
-            <!--                    <div id="modal-01" class="modal modal-video">-->
-            <!--                        <div class="modal-inner">-->
-            <!--                            <div class="responsive-video">-->
-            <!--                                <iframe src="#" frameborder="0" webkitallowfullscreen mozallowfullscreen-->
-            <!--                                        allowfullscreen></iframe>-->
-            <!--                            </div>-->
-            <!--                        </div>-->
-            <!--                    </div>-->
-            <!--                </div>-->
-            <!--            </div>-->
-            <!--        </section>-->
-            <!--        End Video-->
+          <!--        Video-->
+          <!--        <section class="section center-content">-->
+          <!--            <div class="container">-->
+          <!--                <div class="section-inner">-->
+          <!--                    <div class="section-header reveal-from-bottom">-->
+          <!--                        <div class="container-xs"><h2 class="mt-0 mb-16">Built exclusively for you</h2>-->
+          <!--                            <p class="m-0">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore-->
+          <!--                                eu fugiat nulla pariatur excepteur sint — occaecat cupidatat non proident, sunt in culpa-->
+          <!--                                qui.</p></div>-->
+          <!--                    </div>-->
+          <!--                    <div class="reveal-from-bottom"><a class="modal-trigger" aria-controls="modal-01"-->
+          <!--                                                       data-video="https://player.vimeo.com/video/174002812"-->
+          <!--                                                       href="#"><img src="images/video-placeholder.svg" alt="Video"-->
+          <!--                                                                     width="712" height="400"></a></div>-->
+          <!--                    <div id="modal-01" class="modal modal-video">-->
+          <!--                        <div class="modal-inner">-->
+          <!--                            <div class="responsive-video">-->
+          <!--                                <iframe src="#" frameborder="0" webkitallowfullscreen mozallowfullscreen-->
+          <!--                                        allowfullscreen></iframe>-->
+          <!--                            </div>-->
+          <!--                        </div>-->
+          <!--                    </div>-->
+          <!--                </div>-->
+          <!--            </div>-->
+          <!--        </section>-->
+          <!--        End Video-->
         </div>
 
         <section class="features-tiles section center-content">
-            <div class="container">
-                <div class="features-tiles-inner section-inner has-top-divider">
-                    <div class="section-header">
-                        <div class="container-xs reveal-from-bottom" data-reveal-delay="650"><h2 class="mt-0 mb-16">See
-                            the whole picture</h2>
-                            <p class="m-0">Neon Chat is built radically different. We ditched slow bulky servers,
-                                opting for decentralized peer to peer calling. Maximum video quality and
-                                lowest latency. Its good, trust us.</p></div>
-                    </div>
-                    <div class="tiles-wrap">
-                        <div class="tiles-item reveal-from-right">
-                            <div class="tiles-item-inner">
-                                <div class="features-tiles-item-header">
-                                    <div class="features-tiles-item-image mb-16"><img
-                                            src="images/feature-tile-icon-01.svg" alt="Feature tile icon 01" width="72"
-                                            height="72"></div>
-                                </div>
-                                <div class="features-tiles-item-content"><h4 class="mt-0 mb-8">Lowest Latency</h4>
-                                    <p class="m-0 text-sm">Breakthrough peer to peer WebRTC technology means your
-                                        video goes directly to the other person without a server. No middleman. No
-                                        extra stops.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tiles-item reveal-from-left">
-                            <div class="tiles-item-inner">
-                                <div class="features-tiles-item-header">
-                                    <div class="features-tiles-item-image mb-16"><img
-                                            src="images/feature-tile-icon-02.svg" alt="Feature tile icon 02" width="72"
-                                            height="72"></div>
-                                </div>
-                                <div class="features-tiles-item-content"><h4 class="mt-0 mb-8">Best Video Quality</h4>
-                                    <p class="m-0 text-sm">State of the art VP9 video compression combined with our
-                                        custom scaling optimization means your calls have never looked better.</p></div>
-                            </div>
-                        </div>
-                        <div class="tiles-item reveal-from-right">
-                            <div class="tiles-item-inner">
-                                <div class="features-tiles-item-header">
-                                    <div class="features-tiles-item-image mb-16"><img
-                                            src="images/feature-tile-icon-03.svg" alt="Feature tile icon 03" width="72"
-                                            height="72"></div>
-                                </div>
-                                <div class="features-tiles-item-content"><h4 class="mt-0 mb-8">Total Privacy</h4>
-                                    <p class="m-0 text-sm">Each chat room is single use, with data
-                                        kept between you and your friend. Your data is yours to keep.</p></div>
-                            </div>
-                        </div>
-                        <div class="tiles-item reveal-from-left">
-                            <div class="tiles-item-inner">
-                                <div class="features-tiles-item-header">
-                                    <div class="features-tiles-item-image mb-16"><img
-                                            src="images/feature-tile-icon-04.svg" alt="Feature tile icon 04" width="72"
-                                            height="72"></div>
-                                </div>
-                                <div class="features-tiles-item-content"><h4 class="mt-0 mb-8">No Download Required</h4>
-                                    <p class="m-0 text-sm">No download means you can get back to what matters most. Just
-                                        open Neon Chats in Chrome or Firefox.</p></div>
-                            </div>
-                        </div>
-
-                        <div class="tiles-item reveal-from-right">
-                            <div class="tiles-item-inner">
-                                <div class="features-tiles-item-header">
-                                    <div class="features-tiles-item-image mb-16"><img
-                                            src="images/feature-tile-icon-05.svg" alt="Feature tile icon 05" width="72"
-                                            height="72"></div>
-                                </div>
-                                <div class="features-tiles-item-content"><h4 class="mt-0 mb-8">No Server Needed</h4>
-                                    <p class="m-0 text-sm">Calls are entirely between you and your friend.
-                                        Decentralized from any server. Data never leaves the browser. Cool right?</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="tiles-item reveal-from-left">
-                            <div class="tiles-item-inner">
-                                <div class="features-tiles-item-header">
-                                    <div class="features-tiles-item-image mb-16"><img
-                                            src="images/feature-tile-icon-06.svg" alt="Feature tile icon 06" width="72"
-                                            height="72"></div>
-                                </div>
-                                <div class="features-tiles-item-content"><h4 class="mt-0 mb-8">Maximum Security</h4>
-                                    <p class="m-0 text-sm">End to end state of the art encryption means your calls are
-                                        exactly that. Your calls.</p></div>
-                            </div>
-                        </div>
-
-                    </div>
+          <div class="container">
+            <div class="features-tiles-inner section-inner has-top-divider">
+              <div class="section-header">
+                <div
+                  class="container-xs reveal-from-bottom"
+                  data-reveal-delay="650"
+                >
+                  <h2 class="mt-0 mb-16">See the whole picture</h2>
+                  <p class="m-0">
+                    Neon Chat is built radically different. We ditched slow
+                    bulky servers, opting for decentralized peer to peer
+                    calling. Maximum video quality and lowest latency. Its good,
+                    trust us.
+                  </p>
                 </div>
+              </div>
+              <div class="tiles-wrap">
+                <div class="tiles-item reveal-from-right">
+                  <div class="tiles-item-inner">
+                    <div class="features-tiles-item-header">
+                      <div class="features-tiles-item-image mb-16">
+                        <img
+                          src="images/feature-tile-icon-01.svg"
+                          alt="Feature tile icon 01"
+                          width="72"
+                          height="72"
+                        />
+                      </div>
+                    </div>
+                    <div class="features-tiles-item-content">
+                      <h4 class="mt-0 mb-8">Lowest Latency</h4>
+                      <p class="m-0 text-sm">
+                        Breakthrough peer to peer WebRTC technology means your
+                        video goes directly to the other person without a
+                        server. No middleman. No extra stops.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="tiles-item reveal-from-left">
+                  <div class="tiles-item-inner">
+                    <div class="features-tiles-item-header">
+                      <div class="features-tiles-item-image mb-16">
+                        <img
+                          src="images/feature-tile-icon-02.svg"
+                          alt="Feature tile icon 02"
+                          width="72"
+                          height="72"
+                        />
+                      </div>
+                    </div>
+                    <div class="features-tiles-item-content">
+                      <h4 class="mt-0 mb-8">Best Video Quality</h4>
+                      <p class="m-0 text-sm">
+                        State of the art VP9 video compression combined with our
+                        custom scaling optimization means your calls have never
+                        looked better.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="tiles-item reveal-from-right">
+                  <div class="tiles-item-inner">
+                    <div class="features-tiles-item-header">
+                      <div class="features-tiles-item-image mb-16">
+                        <img
+                          src="images/feature-tile-icon-03.svg"
+                          alt="Feature tile icon 03"
+                          width="72"
+                          height="72"
+                        />
+                      </div>
+                    </div>
+                    <div class="features-tiles-item-content">
+                      <h4 class="mt-0 mb-8">Total Privacy</h4>
+                      <p class="m-0 text-sm">
+                        Each chat room is single use, with data kept between you
+                        and your friend. Your data is yours to keep.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="tiles-item reveal-from-left">
+                  <div class="tiles-item-inner">
+                    <div class="features-tiles-item-header">
+                      <div class="features-tiles-item-image mb-16">
+                        <img
+                          src="images/feature-tile-icon-04.svg"
+                          alt="Feature tile icon 04"
+                          width="72"
+                          height="72"
+                        />
+                      </div>
+                    </div>
+                    <div class="features-tiles-item-content">
+                      <h4 class="mt-0 mb-8">No Download Required</h4>
+                      <p class="m-0 text-sm">
+                        No download means you can get back to what matters most.
+                        Just open Neon Chats in Chrome or Firefox.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="tiles-item reveal-from-right">
+                  <div class="tiles-item-inner">
+                    <div class="features-tiles-item-header">
+                      <div class="features-tiles-item-image mb-16">
+                        <img
+                          src="images/feature-tile-icon-05.svg"
+                          alt="Feature tile icon 05"
+                          width="72"
+                          height="72"
+                        />
+                      </div>
+                    </div>
+                    <div class="features-tiles-item-content">
+                      <h4 class="mt-0 mb-8">No Server Needed</h4>
+                      <p class="m-0 text-sm">
+                        Calls are entirely between you and your friend.
+                        Decentralized from any server. Data never leaves the
+                        browser. Cool right?
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="tiles-item reveal-from-left">
+                  <div class="tiles-item-inner">
+                    <div class="features-tiles-item-header">
+                      <div class="features-tiles-item-image mb-16">
+                        <img
+                          src="images/feature-tile-icon-06.svg"
+                          alt="Feature tile icon 06"
+                          width="72"
+                          height="72"
+                        />
+                      </div>
+                    </div>
+                    <div class="features-tiles-item-content">
+                      <h4 class="mt-0 mb-8">Maximum Security</h4>
+                      <p class="m-0 text-sm">
+                        End to end state of the art encryption means your calls
+                        are exactly that. Your calls.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
+          </div>
         </section>
 
-
         <section class="section">
-            <div class="container">
-                <div class="section-inner has-top-divider">
-                    <div class="container-xs">
-                        <div class="section-header center-content"><h2 class="m-0">Tired of the old way of
-                            chatting? </h2></div>
-                        <div class="center-content">
-                            <a class="button button-primary button-wide-mobile pulse"
-                               style="border:0; background: linear-gradient(100deg, #376DF9 0, #FF5FA0 75%, #FFC55A 100%);"
-                               href="/newroom">Try now</a>
-                        </div>
-                    </div>
+          <div class="container">
+            <div class="section-inner has-top-divider">
+              <div class="container-xs">
+                <div class="section-header center-content">
+                  <h2 class="m-0">Tired of the old way of chatting?</h2>
                 </div>
+                <div class="center-content">
+                  <a
+                    class="button button-primary button-wide-mobile pulse"
+                    style="
+                      border: 0;
+                      background: linear-gradient(
+                        100deg,
+                        #376df9 0,
+                        #ff5fa0 75%,
+                        #ffc55a 100%
+                      );
+                    "
+                    href="/newroom"
+                    >Try now</a
+                  >
+                </div>
+              </div>
             </div>
+          </div>
         </section>
 
         <div>
-            <!--        <section class="testimonial section">-->
-            <!--            <div class="container">-->
-            <!--                <div class="testimonial-inner section-inner has-top-divider">-->
-            <!--                    <div class="section-header center-content">-->
-            <!--                        <div class="container-xs"><h2 class="mt-0 mb-16">Don't take our word for it</h2>-->
-            <!--                            <p class="m-0">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore-->
-            <!--                                eu fugiat nulla pariatur excepteur sint — occaecat cupidatat non proident, sunt in culpa-->
-            <!--                                qui.</p></div>-->
-            <!--                    </div>-->
-            <!--                    <div class="tiles-wrap">-->
-            <!--                        <div class="tiles-item reveal-from-right" data-reveal-delay="200">-->
-            <!--                            <div class="tiles-item-inner">-->
-            <!--                                <div class="testimonial-item-content"><p class="text-sm mb-0">— Duis aute irure dolor in-->
-            <!--                                    reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.-->
-            <!--                                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt-->
-            <!--                                    mollit anim id est laborum cillum dolore eu fugiat.</p></div>-->
-            <!--                                <div class="testimonial-item-footer text-xs mt-32 mb-0 has-top-divider"><span-->
-            <!--                                        class="testimonial-item-name text-color-high">Roman Level</span> <span-->
-            <!--                                        class="text-color-low">/ </span><span class="testimonial-item-link"><a href="#">AppName</a></span>-->
-            <!--                                </div>-->
-            <!--                            </div>-->
-            <!--                        </div>-->
-            <!--                        <div class="tiles-item reveal-from-bottom">-->
-            <!--                            <div class="tiles-item-inner">-->
-            <!--                                <div class="testimonial-item-content"><p class="text-sm mb-0">— Duis aute irure dolor in-->
-            <!--                                    reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.-->
-            <!--                                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt-->
-            <!--                                    mollit anim id est laborum cillum dolore eu fugiat.</p></div>-->
-            <!--                                <div class="testimonial-item-footer text-xs mt-32 mb-0 has-top-divider"><span-->
-            <!--                                        class="testimonial-item-name text-color-high">Diana Rynzhuk</span> <span-->
-            <!--                                        class="text-color-low">/ </span><span class="testimonial-item-link"><a href="#">AppName</a></span>-->
-            <!--                                </div>-->
-            <!--                            </div>-->
-            <!--                        </div>-->
-            <!--                        <div class="tiles-item reveal-from-left" data-reveal-delay="200">-->
-            <!--                            <div class="tiles-item-inner">-->
-            <!--                                <div class="testimonial-item-content"><p class="text-sm mb-0">— Duis aute irure dolor in-->
-            <!--                                    reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.-->
-            <!--                                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt-->
-            <!--                                    mollit anim id est laborum cillum dolore eu fugiat.</p></div>-->
-            <!--                                <div class="testimonial-item-footer text-xs mt-32 mb-0 has-top-divider"><span-->
-            <!--                                        class="testimonial-item-name text-color-high">Ben Stafford</span> <span-->
-            <!--                                        class="text-color-low">/ </span><span class="testimonial-item-link"><a href="#">AppName</a></span>-->
-            <!--                                </div>-->
-            <!--                            </div>-->
-            <!--                        </div>-->
-            <!--                    </div>-->
-            <!--                </div>-->
-            <!--            </div>-->
-            <!--        </section>-->
+          <!--        <section class="testimonial section">-->
+          <!--            <div class="container">-->
+          <!--                <div class="testimonial-inner section-inner has-top-divider">-->
+          <!--                    <div class="section-header center-content">-->
+          <!--                        <div class="container-xs"><h2 class="mt-0 mb-16">Don't take our word for it</h2>-->
+          <!--                            <p class="m-0">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore-->
+          <!--                                eu fugiat nulla pariatur excepteur sint — occaecat cupidatat non proident, sunt in culpa-->
+          <!--                                qui.</p></div>-->
+          <!--                    </div>-->
+          <!--                    <div class="tiles-wrap">-->
+          <!--                        <div class="tiles-item reveal-from-right" data-reveal-delay="200">-->
+          <!--                            <div class="tiles-item-inner">-->
+          <!--                                <div class="testimonial-item-content"><p class="text-sm mb-0">— Duis aute irure dolor in-->
+          <!--                                    reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.-->
+          <!--                                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt-->
+          <!--                                    mollit anim id est laborum cillum dolore eu fugiat.</p></div>-->
+          <!--                                <div class="testimonial-item-footer text-xs mt-32 mb-0 has-top-divider"><span-->
+          <!--                                        class="testimonial-item-name text-color-high">Roman Level</span> <span-->
+          <!--                                        class="text-color-low">/ </span><span class="testimonial-item-link"><a href="#">AppName</a></span>-->
+          <!--                                </div>-->
+          <!--                            </div>-->
+          <!--                        </div>-->
+          <!--                        <div class="tiles-item reveal-from-bottom">-->
+          <!--                            <div class="tiles-item-inner">-->
+          <!--                                <div class="testimonial-item-content"><p class="text-sm mb-0">— Duis aute irure dolor in-->
+          <!--                                    reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.-->
+          <!--                                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt-->
+          <!--                                    mollit anim id est laborum cillum dolore eu fugiat.</p></div>-->
+          <!--                                <div class="testimonial-item-footer text-xs mt-32 mb-0 has-top-divider"><span-->
+          <!--                                        class="testimonial-item-name text-color-high">Diana Rynzhuk</span> <span-->
+          <!--                                        class="text-color-low">/ </span><span class="testimonial-item-link"><a href="#">AppName</a></span>-->
+          <!--                                </div>-->
+          <!--                            </div>-->
+          <!--                        </div>-->
+          <!--                        <div class="tiles-item reveal-from-left" data-reveal-delay="200">-->
+          <!--                            <div class="tiles-item-inner">-->
+          <!--                                <div class="testimonial-item-content"><p class="text-sm mb-0">— Duis aute irure dolor in-->
+          <!--                                    reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.-->
+          <!--                                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt-->
+          <!--                                    mollit anim id est laborum cillum dolore eu fugiat.</p></div>-->
+          <!--                                <div class="testimonial-item-footer text-xs mt-32 mb-0 has-top-divider"><span-->
+          <!--                                        class="testimonial-item-name text-color-high">Ben Stafford</span> <span-->
+          <!--                                        class="text-color-low">/ </span><span class="testimonial-item-link"><a href="#">AppName</a></span>-->
+          <!--                                </div>-->
+          <!--                            </div>-->
+          <!--                        </div>-->
+          <!--                    </div>-->
+          <!--                </div>-->
+          <!--            </div>-->
+          <!--        </section>-->
 
-            <!--        <section class="cta section center-content-mobile reveal-from-bottom">-->
-            <!--            <div class="container">-->
-            <!--                <div class="cta-inner section-inner cta-split">-->
-            <!--                    <div class="cta-slogan"><h3 class="m-0">For previewing layouts and visual?</h3></div>-->
-            <!--                    <div class="cta-action">-->
-            <!--                        <div class="has-icon-right"><label for="newsletter"-->
-            <!--                                                           class="form-label screen-reader">Subscribe</label> <input-->
-            <!--                                id="newsletter" class="form-input" type="email" placeholder="Your best email">-->
-            <!--                            <svg width="16" height="12" xmlns="http://www.w3.org/2000/svg">-->
-            <!--                                <path d="M9 5H1c-.6 0-1 .4-1 1s.4 1 1 1h8v5l7-6-7-6v5z" fill="#376DF9"-->
-            <!--                                      fill-rule="nonzero"/>-->
-            <!--                            </svg>-->
-            <!--                        </div>-->
-            <!--                    </div>-->
-            <!--                </div>-->
-            <!--            </div>-->
-            <!--        </section>-->
+          <!--        <section class="cta section center-content-mobile reveal-from-bottom">-->
+          <!--            <div class="container">-->
+          <!--                <div class="cta-inner section-inner cta-split">-->
+          <!--                    <div class="cta-slogan"><h3 class="m-0">For previewing layouts and visual?</h3></div>-->
+          <!--                    <div class="cta-action">-->
+          <!--                        <div class="has-icon-right"><label for="newsletter"-->
+          <!--                                                           class="form-label screen-reader">Subscribe</label> <input-->
+          <!--                                id="newsletter" class="form-input" type="email" placeholder="Your best email">-->
+          <!--                            <svg width="16" height="12" xmlns="http://www.w3.org/2000/svg">-->
+          <!--                                <path d="M9 5H1c-.6 0-1 .4-1 1s.4 1 1 1h8v5l7-6-7-6v5z" fill="#376DF9"-->
+          <!--                                      fill-rule="nonzero"/>-->
+          <!--                            </svg>-->
+          <!--                        </div>-->
+          <!--                    </div>-->
+          <!--                </div>-->
+          <!--            </div>-->
+          <!--        </section>-->
         </div>
-
-    </main>
-    <footer class="site-footer center-content-mobile">
+      </main>
+      <footer class="site-footer center-content-mobile">
         <div class="container">
-            <div class="site-footer-inner">
-                <div class="footer-top space-between text-xxs">
-                    <div class="brand">
-                        <a href="/"><img src="images/logo.svg" alt="Neon" width="32" height="32"></a>
-                    </div>
-                    <div class="footer-social">
-                        <div><a href="https://github.com/ianramzy/decentralized-video-chat">
-                            <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                                <title>GitHub</title>
-                                <path d="M7.95 0C3.578 0 0 3.578 0 7.95c0 3.479 2.286 6.46 5.466 7.553.397.1.497-.199.497-.397v-1.392c-2.187.497-2.683-.994-2.683-.994-.398-.894-.895-1.192-.895-1.192-.696-.497.1-.497.1-.497.795.1 1.192.795 1.192.795.696 1.292 1.888.894 2.286.696.1-.497.298-.895.497-1.093-1.79-.2-3.578-.895-3.578-3.976 0-.894.298-1.59.795-2.087-.1-.198-.397-.993.1-2.086 0 0 .695-.2 2.186.795a6.408 6.408 0 0 1 1.987-.299c.696 0 1.392.1 1.988.299 1.49-.994 2.186-.795 2.186-.795.398 1.093.199 1.888.1 2.086.496.597.795 1.292.795 2.087 0 3.081-1.889 3.677-3.677 3.876.298.398.596.895.596 1.59v2.187c0 .198.1.496.596.397C13.714 14.41 16 11.43 16 7.95 15.9 3.578 12.323 0 7.95 0z"/>
-                            </svg>
-                        </a></div>
-                        </ul>
-                    </div>
+          <div class="site-footer-inner">
+            <div class="footer-top space-between text-xxs">
+              <div class="brand">
+                <a href="/"
+                  ><img src="images/logo.svg" alt="Neon" width="32" height="32"
+                /></a>
+              </div>
+              <div class="footer-social">
+                <div>
+                  <a
+                    href="https://github.com/ianramzy/decentralized-video-chat"
+                  >
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <title>GitHub</title>
+                      <path
+                        d="M7.95 0C3.578 0 0 3.578 0 7.95c0 3.479 2.286 6.46 5.466 7.553.397.1.497-.199.497-.397v-1.392c-2.187.497-2.683-.994-2.683-.994-.398-.894-.895-1.192-.895-1.192-.696-.497.1-.497.1-.497.795.1 1.192.795 1.192.795.696 1.292 1.888.894 2.286.696.1-.497.298-.895.497-1.093-1.79-.2-3.578-.895-3.578-3.976 0-.894.298-1.59.795-2.087-.1-.198-.397-.993.1-2.086 0 0 .695-.2 2.186.795a6.408 6.408 0 0 1 1.987-.299c.696 0 1.392.1 1.988.299 1.49-.994 2.186-.795 2.186-.795.398 1.093.199 1.888.1 2.086.496.597.795 1.292.795 2.087 0 3.081-1.889 3.677-3.677 3.876.298.398.596.895.596 1.59v2.187c0 .198.1.496.596.397C13.714 14.41 16 11.43 16 7.95 15.9 3.578 12.323 0 7.95 0z"
+                      />
+                    </svg>
+                  </a>
                 </div>
-                <div class="footer-bottom space-between text-xxs invert-order-desktop">
-                    <nav class="footer-nav">
-                        <ul class="list-reset">
-                            <li><a href="https://ianramzy.com">Made with ❤️ by Ian Ramzy</a></li>
-<!--                                                                            <li><a href="#">Contact</a></li>-->
-                            <!--                                                <li><a href="#">About us</a></li>-->
-                            <!--                                                <li><a href="#">FAQ's</a></li>-->
-                            <!--                                                <li><a href="#">Support</a></li>-->
-                        </ul>
-                    </nav>
-                    <div class="footer-copyright">&copy; 2020 Neon Chat, all rights reserved</div>
-                </div>
+              </div>
             </div>
+            <div
+              class="footer-bottom space-between text-xxs invert-order-desktop"
+            >
+              <nav class="footer-nav">
+                <ul class="list-reset">
+                  <li>
+                    <a href="https://ianramzy.com">Made with ❤️ by Ian Ramzy</a>
+                  </li>
+                  <!--                                          <li><a href="#">Contact</a></li>-->
+                  <!--                                                <li><a href="#">About us</a></li>-->
+                  <!--                                                <li><a href="#">FAQ's</a></li>-->
+                  <!--                                                <li><a href="#">Support</a></li>-->
+                </ul>
+              </nav>
+              <div class="footer-copyright">
+                &copy; 2020 Neon Chat, all rights reserved
+              </div>
+            </div>
+          </div>
         </div>
-    </footer>
-</div>
-<script src="js/landing.js"></script>
-</body>
+      </footer>
+    </div>
+    <script src="js/landing.js"></script>
+  </body>
 </html>
