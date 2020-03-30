@@ -1,58 +1,28 @@
-// strip url parameters
-if (window.location.href.indexOf('?') > -1) {
-    window.location.href = window.location.href.split('?')[0];
-}
-
-if (window.location.pathname === "/room") {
-    window.location.href = "/landing/newroom";
-}
-
-
-url = window.location.href;
+// Vars
+const browserName = getBrowserName();
+const url = window.location.href;
 const roomHash = url.substring(url.lastIndexOf('/') + 1).toLowerCase();
-document.title = 'Neon Chat - ' + url.substring(url.lastIndexOf('/') + 1);
-
-
-function getBrowserName() {
-    var name = "Unknown";
-    if (window.navigator.userAgent.indexOf("MSIE") !== -1) {
-    } else if (window.navigator.userAgent.indexOf("Firefox") !== -1) {
-        name = "Firefox";
-    } else if (window.navigator.userAgent.indexOf("Opera") !== -1) {
-        name = "Opera";
-    } else if (window.navigator.userAgent.indexOf("Chrome") !== -1) {
-        name = "Chrome";
-    } else if (window.navigator.userAgent.indexOf("Safari") !== -1) {
-        name = "Safari";
-    }
-    return name;
-}
-
-var browserName = getBrowserName();
-
-var isWebRTCSupported =
+var mode = "camera";
+var isFullscreen = false;
+var sendingCaptions = false;
+var receivingCaptions = false;
+const isWebRTCSupported =
     navigator.getUserMedia ||
     navigator.webkitGetUserMedia ||
     navigator.mozGetUserMedia ||
     navigator.msGetUserMedia ||
     window.RTCPeerConnection;
 
-if (!isWebRTCSupported || browserName === "Safari" || browserName === "MSIE") {
-    alert("Your browser doesn't support Neon Chat. Please use Chrome or Firefox.");
-    window.location.href = "/";
-}
+// Element vars
+const chatInput = document.querySelector('.compose textarea');
+const pipVideo = document.getElementById('remote-video');
 
 
-function logIt(message, error) {
-    console.log(message);
-}
 
-// Create an object to save various objects to without polluting the global namespace.
 var VideoChat = {
     connected: false,
     willInitiateCall: false,
     localICECandidates: [],
-    // Initialise our connection to the WebSocket.
     socket: io(),
     remoteVideo: document.getElementById('remote-video'),
     localVideo: document.getElementById('local-video'),
@@ -64,7 +34,7 @@ var VideoChat = {
     // noMediaStream function.
     requestMediaStream: function (event) {
         logIt("requestMediaStream");
-        VideoChat.rePositionLocalVideo();
+        rePositionLocalVideo();
         navigator.mediaDevices.getUserMedia({
             video: true,
             audio: true
@@ -105,17 +75,12 @@ var VideoChat = {
         VideoChat.localVideo.srcObject = stream;
         // Now we're ready to join the chat room.
         VideoChat.socket.emit('join', roomHash);
-        VideoChat.socket.on('full', VideoChat.chatRoomFull);
+        VideoChat.socket.on('full', chatRoomFull);
         VideoChat.socket.on('offer', VideoChat.onOffer);
         VideoChat.socket.on('ready', VideoChat.readyToCall);
         VideoChat.socket.on('willInitiateCall', () => VideoChat.willInitiateCall = true);
     },
 
-
-    chatRoomFull: function () {
-        alert("Chat room is full. Check to make sure you don't have multiple open tabs, or try with a new room link");
-        window.location.href = "/newroom";
-    },
 
     // When we are ready to call, enable the Call button.
     readyToCall: function (event) {
@@ -154,30 +119,10 @@ var VideoChat = {
             VideoChat.socket.on('candidate', VideoChat.onCandidate);
             VideoChat.socket.on('answer', VideoChat.onAnswer);
             VideoChat.socket.on('requestToggleCaptions', () => toggleSendCaptions());
-            VideoChat.socket.on('recieveCaptions', (captions) => VideoChat.recieveCaptions(captions));
+            VideoChat.socket.on('recieveCaptions', (captions) => recieveCaptions(captions));
 
             callback();
         };
-    },
-
-    recieveCaptions: function (captions) {
-        //    reset button to start captions
-        $('#remote-video-text').text("").fadeIn();
-        if (!receivingCaptions) {
-            $('#remote-video-text').text("").fadeOut();
-        }
-        if (captions === "notusingchrome") {
-            alert("Other caller must be using chrome for this feature to work");
-            receivingCaptions = false;
-            $('#remote-video-text').text("").fadeOut();
-            $('#caption-text').text("Start Live Caption");
-            return
-        }
-        if (captions.length > 100) {
-            $('#remote-video-text').text(captions.substr(captions.length - 199));
-        } else {
-            $('#remote-video-text').text(captions);
-        }
     },
 
     // When the peerConnection generates an ice candidate, send it over the socket to the peer.
@@ -259,8 +204,7 @@ var VideoChat = {
         VideoChat.socket.emit('token', roomHash);
     },
 
-    // When an answer is received, add it to the peerConnection as the remote
-    // description.
+    // When an answer is received, add it to the peerConnection as the remote description.
     onAnswer: function (answer) {
         logIt("onAnswer");
         logIt('<<< Received answer');
@@ -272,13 +216,10 @@ var VideoChat = {
             logIt(`>>> Sending local ICE candidate (${candidate.address})`);
             VideoChat.socket.emit('candidate', JSON.stringify(candidate), roomHash);
         });
-        // Reset the buffer of local ICE candidates. This is not really needed
-        // in this specific client, but it's good practice
+        // Reset the buffer of local ICE candidates. This is not really needed, but it's good practice
         VideoChat.localICECandidates = [];
     },
 
-    // When the peerConnection receives the actual media stream from the other
-    // browser, add it to the other video element on the page.
     onAddStream: function (event) {
         logIt("onAddStream");
         logIt('<<< Received new stream from remote. Adding it...');
@@ -295,20 +236,48 @@ var VideoChat = {
             if (timesRun === 20) {
                 clearInterval(interval);
             }
-            VideoChat.rePositionLocalVideo()
+            rePositionLocalVideo()
         }, 300);
     },
-
-    rePositionLocalVideo: function () {
-        var bounds = $("#remote-video").position();
-        bounds.top += 10;
-        bounds.left += 10;
-        $("#moveable").css(bounds)
-    }
 };
 
 
-var isFullscreen = false;
+function getBrowserName() {
+    var name = "Unknown";
+    if (window.navigator.userAgent.indexOf("MSIE") !== -1) {
+    } else if (window.navigator.userAgent.indexOf("Firefox") !== -1) {
+        name = "Firefox";
+    } else if (window.navigator.userAgent.indexOf("Opera") !== -1) {
+        name = "Opera";
+    } else if (window.navigator.userAgent.indexOf("Chrome") !== -1) {
+        name = "Chrome";
+    } else if (window.navigator.userAgent.indexOf("Safari") !== -1) {
+        name = "Safari";
+    }
+    return name;
+}
+
+function logIt(message, error) {
+    console.log(message);
+}
+
+function chatRoomFull() {
+    alert("Chat room is full. Check to make sure you don't have multiple open tabs, or try with a new room link");
+    window.location.href = "/newroom";
+}
+
+function rePositionLocalVideo() {
+    var bounds = $("#remote-video").position();
+    bounds.top += 10;
+    bounds.left += 10;
+    $("#moveable").css(bounds)
+}
+
+
+//
+// Fullscreen
+//
+
 
 function openFullscreen() {
     var elem = document.getElementById("remote-video");
@@ -337,6 +306,14 @@ function openFullscreen() {
     }
 }
 
+//
+// End Fullscreen
+//
+
+
+//
+// Mute microphone
+//
 function muteMicrophone() {
     var muted = VideoChat.localStream.getAudioTracks()[0].enabled;
     VideoChat.localStream.getAudioTracks()[0].enabled = !muted;
@@ -353,6 +330,13 @@ function muteMicrophone() {
     }
 }
 
+//
+// End Mute microphone
+//
+
+//
+// Pause Video
+//
 function pauseVideo() {
     var paused = VideoChat.localStream.getVideoTracks()[0].enabled;
     VideoChat.localStream.getVideoTracks()[0].enabled = !paused;
@@ -369,58 +353,14 @@ function pauseVideo() {
     }
 }
 
-
-// Fade out / show UI on mouse move
-var timedelay = 1;
-
-function delayCheck() {
-    if (timedelay === 5) {
-        $('.multi-button').fadeOut();
-        $('#header').fadeOut();
-        timedelay = 1;
-    }
-    timedelay = timedelay + 1;
-}
-
-$(document).mousemove(function () {
-    $('.multi-button').fadeIn();
-    $('#header').fadeIn();
-    timedelay = 1;
-    clearInterval(_delay);
-    _delay = setInterval(delayCheck, 500);
-});
-_delay = setInterval(delayCheck, 500);
+//
+// End pause Video
+//
 
 
-// Show accept webcam snackbar
-Snackbar.show({
-    text: 'Please allow microphone and webcam access',
-    actionText: 'Show Me How',
-    width: '455px',
-    pos: 'top-right',
-    actionTextColor: '#8688ff',
-    duration: 50000,
-    backgroundColor: '#292B32',
-    onActionClick: function (element) {
-        window.open('https://getacclaim.zendesk.com/hc/en-us/articles/360001547832-Setting-the-default-camera-on-your-browser', '_blank');
-    }
-});
-
-
-//Neomorphic buttons
-$(".HoverState").hide();
-$(document).ready(function () {
-    $(".hoverButton").mouseover(function () {
-        $(".HoverState").hide();
-        $(this).next().show();
-    });
-    $(".hoverButton").mouseout(function () {
-        $(".HoverState").hide();
-    });
-});
-
-
-var mode = "camera";
+//
+// Swap camera / screen share
+//
 
 function swap() {
     if (!VideoChat.connected) {
@@ -467,13 +407,14 @@ function switchStreamHelper(stream) {
     VideoChat.localVideo.srcObject = stream;
 }
 
+//
+// End swap camera / screen share
+//
 
-$("#moveable").draggable({containment: 'window'});
-$('#remote-video-text').text("").fadeOut();
 
-var sendingCaptions = false;
-var receivingCaptions = false;
-
+//
+// Live caption
+//
 
 function requestToggleCaptions() {
     if (!VideoChat.connected) {
@@ -501,7 +442,6 @@ function toggleSendCaptions() {
         sendingCaptions = true;
     }
 }
-
 
 function startSpeech() {
     try {
@@ -565,36 +505,60 @@ function startSpeech() {
     recognition.start();
 }
 
+function recieveCaptions(captions) {
+    $('#remote-video-text').text("").fadeIn();
+    if (!receivingCaptions) {
+        $('#remote-video-text').text("").fadeOut();
+    }
+    if (captions === "notusingchrome") {
+        alert("Other caller must be using chrome for this feature to work");
+        receivingCaptions = false;
+        $('#remote-video-text').text("").fadeOut();
+        $('#caption-text').text("Start Live Caption");
+        return
+    }
+    if (captions.length > 100) {
+        $('#remote-video-text').text(captions.substr(captions.length - 199));
+    } else {
+        $('#remote-video-text').text(captions);
+    }
+}
 
+//
+// End Live caption
+//
+
+//
 // Chat
-$('#entire-chat').hide();
-var input = document.querySelector('.compose textarea');
+//
+
 var socket = VideoChat.socket;
 
-input.addEventListener('keypress', function (event) {
+chatInput.addEventListener('keypress', function (event) {
     if (event.keyCode === 13) {
         event.preventDefault();
-        socket.emit('chat message', input.value, roomHash);
-        $('.chat-messages').append('<div class="message-item customer"><div class="message-bloc"><div class="message">' + input.value + '</div></div></div>');
+        socket.emit('chat message', chatInput.value, roomHash);
+        $('.chat-messages').append('<div class="message-item customer"><div class="message-bloc"><div class="message">' + chatInput.value + '</div></div></div>');
         $('#chat-zone').scrollTop($('#chat-zone')[0].scrollHeight);
-        input.value = '';
+        chatInput.value = '';
     }
 });
+
 
 socket.on('chat message', function (msg) {
     $('.chat-messages').append('<div class="message-item moderator"><div class="message-bloc"><div class="message">' + msg + '</div></div></div>');
     $('#chat-zone').scrollTop($('#chat-zone')[0].scrollHeight);
-    if ($('#entire-chat').is(":hidden")){
+    if ($('#entire-chat').is(":hidden")) {
         toggleChat()
     }
 });
 
 
 function toggleChat() {
-    var entireChat =  $('#entire-chat');
-    var chatIcon =  document.getElementById("chat-icon");
+    var entireChat = $('#entire-chat');
+    var chatIcon = document.getElementById("chat-icon");
     var chatText = $('#chat-text');
-    if (entireChat.is(":visible")){
+    if (entireChat.is(":visible")) {
         entireChat.fadeOut();
         chatText.text("Show Chat");
         chatIcon.classList.remove("fa-comment-slash");
@@ -606,11 +570,15 @@ function toggleChat() {
         chatIcon.classList.add("fa-comment-slash");
     }
 }
-// Chat
 
+//
+// End chat
+//
 
+//
 //Picture in picture
-const pipVideo = document.getElementById('remote-video');
+//
+
 function togglePictureInPicture() {
     if ('pictureInPictureEnabled' in document) {
         if (document.pictureInPictureElement) {
@@ -639,9 +607,101 @@ pipVideo.addEventListener('enterpictureinpicture', () => {
 pipVideo.addEventListener('leavepictureinpicture', () => {
     $('#pip-text').text("Enter Picture in Picture");
 });
+//
 //Picture in picture
+//
 
 
-// auto get media
-VideoChat.requestMediaStream();
+function startUp() {
+    // strip url parameters
+    if (url.indexOf('?') > -1) {
+        window.location.href = url.split('?')[0];
+    }
 
+    // if no chat room provided go back to newroom
+    if (window.location.pathname === "/room") {
+        window.location.href = "/landing/newroom";
+    }
+
+    // Redirect unsupported browsers
+    if (!isWebRTCSupported || browserName === "Safari" || browserName === "MSIE") {
+        alert("Your browser doesn't support Neon Chat. Please use Chrome or Firefox.");
+        window.location.href = "/";
+    }
+
+    document.title = 'Neon Chat - ' + url.substring(url.lastIndexOf('/') + 1);
+
+    // get webcam on load
+    VideoChat.requestMediaStream();
+
+    $('#remote-video-text').text("").fadeOut();
+
+    $("#moveable").draggable({containment: 'window'});
+
+    $(".HoverState").hide();
+
+    $('#entire-chat').hide();
+
+    //
+    // Show hide button labels on hover
+    //
+
+    $(document).ready(function () {
+        $(".hoverButton").mouseover(function () {
+            $(".HoverState").hide();
+            $(this).next().show();
+        });
+        $(".hoverButton").mouseout(function () {
+            $(".HoverState").hide();
+        });
+    });
+
+    //
+    // End show hide button labels on hover
+    //
+
+
+    //
+    // Fade out / show UI on mouse move
+    //
+
+    var timedelay = 1;
+
+    function delayCheck() {
+        if (timedelay === 5) {
+            $('.multi-button').fadeOut();
+            $('#header').fadeOut();
+            timedelay = 1;
+        }
+        timedelay = timedelay + 1;
+    }
+
+    $(document).mousemove(function () {
+        $('.multi-button').fadeIn();
+        $('#header').fadeIn();
+        timedelay = 1;
+        clearInterval(_delay);
+        _delay = setInterval(delayCheck, 500);
+    });
+    _delay = setInterval(delayCheck, 500);
+
+    //
+    // End Fade out / show UI on mouse move
+    //
+
+    // Show accept webcam snackbar
+    Snackbar.show({
+        text: 'Please allow microphone and webcam access',
+        actionText: 'Show Me How',
+        width: '455px',
+        pos: 'top-right',
+        actionTextColor: '#8688ff',
+        duration: 50000,
+        backgroundColor: '#292B32',
+        onActionClick: function (element) {
+            window.open('https://getacclaim.zendesk.com/hc/en-us/articles/360001547832-Setting-the-default-camera-on-your-browser', '_blank');
+        }
+    });
+}
+
+startUp();
