@@ -381,6 +381,9 @@ function swap() {
             switchStreamHelper(stream);
         });
     } else {
+
+        VideoChat.localVideo.srcObject.getTracks().forEach(track => track.stop());
+
         navigator.mediaDevices.getUserMedia({
             video: true,
             audio: true
