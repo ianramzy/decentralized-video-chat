@@ -590,6 +590,39 @@ socket.on('chat message', function (msg) {
 // Chat
 
 
+//Picture in picture
+const pipVideo = document.getElementById('remote-video');
+function togglePictureInPicture() {
+    if ('pictureInPictureEnabled' in document) {
+        if (document.pictureInPictureElement) {
+            document.exitPictureInPicture()
+                .catch(error => {
+                    logIt("Error exiting pip.");
+                    logIt(error);
+                })
+        } else {
+            pipVideo.requestPictureInPicture()
+                .catch(error => {
+                    logIt("Error entering pip.");
+                    logIt(error);
+                });
+        }
+    } else {
+        alert("Picture in picture is not supported in your browser. Consider using Chrome.")
+    }
+}
+
+
+pipVideo.addEventListener('enterpictureinpicture', () => {
+    $('#pip-text').text("Exit Picture in Picture");
+});
+
+pipVideo.addEventListener('leavepictureinpicture', () => {
+    $('#pip-text').text("Enter Picture in Picture");
+});
+//Picture in picture
+
+
 // auto get media
 VideoChat.requestMediaStream();
 
