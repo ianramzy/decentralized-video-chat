@@ -381,9 +381,7 @@ function swap() {
             switchStreamHelper(stream);
         });
     } else {
-
         VideoChat.localVideo.srcObject.getTracks().forEach(track => track.stop());
-
         navigator.mediaDevices.getUserMedia({
             video: true,
             audio: true
@@ -405,7 +403,6 @@ function switchStreamHelper(stream) {
         });
         sender.replaceTrack(videoTrack);
     }
-
     VideoChat.localStream = videoTrack;
     VideoChat.localVideo.srcObject = stream;
 }

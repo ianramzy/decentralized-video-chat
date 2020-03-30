@@ -162,7 +162,7 @@ video {
 /*Neomorphic buttons*/
 button {
     border: none;
-    font-size: 2rem;
+    font-size: 1.5rem;
     transition: all .3s ease-in-out;
     color: gray;
     background: transparent;
@@ -182,8 +182,12 @@ button:hover {
 
 .multi-button {
     position: absolute;
-    left: calc(5vw - 40px);
-    top: calc(50vh - 175px);
+    left: calc(7.5vw - 40px);
+    top: 50%;
+    -ms-transform: translate(0%, -50%);
+    transform: translate(0%, -50%);
+
+
     z-index: 999;
     border-radius: 10px;
     background: #16171a;
@@ -200,7 +204,7 @@ button:hover {
     position: absolute;
     left: 70px;
     white-space: nowrap;
-    top: 25px;
+    top: 0px;
     font-weight: bold;
     background: #16171a;
     padding: 10px;
@@ -276,9 +280,16 @@ button:hover {
     right: 0;
     width: 15vw;
     overflow: scroll;
-    -webkit-overflow-scrolling: touch;
+    /*overflow: -moz-scrollbars-none;*/
+    /*-ms-overflow-style: none;*/
+    /*-webkit-overflow-scrolling: touch;*/
     font-family: "Heebo", sans-serif;
 }
+
+/*#chat-zone::-webkit-scrollbar {*/
+/*    !*width: 0 !important*!*/
+/*    display: none;*/
+/*}*/
 
 #chat-zone .chat-messages .message-item {
     position: relative;
