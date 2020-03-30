@@ -355,7 +355,6 @@ function muteMicrophone() {
 
 function pauseVideo() {
     var paused = VideoChat.localStream.getVideoTracks()[0].enabled;
-    alert(paused);
     VideoChat.localStream.getVideoTracks()[0].enabled = !paused;
     const micIcon = document.getElementById("video-icon");
     const micText = document.getElementById("video-text");
@@ -585,8 +584,28 @@ input.addEventListener('keypress', function (event) {
 socket.on('chat message', function (msg) {
     $('.chat-messages').append('<div class="message-item moderator"><div class="message-bloc"><div class="message">' + msg + '</div></div></div>');
     $('#chat-zone').scrollTop($('#chat-zone')[0].scrollHeight);
-    $('#entire-chat').fadeIn();
+    if ($('#entire-chat').is(":hidden")){
+        toggleChat()
+    }
 });
+
+
+function toggleChat() {
+    var entireChat =  $('#entire-chat');
+    var chatIcon =  document.getElementById("chat-icon");
+    var chatText = $('#chat-text');
+    if (entireChat.is(":visible")){
+        entireChat.fadeOut();
+        chatText.text("Show Chat");
+        chatIcon.classList.remove("fa-comment-slash");
+        chatIcon.classList.add("fa-comment");
+    } else {
+        entireChat.fadeIn();
+        chatText.text("Hide Chat");
+        chatIcon.classList.remove("fa-comment");
+        chatIcon.classList.add("fa-comment-slash");
+    }
+}
 // Chat
 
 
@@ -599,7 +618,7 @@ function togglePictureInPicture() {
                 .catch(error => {
                     logIt("Error exiting pip.");
                     logIt(error);
-                })
+                });
         } else {
             pipVideo.requestPictureInPicture()
                 .catch(error => {

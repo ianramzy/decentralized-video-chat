@@ -107,10 +107,10 @@
         <div class="HoverState" id="caption-text">Start Live Caption</div>
     </div>
     <div class="buttonContainer">
-        <button class="hoverButton" onclick="{$('#entire-chat').fadeToggle();}">
-            <i class="fas fa-comment-alt fa-xs"></i>
+        <button class="hoverButton" onclick="{toggleChat()}">
+            <i id="chat-icon" class="fas fa-comment fa-xs"></i>
         </button>
-        <div class="HoverState">Open Chat</div>
+        <div class="HoverState" id="chat-text">Show Chat</div>
     </div>
     <div class="buttonContainer">
         <button class="hoverButton" id="pip-button" onclick="{togglePictureInPicture()}">
