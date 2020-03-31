@@ -10,6 +10,7 @@ var http = require("http").createServer(app);
 var io = require("socket.io")(http);
 var path = require("path");
 var public = path.join(__dirname, "public");
+const url = require("url"); // built-in utility
 
 // enable ssl redirect
 app.use(sslRedirect());
@@ -22,14 +23,27 @@ app.get("/newroom", function (req, res) {
   res.sendFile(path.join(public, "newroom.html"));
 });
 
+app.get("/room/", function (req, res) {
+  res.redirect("/");
+});
+
 app.get("/room/*", function (req, res) {
-  res.sendFile(path.join(public, "chat.html"));
+  if (Object.keys(req.query).length > 0) {
+    logIt("redirect:" + req.url + " to " + url.parse(req.url).pathname);
+    res.redirect(url.parse(req.url).pathname);
+  } else {
+    res.sendFile(path.join(public, "chat.html"));
+  }
 });
 
 app.use(express.static("public"));
 
 function logIt(msg, room) {
-  console.log(room + ": " + msg);
+  if (room) {
+    console.log(room + ": " + msg);
+  } else {
+    console.log(msg);
+  }
 }
 
 // When a socket connects, set up the specific listeners we will use.

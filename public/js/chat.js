@@ -663,16 +663,6 @@ pipVideo.addEventListener("leavepictureinpicture", () => {
 //
 
 function startUp() {
-  // strip url parameters
-  if (url.indexOf("?") > -1) {
-    window.location.href = url.split("?")[0];
-  }
-
-  // if no chat room provided go back to newroom
-  if (window.location.pathname === "/room") {
-    window.location.href = "/landing/newroom";
-  }
-
   // Redirect unsupported browsers
   if (
     !isWebRTCSupported ||
