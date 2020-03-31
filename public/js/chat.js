@@ -16,6 +16,8 @@ const isWebRTCSupported =
 // Element vars
 const chatInput = document.querySelector(".compose input");
 const pipVideo = document.getElementById("remote-video");
+const remoteVideo = $("#remote-video");
+const captionText = $("#remote-video-text");
 
 var VideoChat = {
   connected: false,
@@ -290,10 +292,22 @@ function chatRoomFull() {
 }
 
 function rePositionLocalVideo() {
-  var bounds = $("#remote-video").position();
+  var bounds = remoteVideo.position();
   bounds.top += 10;
   bounds.left += 10;
   $("#moveable").css(bounds);
+}
+
+function rePositionCaptions() {
+  var bounds = remoteVideo.position();
+  bounds.top -= 10;
+  bounds.top = bounds.top + remoteVideo.height() - 1 * captionText.height();
+  captionText.css(bounds);
+}
+
+function windowResized() {
+  rePositionLocalVideo();
+  rePositionCaptions();
 }
 
 //
@@ -548,11 +562,12 @@ function recieveCaptions(captions) {
     $("#caption-text").text("Start Live Caption");
     return;
   }
-  if (captions.length > 100) {
-    $("#remote-video-text").text(captions.substr(captions.length - 199));
+  if (captions.length > 299) {
+    $("#remote-video-text").text(captions.substr(captions.length - 299));
   } else {
     $("#remote-video-text").text(captions);
   }
+  rePositionCaptions();
 }
 
 //
