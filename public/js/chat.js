@@ -586,7 +586,7 @@ chatInput.addEventListener("keypress", function (event) {
     socket.emit("chat message", chatInput.value, roomHash);
     $(".chat-messages").append(
       '<div class="message-item customer"><div class="message-bloc"><div class="message">' +
-        chatInput.value +
+        chatInput.value.autoLink() +
         "</div></div></div>"
     );
     $("#chat-zone").scrollTop($("#chat-zone")[0].scrollHeight);
@@ -597,7 +597,7 @@ chatInput.addEventListener("keypress", function (event) {
 socket.on("chat message", function (msg) {
   $(".chat-messages").append(
     '<div class="message-item moderator"><div class="message-bloc"><div class="message">' +
-      msg +
+      msg.autoLink() +
       "</div></div></div>"
   );
   $("#chat-zone").scrollTop($("#chat-zone")[0].scrollHeight);

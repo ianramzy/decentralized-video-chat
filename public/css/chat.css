@@ -252,7 +252,7 @@ button:hover {
   font-size: inherit;
   border: none;
   width: 100%;
-  height: calc(100%);
+  height: calc(100% - 5px);
   resize: none;
   outline: none;
   background-color: inherit;
@@ -339,6 +339,10 @@ button:hover {
 
 .message {
   word-break: break-all;
+}
+
+.message a {
+  text-decoration: underline;
 }
 
 /*simple chat*/
