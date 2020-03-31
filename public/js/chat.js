@@ -14,7 +14,7 @@ const isWebRTCSupported =
   window.RTCPeerConnection;
 
 // Element vars
-const chatInput = document.querySelector(".compose textarea");
+const chatInput = document.querySelector(".compose input");
 const pipVideo = document.getElementById("remote-video");
 
 var VideoChat = {
