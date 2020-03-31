@@ -38,7 +38,7 @@
       gtag("config", "UA-162048272-1");
     </script>
   </head>
-  <body>
+  <body onresize="rePositionLocalVideo()">
     <div id="header">
       <a href="/">
         <img src="/images/logo.svg" alt="Neon" width="48" height="48" />
@@ -54,23 +54,15 @@
     </div>
 
     <div id="entire-chat">
-      <form class="compose">
-        <textarea type="text" placeholder="Type a message"></textarea>
-      </form>
       <div id="chat-zone">
-        <div class="chat-messages">
-          <!--            <div class="message-item customer">-->
-          <!--                <div class="message-bloc">-->
-          <!--                    <div class="message">Have you tried this chat?</div>-->
-          <!--                </div>-->
-          <!--            </div>-->
-
-          <!--            <div class="message-item moderator">-->
-          <!--                <div class="message-bloc">-->
-          <!--                    <div class="message">Not yet! It looks awesome</div>-->
-          <!--                </div>-->
-          <!--            </div>-->
-        </div>
+        <form class="compose">
+          <textarea
+            type="text"
+            placeholder="Type a message"
+            style="overflow: -moz-scrollbars-none;"
+          ></textarea>
+        </form>
+        <div class="chat-messages"></div>
       </div>
     </div>
 

@@ -255,7 +255,7 @@ var VideoChat = {
     var timesRun = 0;
     var interval = setInterval(function () {
       timesRun += 1;
-      if (timesRun === 20) {
+      if (timesRun === 10) {
         clearInterval(interval);
       }
       rePositionLocalVideo();
