@@ -251,7 +251,7 @@ var VideoChat = {
     Snackbar.close();
     VideoChat.remoteVideo.style.background = "none";
     VideoChat.connected = true;
-    $("#remote-video-text").fadeOut();
+    captionText.fadeOut();
     $("#local-video-text").fadeOut();
 
     var timesRun = 0;
@@ -464,7 +464,7 @@ function requestToggleCaptions() {
     return;
   }
   if (receivingCaptions) {
-    $("#remote-video-text").text("").fadeOut();
+    captionText.text("").fadeOut();
     $("#caption-text").text("Start Live Caption");
     receivingCaptions = false;
   } else {
@@ -551,21 +551,21 @@ function startSpeech() {
 }
 
 function recieveCaptions(captions) {
-  $("#remote-video-text").text("").fadeIn();
+  captionText.text("").fadeIn();
   if (!receivingCaptions) {
-    $("#remote-video-text").text("").fadeOut();
+    captionText.text("").fadeOut();
   }
   if (captions === "notusingchrome") {
     alert("Other caller must be using chrome for this feature to work");
     receivingCaptions = false;
-    $("#remote-video-text").text("").fadeOut();
+    captionText.text("").fadeOut();
     $("#caption-text").text("Start Live Caption");
     return;
   }
   if (captions.length > 299) {
-    $("#remote-video-text").text(captions.substr(captions.length - 299));
+    captionText.text(captions.substr(captions.length - 299));
   } else {
-    $("#remote-video-text").text(captions);
+    captionText.text(captions);
   }
   rePositionCaptions();
 }
@@ -690,7 +690,7 @@ function startUp() {
   // get webcam on load
   VideoChat.requestMediaStream();
 
-  $("#remote-video-text").text("").fadeOut();
+  captionText.text("").fadeOut();
 
   $("#moveable").draggable({ containment: "window" });
 
