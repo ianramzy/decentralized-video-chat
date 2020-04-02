@@ -137,33 +137,30 @@ var VideoChat = {
         switch (VideoChat.peerConnection.connectionState) {
           case "connected":
             logIt("connected");
-            // alert("connected");
-            function onConnect() {
-              VideoChat.socket.disconnect();
-              // VideoChat.peerConnection = null;
-            }
-            setTimeout(onConnect, 100);
+            VideoChat.socket.disconnect();
             break;
           case "disconnected":
           case "failed":
             logIt("failed/disconnected");
-            logIt(VideoChat);
-            // VideoChat.socket = io();
-            // VideoChat.socket.on("candidate", VideoChat.onCandidate);
-            // VideoChat.socket.on("answer", VideoChat.onAnswer);
-
-            location.reload();
-
-            // startUp();
-            // alert("failed/disconnected");
+            logIt("Refreshing page...");
+            function reloadScript(id) {
+              var $el = $("#" + id);
+              $("#" + id).replaceWith(
+                '<script id="' +
+                  id +
+                  '" src="' +
+                  $el.prop("src") +
+                  '"></script>'
+              );
+            }
+            reloadScript("chatJS");
+            // location.reload();
             break;
           case "closed":
             logIt("closed");
-            // alert("closed");
             break;
         }
       };
-
       callback();
     };
   },
