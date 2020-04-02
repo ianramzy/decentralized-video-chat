@@ -15,5 +15,8 @@
     "heroku-ssl-redirect": "0.0.4",
     "socket.io": "^2.2.0",
     "twilio": "^3.34.0"
+  },
+  "devDependencies": {
+    "prettier": "2.0.2"
   }
 }

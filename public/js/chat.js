@@ -133,6 +133,36 @@ var VideoChat = {
       VideoChat.socket.on("recieveCaptions", (captions) =>
         recieveCaptions(captions)
       );
+      VideoChat.peerConnection.onconnectionstatechange = function (event) {
+        switch (VideoChat.peerConnection.connectionState) {
+          case "connected":
+            logIt("connected");
+            // alert("connected");
+            function onConnect() {
+              VideoChat.socket.disconnect();
+              // VideoChat.peerConnection = null;
+            }
+            setTimeout(onConnect, 100);
+            break;
+          case "disconnected":
+          case "failed":
+            logIt("failed/disconnected");
+            logIt(VideoChat);
+            // VideoChat.socket = io();
+            // VideoChat.socket.on("candidate", VideoChat.onCandidate);
+            // VideoChat.socket.on("answer", VideoChat.onAnswer);
+
+            location.reload();
+
+            // startUp();
+            // alert("failed/disconnected");
+            break;
+          case "closed":
+            logIt("closed");
+            // alert("closed");
+            break;
+        }
+      };
 
       callback();
     };
