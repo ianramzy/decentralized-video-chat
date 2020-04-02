@@ -133,7 +133,16 @@ var VideoChat = {
       };
 
       dataChanel.onmessage = function (event) {
-        handleRecieveMessage(event);
+        var recievedData = event.data;
+        var dataType = recievedData.substring(0, 4);
+        var cleanedMessage = recievedData.slice(4);
+        if (dataType === "mes:") {
+          handleRecieveMessage(cleanedMessage);
+        } else if (dataType === "cap:") {
+          recieveCaptions(cleanedMessage);
+        } else if (dataType === "tog:") {
+          toggleSendCaptions();
+        }
       };
 
       // Set up callbacks for the connection generating iceCandidates or
@@ -517,7 +526,7 @@ function requestToggleCaptions() {
     $("#caption-text").text("End Live Caption");
     receivingCaptions = true;
   }
-  VideoChat.socket.emit("requestToggleCaptions", roomHash);
+  dataChanel.send("tog:");
 }
 
 function toggleSendCaptions() {
@@ -540,7 +549,7 @@ function startSpeech() {
     sendingCaptions = false;
     logIt(e);
     logIt("error importing speech library");
-    VideoChat.socket.emit("sendCaptions", "notusingchrome", roomHash);
+    dataChanel.send("cap:notusingchrome");
     return;
   }
 
@@ -560,7 +569,7 @@ function startSpeech() {
         finalTranscript += transcript;
       } else {
         interimTranscript += transcript;
-        VideoChat.socket.emit("sendCaptions", interimTranscript, roomHash);
+        dataChanel.send("cap:" + interimTranscript);
         // console.log(interimTranscript);
       }
     }
@@ -624,7 +633,7 @@ function recieveCaptions(captions) {
 chatInput.addEventListener("keypress", function (event) {
   if (event.keyCode === 13) {
     event.preventDefault();
-    dataChanel.send(chatInput.value);
+    dataChanel.send("mes:" + chatInput.value);
     $(".chat-messages").append(
       '<div class="message-item customer"><div class="message-bloc"><div class="message">' +
         chatInput.value.autoLink() +
@@ -635,8 +644,7 @@ chatInput.addEventListener("keypress", function (event) {
   }
 });
 
-function handleRecieveMessage(event) {
-  msg = event.data;
+function handleRecieveMessage(msg) {
   $(".chat-messages").append(
     '<div class="message-item moderator"><div class="message-bloc"><div class="message">' +
       msg.autoLink() +
