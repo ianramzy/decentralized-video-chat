@@ -1,4 +1,6 @@
 // Vars
+var isMuted;
+var videoIsPaused;
 var dataChanel = null;
 const browserName = getBrowserName();
 const url = window.location.href;
@@ -410,12 +412,22 @@ function openFullscreen() {
 //
 // Mute microphone
 //
+
 function muteMicrophone() {
-  var muted = VideoChat.localStream.getAudioTracks()[0].enabled;
-  VideoChat.localStream.getAudioTracks()[0].enabled = !muted;
+  var audioTrack = null;
+  VideoChat.peerConnection.getSenders().find(function (s) {
+    if (s.track.kind === "audio") {
+      audioTrack = s.track;
+    }
+  });
+
+  isMuted = !audioTrack.enabled;
+  audioTrack.enabled = isMuted;
+  isMuted = !isMuted;
+
   const micIcon = document.getElementById("mic-icon");
   const micText = document.getElementById("mic-text");
-  if (muted) {
+  if (isMuted) {
     micIcon.classList.remove("fa-microphone");
     micIcon.classList.add("fa-microphone-slash");
     micText.innerText = "Unmute";
@@ -433,12 +445,20 @@ function muteMicrophone() {
 //
 // Pause Video
 //
+
 function pauseVideo() {
-  var paused = VideoChat.localStream.getVideoTracks()[0].enabled;
-  VideoChat.localStream.getVideoTracks()[0].enabled = !paused;
+  var videoTrack = null;
+  VideoChat.peerConnection.getSenders().find(function (s) {
+    if (s.track.kind === "video") {
+      videoTrack = s.track;
+    }
+  });
+  videoIsPaused = !videoTrack.enabled;
+  videoTrack.enabled = videoIsPaused;
+  videoIsPaused = !videoIsPaused;
   const micIcon = document.getElementById("video-icon");
   const micText = document.getElementById("video-text");
-  if (paused) {
+  if (videoIsPaused) {
     micIcon.classList.remove("fa-video");
     micIcon.classList.add("fa-video-slash");
     micText.innerText = "Unpause Video";
@@ -475,6 +495,9 @@ function swap() {
         swapIcon.classList.remove("fa-desktop");
         swapIcon.classList.add("fa-camera");
         swapText.innerText = "Share Webcam";
+        if (videoIsPaused) {
+          pauseVideo();
+        }
         switchStreamHelper(stream);
       });
   } else {
@@ -497,7 +520,7 @@ function swap() {
 function switchStreamHelper(stream) {
   let videoTrack = stream.getVideoTracks()[0];
   if (VideoChat.connected) {
-    var sender = VideoChat.peerConnection.getSenders().find(function (s) {
+    const sender = VideoChat.peerConnection.getSenders().find(function (s) {
       return s.track.kind === videoTrack.kind;
     });
     sender.replaceTrack(videoTrack);
