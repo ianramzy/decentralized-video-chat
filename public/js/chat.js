@@ -158,8 +158,9 @@ var VideoChat = {
       VideoChat.socket.on("recieveCaptions", (captions) =>
         recieveCaptions(captions)
       );
-      VideoChat.peerConnection.onconnectionstatechange = function (event) {
-        switch (VideoChat.peerConnection.connectionState) {
+
+      VideoChat.peerConnection.oniceconnectionstatechange = function (event) {
+        switch (VideoChat.peerConnection.iceConnectionState) {
           case "connected":
             logIt("connected");
             VideoChat.socket.disconnect();
@@ -167,25 +168,28 @@ var VideoChat = {
           case "disconnected":
           case "failed":
             logIt("failed/disconnected");
-            logIt("Refreshing page...");
-            function reloadScript(id) {
-              var $el = $("#" + id);
-              $("#" + id).replaceWith(
-                '<script id="' +
-                  id +
-                  '" src="' +
-                  $el.prop("src") +
-                  '"></script>'
-              );
-            }
-            reloadScript("chatJS");
-            // location.reload();
+            // dataChanel.close();
+            // logIt("Refreshing page...");
+            // function reloadScript(id) {
+            //   var $el = $("#" + id);
+            //   $("#" + id).replaceWith(
+            //     '<script id="' +
+            //       id +
+            //       '" src="' +
+            //       $el.prop("src") +
+            //       '"></script>'
+            //   );
+            // }
+            // reloadScript("chatJS");
+            // alert("reloding");
+            location.reload();
             break;
           case "closed":
             logIt("closed");
             break;
         }
       };
+
       callback();
     };
   },
