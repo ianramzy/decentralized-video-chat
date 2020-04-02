@@ -69,45 +69,35 @@
         </button>
         <div class="HoverState" id="mic-text">Mute</div>
       </div>
+
       <div class="buttonContainer">
         <button class="hoverButton" onclick="{openFullscreen()}">
           <i class="fas fa-compress fa-xs"></i>
         </button>
         <div class="HoverState">Fullscreen</div>
       </div>
+
       <div class="buttonContainer">
         <button class="hoverButton" onclick="{pauseVideo()}">
           <i class="fas fa-video fa-xs" id="video-icon"></i>
         </button>
         <div class="HoverState" id="video-text">Pause Video</div>
       </div>
+
       <div class="buttonContainer">
         <button class="hoverButton" id="share-button" onclick="{swap()}">
           <i id="swap-icon" class="fas fa-desktop fa-xs"></i>
         </button>
         <div class="HoverState" id="swap-text">Share Screen</div>
       </div>
-      <div class="buttonContainer">
-        <button
-          class="hoverButton"
-          onclick="{window.location.href = '/newroom'}"
-        >
-          <i class="fas fa-phone-slash fa-xs"></i>
-        </button>
-        <div class="HoverState">End Call</div>
-      </div>
-      <div class="buttonContainer">
-        <button class="hoverButton" onclick="{requestToggleCaptions()}">
-          <i class="fas fa-closed-captioning fa-xs"></i>
-        </button>
-        <div class="HoverState" id="caption-text">Start Live Caption</div>
-      </div>
+
       <div class="buttonContainer">
         <button class="hoverButton" onclick="{toggleChat()}">
           <i id="chat-icon" class="fas fa-comment fa-xs"></i>
         </button>
         <div class="HoverState" id="chat-text">Show Chat</div>
       </div>
+
       <div class="buttonContainer">
         <button
           class="hoverButton"
@@ -117,6 +107,23 @@
           <i class="fas fa-external-link-alt fa-xs"></i>
         </button>
         <div class="HoverState" id="pip-text">Enter Picture in Picture</div>
+      </div>
+
+      <div class="buttonContainer">
+        <button class="hoverButton" onclick="{requestToggleCaptions()}">
+          <i class="fas fa-closed-captioning fa-xs"></i>
+        </button>
+        <div class="HoverState" id="caption-text">Start Live Caption</div>
+      </div>
+
+      <div class="buttonContainer">
+        <button
+          class="hoverButton"
+          onclick="{window.location.href = '/newroom'}"
+        >
+          <i class="fas fa-phone-slash fa-xs"></i>
+        </button>
+        <div class="HoverState">End Call</div>
       </div>
     </div>
 
