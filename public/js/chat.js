@@ -694,6 +694,9 @@ function togglePictureInPicture() {
       });
     } else {
       pipVideo.requestPictureInPicture().catch((error) => {
+        alert(
+          "You must be connected to another person to endter picture in picture."
+        );
         logIt("Error entering pip.");
         logIt(error);
       });
