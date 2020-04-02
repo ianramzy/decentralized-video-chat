@@ -1,4 +1,5 @@
 // Vars
+var dataChanel = null;
 const browserName = getBrowserName();
 const url = window.location.href;
 const roomHash = url.substring(url.lastIndexOf("/") + 1).toLowerCase();
@@ -121,6 +122,20 @@ var VideoChat = {
       VideoChat.localStream.getTracks().forEach(function (track) {
         VideoChat.peerConnection.addTrack(track, VideoChat.localStream);
       });
+
+      dataChanel = VideoChat.peerConnection.createDataChannel("chat", {
+        negotiated: true,
+        id: 0,
+      });
+
+      dataChanel.onopen = function (event) {
+        logIt("dataChannel opened");
+      };
+
+      dataChanel.onmessage = function (event) {
+        handleRecieveMessage(event);
+      };
+
       // Set up callbacks for the connection generating iceCandidates or
       // receiving the remote media stream.
       VideoChat.peerConnection.onicecandidate = VideoChat.onIceCandidate;
@@ -130,6 +145,7 @@ var VideoChat = {
       VideoChat.socket.on("candidate", VideoChat.onCandidate);
       VideoChat.socket.on("answer", VideoChat.onAnswer);
       VideoChat.socket.on("requestToggleCaptions", () => toggleSendCaptions());
+
       VideoChat.socket.on("recieveCaptions", (captions) =>
         recieveCaptions(captions)
       );
@@ -605,12 +621,10 @@ function recieveCaptions(captions) {
 // Chat
 //
 
-var socket = VideoChat.socket;
-
 chatInput.addEventListener("keypress", function (event) {
   if (event.keyCode === 13) {
     event.preventDefault();
-    socket.emit("chat message", chatInput.value, roomHash);
+    dataChanel.send(chatInput.value);
     $(".chat-messages").append(
       '<div class="message-item customer"><div class="message-bloc"><div class="message">' +
         chatInput.value.autoLink() +
@@ -621,7 +635,8 @@ chatInput.addEventListener("keypress", function (event) {
   }
 });
 
-socket.on("chat message", function (msg) {
+function handleRecieveMessage(event) {
+  msg = event.data;
   $(".chat-messages").append(
     '<div class="message-item moderator"><div class="message-bloc"><div class="message">' +
       msg.autoLink() +
@@ -631,7 +646,7 @@ socket.on("chat message", function (msg) {
   if ($("#entire-chat").is(":hidden")) {
     toggleChat();
   }
-});
+}
 
 function toggleChat() {
   var entireChat = $("#entire-chat");
