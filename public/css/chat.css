@@ -153,9 +153,14 @@ a {
   background-size: 400px auto;
   background-repeat: no-repeat;
   background-position: center center;
-  box-shadow: 9px 9px 16px #0a0b0c, -9px -9px 16px #222328;
+  /*box-shadow: 9px 9px 16px #0a0b0c, -9px -9px 16px #222328;*/
+  /*-webkit-box-shadow: 9px 9px 16px #0a0b0c, -9px -9px 16px #222328;*/
+  /*object-fit: fill;*/
+}
 
-  object-fit: cover;
+#remote-video.fullscreen {
+  /*object-fit: fill;*/
+  width: 100%;
 }
 
 /*Neomorphic buttons*/

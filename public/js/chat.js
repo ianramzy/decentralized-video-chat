@@ -223,7 +223,7 @@ var VideoChat = {
   // When receiving a candidate over the socket, turn it back into a real
   // RTCIceCandidate and add it to the peerConnection.
   onCandidate: function (candidate) {
-    $("#caption-text").text("Found other user... connecting");
+    $("#remote-video-text").text("Found other user... connecting");
     logIt("onCandidate");
     rtcCandidate = new RTCIceCandidate(JSON.parse(candidate));
     logIt(
@@ -375,8 +375,10 @@ function windowResized() {
 
 function openFullscreen() {
   try {
-    var elem = document.getElementById("remote-video");
+    // var elem = document.getElementById("remote-video");
+    var elem = document.getElementById("body");
     if (!isFullscreen) {
+      VideoChat.remoteVideo.classList.add("fullscreen");
       isFullscreen = true;
       if (elem.requestFullscreen) {
         elem.requestFullscreen();
@@ -385,13 +387,16 @@ function openFullscreen() {
         elem.mozRequestFullScreen();
       } else if (elem.webkitRequestFullscreen) {
         /* Chrome, Safari and Opera */
+
         elem.webkitRequestFullscreen();
+        setTimeout(windowResized, 1000);
       } else if (elem.msRequestFullscreen) {
         /* IE/Edge */
         elem.msRequestFullscreen();
       }
     } else {
       isFullscreen = false;
+      VideoChat.remoteVideo.classList.remove("fullscreen");
       if (document.exitFullscreen) {
         document.exitFullscreen();
       } else if (document.mozCancelFullScreen) {
@@ -404,11 +409,11 @@ function openFullscreen() {
         /* IE/Edge */
         document.msExitFullscreen();
       }
-      setTimeout(windowResized, 1000);
     }
   } catch (e) {
     logIt(e);
   }
+  setTimeout(windowResized, 1000);
 }
 
 //
@@ -737,28 +742,34 @@ function toggleChat() {
 //
 
 function togglePictureInPicture() {
-  if ("pictureInPictureEnabled" in document) {
+  // pipVideo.webkitSetPresentationMode("picture-in-picture");
+  if (
+    "pictureInPictureEnabled" in document ||
+    pipVideo.webkitSetPresentationMode
+  ) {
     if (document.pictureInPictureElement) {
       document.exitPictureInPicture().catch((error) => {
         logIt("Error exiting pip.");
         logIt(error);
       });
+    } else if (pipVideo.webkitPresentationMode === "inline") {
+      pipVideo.webkitSetPresentationMode("picture-in-picture");
+    } else if (pipVideo.webkitPresentationMode === "picture-in-picture") {
+      pipVideo.webkitSetPresentationMode("inline");
     } else {
       pipVideo.requestPictureInPicture().catch((error) => {
         alert(
           "You must be connected to another person to enter picture in picture."
         );
-        logIt("Error entering pip.");
-        logIt(error);
       });
     }
   } else {
     alert(
-      "Picture in picture is not supported in your browser. Consider using Chrome."
+      "Picture in picture is not supported in your browser. Consider using Chrome or Safari."
     );
   }
 }
-
+//todo handle updating of pip button better
 pipVideo.addEventListener("enterpictureinpicture", () => {
   $("#pip-text").text("Exit Picture in Picture");
 });
@@ -772,13 +783,9 @@ pipVideo.addEventListener("leavepictureinpicture", () => {
 
 function startUp() {
   // Redirect unsupported browsers
-  if (
-    !isWebRTCSupported ||
-    browserName === "Safari" ||
-    browserName === "MSIE"
-  ) {
+  if (!isWebRTCSupported || browserName === "MSIE") {
     alert(
-      "Your browser doesn't support Zipcall. Please use Chrome or Firefox."
+      "Your browser doesn't support Zipcall. Please use Chrome, Firefox, or Safari on laptop/desktop."
     );
     window.location.href = "/";
   }

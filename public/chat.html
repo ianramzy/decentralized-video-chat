@@ -35,7 +35,7 @@
       gtag("config", "UA-162048272-1");
     </script>
   </head>
-  <body onresize="windowResized()">
+  <body id="body" onresize="windowResized()">
     <div id="header">
       <a href="/">
         <img src="/images/logo.svg" alt="Neon" width="48" height="48" />
@@ -123,6 +123,7 @@
         <div class="HoverState">End Call</div>
       </div>
     </div>
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="../js/snackbar.js"></script>
