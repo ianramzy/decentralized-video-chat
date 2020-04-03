@@ -1,4 +1,4 @@
-# Decentralized Video Chat
+# Zipcall - Decentralized Video Chat
 
 [![Author](https://img.shields.io/badge/Author-ianramzy-brightgreen.svg)](https://ianramzy.com)
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
@@ -6,11 +6,13 @@
 ![GitHub repo size](https://img.shields.io/github/repo-size/ianramzy/decentralized-video-chat.svg)
 [![Repo Link](https://img.shields.io/badge/Repo-Link-black.svg)](https://github.com/ianramzy/decentralized-video-chat)
 
-# https://neonchat.io
+# https://zipcall.io
 
 Decentralized video chat platform powered by WebRTC using Twilio STUN/TURN infrastructure.
-Neon Chat provides video quality and latency simply not available with traditional
+Zipcall provides video quality and latency simply not available with traditional
 technology.
+
+# Fixme
 
 ![screenshot](public/images/githubpreview.png "Video Calling")
 

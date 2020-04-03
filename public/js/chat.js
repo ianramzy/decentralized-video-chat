@@ -750,12 +750,12 @@ function startUp() {
     browserName === "MSIE"
   ) {
     alert(
-      "Your browser doesn't support Neon Chat. Please use Chrome or Firefox."
+      "Your browser doesn't support Zipcall. Please use Chrome or Firefox."
     );
     window.location.href = "/";
   }
 
-  document.title = "Neon Chat - " + url.substring(url.lastIndexOf("/") + 1);
+  document.title = "Zipcall - " + url.substring(url.lastIndexOf("/") + 1);
 
   // get webcam on load
   VideoChat.requestMediaStream();
