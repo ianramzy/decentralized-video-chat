@@ -223,6 +223,7 @@ var VideoChat = {
   // When receiving a candidate over the socket, turn it back into a real
   // RTCIceCandidate and add it to the peerConnection.
   onCandidate: function (candidate) {
+    $("#caption-text").text("Found other user... connecting");
     logIt("onCandidate");
     rtcCandidate = new RTCIceCandidate(JSON.parse(candidate));
     logIt(
@@ -490,12 +491,31 @@ function swap() {
   const swapIcon = document.getElementById("swap-icon");
   const swapText = document.getElementById("swap-text");
   if (mode === "camera") {
+    // Show accept screenshare snackbar
+    Snackbar.show({
+      text:
+        "Please allow screen share. Click the middle of the picture above and then press share.",
+      // actionText: "Show Me How",
+      width: "455px",
+      pos: "bottom-center",
+      actionTextColor: "#8688ff",
+      duration: 50000,
+      backgroundColor: "#292B32",
+      // onActionClick: function (element) {
+      //   window.open(
+      //     "https://getacclaim.zendesk.com/hc/en-us/articles/360001547832-Setting-the-default-camera-on-your-browser",
+      //     "_blank"
+      //   );
+      // },
+    });
+
     navigator.mediaDevices
       .getDisplayMedia({
         video: true,
         audio: false,
       })
       .then(function (stream) {
+        Snackbar.close();
         mode = "screen";
         swapIcon.classList.remove("fa-desktop");
         swapIcon.classList.add("fa-camera");
@@ -841,3 +861,6 @@ function startUp() {
 }
 
 startUp();
+
+captionText.text("Waiting for other user to join...").fadeIn();
+rePositionCaptions();
