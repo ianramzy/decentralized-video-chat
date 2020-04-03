@@ -373,35 +373,40 @@ function windowResized() {
 //
 
 function openFullscreen() {
-  var elem = document.getElementById("remote-video");
-  if (!isFullscreen) {
-    isFullscreen = true;
-    if (elem.requestFullscreen) {
-      elem.requestFullscreen();
-    } else if (elem.mozRequestFullScreen) {
-      /* Firefox */
-      elem.mozRequestFullScreen();
-    } else if (elem.webkitRequestFullscreen) {
-      /* Chrome, Safari and Opera */
-      elem.webkitRequestFullscreen();
-    } else if (elem.msRequestFullscreen) {
-      /* IE/Edge */
-      elem.msRequestFullscreen();
+  try {
+    var elem = document.getElementById("remote-video");
+    if (!isFullscreen) {
+      isFullscreen = true;
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      } else if (elem.mozRequestFullScreen) {
+        /* Firefox */
+        elem.mozRequestFullScreen();
+      } else if (elem.webkitRequestFullscreen) {
+        /* Chrome, Safari and Opera */
+        elem.webkitRequestFullscreen();
+      } else if (elem.msRequestFullscreen) {
+        /* IE/Edge */
+        elem.msRequestFullscreen();
+      }
+    } else {
+      isFullscreen = false;
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.mozCancelFullScreen) {
+        /* Firefox */
+        document.mozCancelFullScreen();
+      } else if (document.webkitExitFullscreen) {
+        /* Chrome, Safari and Opera */
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) {
+        /* IE/Edge */
+        document.msExitFullscreen();
+      }
+      setTimeout(windowResized, 1000);
     }
-  } else {
-    isFullscreen = false;
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    } else if (document.mozCancelFullScreen) {
-      /* Firefox */
-      document.mozCancelFullScreen();
-    } else if (document.webkitExitFullscreen) {
-      /* Chrome, Safari and Opera */
-      document.webkitExitFullscreen();
-    } else if (document.msExitFullscreen) {
-      /* IE/Edge */
-      document.msExitFullscreen();
-    }
+  } catch (e) {
+    logIt(e);
   }
 }
 
