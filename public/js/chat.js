@@ -493,7 +493,7 @@ function swap() {
     navigator.mediaDevices
       .getDisplayMedia({
         video: true,
-        audio: true,
+        audio: false,
       })
       .then(function (stream) {
         mode = "screen";
@@ -524,6 +524,9 @@ function swap() {
 
 function switchStreamHelper(stream) {
   let videoTrack = stream.getVideoTracks()[0];
+  videoTrack.onended = function () {
+    swap();
+  };
   if (VideoChat.connected) {
     const sender = VideoChat.peerConnection.getSenders().find(function (s) {
       return s.track.kind === videoTrack.kind;
