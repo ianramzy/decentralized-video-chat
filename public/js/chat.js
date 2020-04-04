@@ -769,14 +769,15 @@ function togglePictureInPicture() {
     );
   }
 }
-//todo handle updating of pip button better
-pipVideo.addEventListener("enterpictureinpicture", () => {
-  $("#pip-text").text("Exit Picture in Picture");
-});
-
-pipVideo.addEventListener("leavepictureinpicture", () => {
-  $("#pip-text").text("Enter Picture in Picture");
-});
+// pipVideo.addEventListener("enterpictureinpicture", () => {
+//   $("#pip-text").text("Exit Picture in Picture");
+//   alert("enter pip");
+// });
+//
+// pipVideo.addEventListener("leavepictureinpicture", () => {
+//   $("#pip-text").text("Enter Picture in Picture");
+//   alert("exit pip");
+// });
 //
 //Picture in picture
 //
