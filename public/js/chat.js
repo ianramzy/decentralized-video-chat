@@ -584,7 +584,7 @@ function requestToggleCaptions() {
     receivingCaptions = false;
   } else {
     alert(
-      "This is an expirimental feature. Live transcription requires the other user to have chrome."
+      "This is an experimental feature. Live transcription requires the other user to have chrome."
     );
     $("#caption-text").text("End Live Caption");
     receivingCaptions = true;
@@ -627,13 +627,23 @@ function startSpeech() {
   recognition.onresult = (event) => {
     let interimTranscript = "";
     for (let i = event.resultIndex, len = event.results.length; i < len; i++) {
-      let transcript = event.results[i][0].transcript;
+      var transcript = event.results[i][0].transcript;
       if (event.results[i].isFinal) {
         finalTranscript += transcript;
       } else {
         interimTranscript += transcript;
-        dataChanel.send("cap:" + interimTranscript);
+        // if (interimTranscript.length < 100) {
+        dataChanel.send("cap:" + transcript);
+        // }
         // console.log(interimTranscript);
+        console.log(transcript);
+
+        if (interimTranscript.length > 100) {
+          interimTranscript = "";
+          transcript = "";
+          // event.results[i][0].transcript = "";
+          console.log("reset");
+        }
       }
     }
   };
@@ -698,7 +708,7 @@ chatInput.addEventListener("keypress", function (event) {
     event.preventDefault();
     dataChanel.send("mes:" + chatInput.value);
     $(".chat-messages").append(
-      '<div class="message-item customer"><div class="message-bloc"><div class="message">' +
+      '<div class="message-item customer cssanimation fadeInBottom"><div class="message-bloc"><div class="message">' +
         chatInput.value.autoLink() +
         "</div></div></div>"
     );
@@ -709,7 +719,7 @@ chatInput.addEventListener("keypress", function (event) {
 
 function handleRecieveMessage(msg) {
   $(".chat-messages").append(
-    '<div class="message-item moderator"><div class="message-bloc"><div class="message">' +
+    '<div class="message-item moderator cssanimation fadeInBottom"><div class="message-bloc"><div class="message">' +
       msg.autoLink() +
       "</div></div></div>"
   );
