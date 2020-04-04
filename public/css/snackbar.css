@@ -16,17 +16,22 @@
   top: -100px;
   opacity: 0;
   z-index: 9999;
+
+  background-color: #376df9;
+  background: linear-gradient(100deg, #376df9 0, #ff5fa0 75%, #ffc55a 100%);
 }
 
 .snackbar-container .action {
-  background: inherit;
+  background: white;
+  padding: 7px;
+  border-radius: 3px;
   display: inline-block;
   border: none;
   font-size: inherit;
   text-transform: uppercase;
-  color: #4caf50;
+  color: #000000;
   margin: 0 0 0 24px;
-  padding: 0;
+  /*padding: 0;*/
   min-width: min-content;
   cursor: pointer;
 }

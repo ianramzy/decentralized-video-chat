@@ -36,7 +36,7 @@
     secondButtonText: "",
     secondButtonAria: "Description for Screen Readers",
     secondButtonTextColor: "#4CAF50",
-    backgroundColor: "#323232",
+    // backgroundColor: "#323232",
     pos: "bottom-left",
     duration: 5000,
     customClass: "",
@@ -75,7 +75,7 @@
     $p.style.lineHeight = "1em";
     $p.innerHTML = options.text;
     Snackbar.snackbar.appendChild($p);
-    Snackbar.snackbar.style.background = options.backgroundColor;
+    // Snackbar.snackbar.style.background = options.backgroundColor;
 
     if (options.showSecondButton) {
       var secondButton = document.createElement("button");

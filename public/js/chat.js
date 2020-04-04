@@ -63,11 +63,11 @@ var VideoChat = {
     VideoChat.localStream = stream;
     // Add the stream as video's srcObject.
     Snackbar.show({
-      text: "Share this URL with a friend to get started",
+      text: "Share this URL with a friend to get started!",
       actionText: "Copy Link",
-      width: "355px",
+      width: "400px",
       pos: "top-center",
-      actionTextColor: "#8688ff",
+      actionTextColor: "#616161",
       duration: 500000,
       backgroundColor: "#16171a",
       onActionClick: function (element) {
@@ -501,11 +501,11 @@ function swap() {
       text:
         "Please allow screen share. Click the middle of the picture above and then press share.",
       // actionText: "Show Me How",
-      width: "455px",
+      width: "400px",
       pos: "bottom-center",
-      actionTextColor: "#8688ff",
+      actionTextColor: "#616161",
       duration: 50000,
-      backgroundColor: "#292B32",
+
       // onActionClick: function (element) {
       //   window.open(
       //     "https://getacclaim.zendesk.com/hc/en-us/articles/360001547832-Setting-the-default-camera-on-your-browser",
@@ -529,6 +529,11 @@ function swap() {
           pauseVideo();
         }
         switchStreamHelper(stream);
+      })
+      .catch(function (err) {
+        logIt(err);
+        logIt("Error sharing screen");
+        Snackbar.close();
       });
   } else {
     VideoChat.localVideo.srcObject.getTracks().forEach((track) => track.stop());
@@ -869,9 +874,8 @@ function startUp() {
     actionText: "Show Me How",
     width: "455px",
     pos: "top-right",
-    actionTextColor: "#8688ff",
+    actionTextColor: "#616161",
     duration: 50000,
-    backgroundColor: "#292B32",
     onActionClick: function (element) {
       window.open(
         "https://getacclaim.zendesk.com/hc/en-us/articles/360001547832-Setting-the-default-camera-on-your-browser",

@@ -164,7 +164,7 @@ a {
 }
 
 /*Neomorphic buttons*/
-button {
+.multi-button button {
   border: none;
   font-size: 1.5rem;
   transition: all 0.3s ease-in-out;
@@ -172,6 +172,7 @@ button {
   background: transparent;
   cursor: pointer;
   padding: 7px;
+  border-radius: 5px;
 }
 
 button:focus {
@@ -180,8 +181,8 @@ button:focus {
 
 button:hover {
   color: white;
-  border-radius: 100px;
-  background: #16171a;
+  /*border-radius: 100px;*/
+  /*background: #16171a;*/
 }
 
 .multi-button {
@@ -307,8 +308,11 @@ button:hover {
   padding-left: 40px;
 }
 
-/*Your messages*/
+/*recieved messages*/
 #chat-zone .message-item.moderator .message-bloc {
+  /*background-color: #376df9;*/
+  /*background: linear-gradient(100deg, #376df9 0, #ff5fa0 75%, #ffc55a 100%);*/
+
   background-color: rgb(29, 30, 33);
   color: #fff;
   position: relative;
@@ -321,7 +325,7 @@ button:hover {
   box-shadow: 6px 6px 12px #030506, -6px -6px 12px #23242a;
 }
 
-/*Recieved messages*/
+/*sent messages*/
 #chat-zone .message-item.customer .message-bloc {
   background-color: rgb(47, 48, 52);
   color: #fff;
