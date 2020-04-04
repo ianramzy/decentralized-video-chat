@@ -44,7 +44,7 @@
     </div>
 
     <p id="remote-video-text"></p>
-    <video id="remote-video" autoplay ondblclick="{openFullscreen()}"></video>
+    <video id="remote-video" autoplay></video>
     <div id="moveable">
       <p id="local-video-text">No webcam input</p>
       <video id="local-video" autoplay muted></video>
@@ -67,12 +67,12 @@
         <div class="HoverState" id="mic-text">Mute</div>
       </div>
 
-      <div class="buttonContainer">
-        <button class="hoverButton" onclick="{openFullscreen()}">
-          <i class="fas fa-compress fa-xs"></i>
-        </button>
-        <div class="HoverState">Fullscreen</div>
-      </div>
+      <!--      <div class="buttonContainer">-->
+      <!--        <button class="hoverButton" onclick="{openFullscreen()}">-->
+      <!--          <i class="fas fa-compress fa-xs"></i>-->
+      <!--        </button>-->
+      <!--        <div class="HoverState">Fullscreen</div>-->
+      <!--      </div>-->
 
       <div class="buttonContainer">
         <button class="hoverButton" onclick="{pauseVideo()}">
