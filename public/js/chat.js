@@ -881,6 +881,8 @@ function startUp() {
 
   captionText.text("Waiting for other user to join...").fadeIn();
   rePositionCaptions();
+
+  navigator.mediaDevices.ondevicechange = () => window.location.reload();
 }
 
 startUp();
