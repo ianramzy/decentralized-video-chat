@@ -28,15 +28,15 @@ app.get("/", function (req, res) {
   res.sendFile(path.join(public, "landing.html"));
 });
 
-app.get("/newroom", function (req, res) {
-  res.sendFile(path.join(public, "newroom.html"));
+app.get("/pickname", function (req, res) {
+  res.sendFile(path.join(public, "pickname.html"));
 });
 
-app.get("/room/", function (req, res) {
+app.get("/join/", function (req, res) {
   res.redirect("/");
 });
 
-app.get("/room/*", function (req, res) {
+app.get("/join/*", function (req, res) {
   if (Object.keys(req.query).length > 0) {
     logIt("redirect:" + req.url + " to " + url.parse(req.url).pathname);
     res.redirect(url.parse(req.url).pathname);
