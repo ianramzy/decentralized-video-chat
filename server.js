@@ -45,6 +45,10 @@ app.get("/join/*", function (req, res) {
   }
 });
 
+app.get("/notsupported", function (req, res) {
+  res.sendFile(path.join(public, "notsupported.html"));
+});
+
 app.use(express.static("public"));
 
 function logIt(msg, room) {
