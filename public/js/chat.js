@@ -711,10 +711,12 @@ function recieveCaptions(captions) {
 chatInput.addEventListener("keypress", function (event) {
   if (event.keyCode === 13) {
     event.preventDefault();
-    dataChanel.send("mes:" + chatInput.value);
+    var msg = chatInput.value;
+    msg = msg.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    dataChanel.send("mes:" + msg);
     $(".chat-messages").append(
       '<div class="message-item customer cssanimation fadeInBottom"><div class="message-bloc"><div class="message">' +
-        chatInput.value.autoLink() +
+        msg.autoLink() +
         "</div></div></div>"
     );
     $("#chat-zone").scrollTop($("#chat-zone")[0].scrollHeight);
@@ -723,6 +725,7 @@ chatInput.addEventListener("keypress", function (event) {
 });
 
 function handleRecieveMessage(msg) {
+  msg = msg.replace(/</g, "&lt;").replace(/>/g, "&gt;");
   $(".chat-messages").append(
     '<div class="message-item moderator cssanimation fadeInBottom"><div class="message-bloc"><div class="message">' +
       msg.autoLink() +
