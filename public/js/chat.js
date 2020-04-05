@@ -637,18 +637,11 @@ function startSpeech() {
         finalTranscript += transcript;
       } else {
         interimTranscript += transcript;
-        // if (interimTranscript.length < 100) {
-        dataChanel.send("cap:" + transcript);
-        // }
-        // console.log(interimTranscript);
-        console.log(transcript);
-
-        if (interimTranscript.length > 100) {
-          interimTranscript = "";
-          transcript = "";
-          // event.results[i][0].transcript = "";
-          console.log("reset");
-        }
+        var charsToKeep = interimTranscript.length % 100;
+        dataChanel.send(
+          "cap:" +
+            interimTranscript.substring(interimTranscript.length - charsToKeep)
+        );
       }
     }
   };
@@ -681,22 +674,21 @@ function startSpeech() {
 }
 
 function recieveCaptions(captions) {
-  captionText.text("").fadeIn();
-  if (!receivingCaptions) {
+  if (receivingCaptions) {
+    captionText.text("").fadeIn();
+  } else {
     captionText.text("").fadeOut();
   }
   if (captions === "notusingchrome") {
-    alert("Other caller must be using chrome for this feature to work");
+    alert(
+      "Other caller must be using chrome for this feature to work. Live Caption turned off."
+    );
     receivingCaptions = false;
     captionText.text("").fadeOut();
     $("#caption-text").text("Start Live Caption");
     return;
   }
-  if (captions.length > 299) {
-    captionText.text(captions.substr(captions.length - 299));
-  } else {
-    captionText.text(captions);
-  }
+  captionText.text(captions);
   rePositionCaptions();
 }
 
@@ -886,9 +878,9 @@ function startUp() {
       );
     },
   });
+
+  captionText.text("Waiting for other user to join...").fadeIn();
+  rePositionCaptions();
 }
 
 startUp();
-
-captionText.text("Waiting for other user to join...").fadeIn();
-rePositionCaptions();

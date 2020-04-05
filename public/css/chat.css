@@ -111,6 +111,7 @@ a {
   background: #16171a;
 }
 
+/*caption text*/
 #remote-video-text {
   box-sizing: border-box;
   /*padding: 0;*/
@@ -125,12 +126,12 @@ a {
 
   color: white;
   font-family: "Heebo", sans-serif;
-  font-size: 1rem;
+  font-size: 1.2rem;
   /*white-space: nowrap;*/
   font-weight: bold;
   text-align: left;
   background: rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
+  border-radius: 0 0 10px 10px;
   padding: 10px;
 }
 
