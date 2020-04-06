@@ -15,10 +15,12 @@ technology.
 # Fixme
 
 ![screenshot](public/images/githubpreview.png "Video Calling")
+![Gif of Video Calling](public/images/githubpreview.gif "Gif of Video Calling")
 
 ## Features
 
 - Screen sharing
+- Picture in picture
 - Live captions
 - Text chat
 - Auto-scaling video quality
