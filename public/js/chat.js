@@ -350,7 +350,7 @@ function chatRoomFull() {
     "Chat room is full. Check to make sure you don't have multiple open tabs, or try with a new room link"
   );
   // Exit room and redirect
-  window.location.href = "/pickname";
+  window.location.href = "/newcall";
 }
 
 // Reposition local video to top left of remote video
