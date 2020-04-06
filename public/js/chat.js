@@ -69,9 +69,9 @@ var VideoChat = {
     // Add the stream as video's srcObject.
     // Now that we have webcam video sorted, prompt user to share URL
     Snackbar.show({
-      text: "Share this URL with a friend to get started!",
+      text: "Here is the join link for your call: " + url,
       actionText: "Copy Link",
-      width: "400px",
+      width: "750px",
       pos: "top-center",
       actionTextColor: "#616161",
       duration: 500000,
