@@ -18,7 +18,7 @@ const isWebRTCSupported =
 
 // Element vars
 const chatInput = document.querySelector(".compose input");
-const pipVideo = document.getElementById("remote-video");
+const remoteVideoVanilla = document.getElementById("remote-video");
 const remoteVideo = $("#remote-video");
 const captionText = $("#remote-video-text");
 const localVideoText = $("#local-video-text");
@@ -62,10 +62,12 @@ var VideoChat = {
       });
   },
 
+  // Called when a video stream is added to VideoChat
   onMediaStream: function (stream) {
     logIt("onMediaStream");
     VideoChat.localStream = stream;
     // Add the stream as video's srcObject.
+    // Now that we have webcam video sorted, prompt user to share URL
     Snackbar.show({
       text: "Share this URL with a friend to get started!",
       actionText: "Copy Link",
@@ -75,6 +77,8 @@ var VideoChat = {
       duration: 500000,
       backgroundColor: "#16171a",
       onActionClick: function (element) {
+        // Copy url to clipboard, this is achieved by creating a temporary element,
+        // adding the text we want to that element, selecting it, then deleting it
         var copyContent = window.location.href;
         $('<input id="some-element">')
           .val(copyContent)
@@ -83,12 +87,13 @@ var VideoChat = {
         document.execCommand("copy");
         var toRemove = document.querySelector("#some-element");
         toRemove.parentNode.removeChild(toRemove);
-        $(element).css("opacity", 0); //Set opacity of element to 0 to close Snackbar
+        Snackbar.close();
       },
     });
     VideoChat.localVideo.srcObject = stream;
     // Now we're ready to join the chat room.
     VideoChat.socket.emit("join", roomHash);
+    // Add listeners to the websocket
     VideoChat.socket.on("full", chatRoomFull);
     VideoChat.socket.on("offer", VideoChat.onOffer);
     VideoChat.socket.on("ready", VideoChat.readyToCall);
@@ -101,6 +106,7 @@ var VideoChat = {
   // When we are ready to call, enable the Call button.
   readyToCall: function (event) {
     logIt("readyToCall");
+    // First to join call will most likely initiate call
     if (VideoChat.willInitiateCall) {
       logIt("Initiating call");
       VideoChat.startCall();
@@ -127,20 +133,23 @@ var VideoChat = {
       VideoChat.localStream.getTracks().forEach(function (track) {
         VideoChat.peerConnection.addTrack(track, VideoChat.localStream);
       });
-
+      // Add general purpose data channel to peer connection,
+      // used for text chats, captions, and toggling sending captions
       dataChanel = VideoChat.peerConnection.createDataChannel("chat", {
         negotiated: true,
+        // both peers must have same id
         id: 0,
       });
-
+      // Called when dataChannel is successfully opened
       dataChanel.onopen = function (event) {
         logIt("dataChannel opened");
       };
-
+      // Handle different dataChannel types
       dataChanel.onmessage = function (event) {
-        var recievedData = event.data;
-        var dataType = recievedData.substring(0, 4);
-        var cleanedMessage = recievedData.slice(4);
+        const receivedData = event.data;
+        // First 4 chars represent data type
+        const dataType = receivedData.substring(0, 4);
+        const cleanedMessage = receivedData.slice(4);
         if (dataType === "mes:") {
           handleRecieveMessage(cleanedMessage);
         } else if (dataType === "cap:") {
@@ -149,30 +158,29 @@ var VideoChat = {
           toggleSendCaptions();
         }
       };
-
       // Set up callbacks for the connection generating iceCandidates or
       // receiving the remote media stream.
       VideoChat.peerConnection.onicecandidate = VideoChat.onIceCandidate;
       VideoChat.peerConnection.onaddstream = VideoChat.onAddStream;
-      // Set up listeners on the socket for candidates or answers being passed
-      // over the socket connection.
+      // Set up listeners on the socket
       VideoChat.socket.on("candidate", VideoChat.onCandidate);
       VideoChat.socket.on("answer", VideoChat.onAnswer);
       VideoChat.socket.on("requestToggleCaptions", () => toggleSendCaptions());
-
       VideoChat.socket.on("recieveCaptions", (captions) =>
         recieveCaptions(captions)
       );
-
+      // Called when there is a change in connection state
       VideoChat.peerConnection.oniceconnectionstatechange = function (event) {
         switch (VideoChat.peerConnection.iceConnectionState) {
           case "connected":
             logIt("connected");
+            // Once connected we no longer have a need for the signaling server, so disconnect
             VideoChat.socket.disconnect();
             break;
           case "disconnected":
           case "failed":
             logIt("failed/disconnected");
+            // Refresh page if connection is lost
             location.reload();
             break;
           case "closed":
@@ -180,7 +188,6 @@ var VideoChat = {
             break;
         }
       };
-
       callback();
     };
   },
@@ -212,19 +219,18 @@ var VideoChat = {
   // When receiving a candidate over the socket, turn it back into a real
   // RTCIceCandidate and add it to the peerConnection.
   onCandidate: function (candidate) {
-    $("#remote-video-text").text("Found other user... connecting");
-    logIt("onCandidate");
+    // Update caption text
+    captionText.text("Found other user... connecting");
     rtcCandidate = new RTCIceCandidate(JSON.parse(candidate));
     logIt(
-      `<<< Received remote ICE candidate (${rtcCandidate.address} - ${rtcCandidate.relatedAddress})`
+      `onCandidate <<< Received remote ICE candidate (${rtcCandidate.address} - ${rtcCandidate.relatedAddress})`
     );
     VideoChat.peerConnection.addIceCandidate(rtcCandidate);
   },
 
   // Create an offer that contains the media capabilities of the browser.
   createOffer: function () {
-    logIt("createOffer");
-    logIt(">>> Creating offer...");
+    logIt("createOffer >>> Creating offer...");
     VideoChat.peerConnection.createOffer(
       function (offer) {
         // If the offer is created successfully, set it as the local description
@@ -267,8 +273,7 @@ var VideoChat = {
   // When a browser receives an offer, set up a callback to be run when the
   // ephemeral token is returned from Twilio.
   onOffer: function (offer) {
-    logIt("onOffer");
-    logIt("<<< Received offer");
+    logIt("onOffer <<< Received offer");
     VideoChat.socket.on(
       "token",
       VideoChat.onToken(VideoChat.createAnswer(offer))
@@ -278,30 +283,35 @@ var VideoChat = {
 
   // When an answer is received, add it to the peerConnection as the remote description.
   onAnswer: function (answer) {
-    logIt("onAnswer");
-    logIt("<<< Received answer");
-
+    logIt("onAnswer <<< Received answer");
     var rtcAnswer = new RTCSessionDescription(JSON.parse(answer));
+    // Set remote description of RTCSession
     VideoChat.peerConnection.setRemoteDescription(rtcAnswer);
+    // The caller now knows that the callee is ready to accept new ICE candidates, so sending the buffer over
     VideoChat.localICECandidates.forEach((candidate) => {
-      // The caller now knows that the callee is ready to accept new ICE candidates, so sending the buffer over
       logIt(`>>> Sending local ICE candidate (${candidate.address})`);
+      // Send ice candidate over websocket
       VideoChat.socket.emit("candidate", JSON.stringify(candidate), roomHash);
     });
     // Reset the buffer of local ICE candidates. This is not really needed, but it's good practice
     VideoChat.localICECandidates = [];
   },
 
+  // Called when a stream is added to the peer connection
   onAddStream: function (event) {
-    logIt("onAddStream");
-    logIt("<<< Received new stream from remote. Adding it...");
+    logIt("onAddStream <<< Received new stream from remote. Adding it...");
+    // Update remote video source
     VideoChat.remoteVideo.srcObject = event.stream;
+    // Close the initial share url snackbar
     Snackbar.close();
+    // Remove the loading gif from video
     VideoChat.remoteVideo.style.background = "none";
+    // Update connection status
     VideoChat.connected = true;
+    // Hide caption status text
     captionText.fadeOut();
-    $("#local-video-text").fadeOut();
-
+    // Reposition local video repeatedly, as there is often a delay
+    // between adding a stream and the height of the video div changing
     var timesRun = 0;
     var interval = setInterval(function () {
       timesRun += 1;
@@ -472,12 +482,15 @@ function pauseVideo() {
 
 // Swap camera / screen share
 function swap() {
+  // Handle swap video before video call is connected
   if (!VideoChat.connected) {
     alert("You must join a call before you can share your screen.");
     return;
   }
+  // Store swap button icon and text
   const swapIcon = document.getElementById("swap-icon");
   const swapText = document.getElementById("swap-text");
+  // If mode is camera then switch to screen share
   if (mode === "camera") {
     // Show accept screenshare snackbar
     Snackbar.show({
@@ -488,22 +501,22 @@ function swap() {
       actionTextColor: "#616161",
       duration: 50000,
     });
-
-    // Request screen share
+    // Request screen share, note we dont want to capture audio
+    // as we already have the stream from the Webcam
     navigator.mediaDevices
       .getDisplayMedia({
         video: true,
         audio: false,
       })
       .then(function (stream) {
+        // Close allow screenshare snackbar
         Snackbar.close();
+        // Change display mode
         mode = "screen";
+        // Update swap button icon and text
         swapIcon.classList.remove("fa-desktop");
         swapIcon.classList.add("fa-camera");
         swapText.innerText = "Share Webcam";
-        if (videoIsPaused) {
-          pauseVideo();
-        }
         switchStreamHelper(stream);
       })
       .catch(function (err) {
@@ -511,15 +524,20 @@ function swap() {
         logIt("Error sharing screen");
         Snackbar.close();
       });
+    // If mode is screenshare then switch to webcam
   } else {
+    // Stop the screen share track
     VideoChat.localVideo.srcObject.getTracks().forEach((track) => track.stop());
+    // Get webcam input
     navigator.mediaDevices
       .getUserMedia({
         video: true,
         audio: true,
       })
       .then(function (stream) {
+        // Change display mode
         mode = "camera";
+        // Update swap button icon and text
         swapIcon.classList.remove("fa-camera");
         swapIcon.classList.add("fa-desktop");
         swapText.innerText = "Share Screen";
@@ -528,18 +546,26 @@ function swap() {
   }
 }
 
+// Swap current video track with passed in stream
 function switchStreamHelper(stream) {
+  // Get current video track
   let videoTrack = stream.getVideoTracks()[0];
+  // Add listen for if the current track swaps, swap back
   videoTrack.onended = function () {
     swap();
   };
   if (VideoChat.connected) {
+    // Find sender
     const sender = VideoChat.peerConnection.getSenders().find(function (s) {
+      // make sure tack types match
       return s.track.kind === videoTrack.kind;
     });
+    // Replace sender track
     sender.replaceTrack(videoTrack);
   }
+  // Update local video stream
   VideoChat.localStream = videoTrack;
+  // Update local video object
   VideoChat.localVideo.srcObject = stream;
   // Unpause video on swap
   if (videoIsPaused) {
@@ -725,19 +751,21 @@ function toggleChat() {
 function togglePictureInPicture() {
   if (
     "pictureInPictureEnabled" in document ||
-    pipVideo.webkitSetPresentationMode
+    remoteVideoVanilla.webkitSetPresentationMode
   ) {
     if (document.pictureInPictureElement) {
       document.exitPictureInPicture().catch((error) => {
         logIt("Error exiting pip.");
         logIt(error);
       });
-    } else if (pipVideo.webkitPresentationMode === "inline") {
-      pipVideo.webkitSetPresentationMode("picture-in-picture");
-    } else if (pipVideo.webkitPresentationMode === "picture-in-picture") {
-      pipVideo.webkitSetPresentationMode("inline");
+    } else if (remoteVideoVanilla.webkitPresentationMode === "inline") {
+      remoteVideoVanilla.webkitSetPresentationMode("picture-in-picture");
+    } else if (
+      remoteVideoVanilla.webkitPresentationMode === "picture-in-picture"
+    ) {
+      remoteVideoVanilla.webkitSetPresentationMode("inline");
     } else {
-      pipVideo.requestPictureInPicture().catch((error) => {
+      remoteVideoVanilla.requestPictureInPicture().catch((error) => {
         alert(
           "You must be connected to another person to enter picture in picture."
         );
