@@ -52,7 +52,3 @@ npm start
 - Open `localhost:3000` in Chrome or Firefox.
 - If you want to use a client on another computer/network, make sure you publish your server on an HTTPS connection.
   You can use a service like [ngrok](https://ngrok.com/) for that.
-
-## Quick Deployment
-
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/ianramzy/decentralized-video-chat)
