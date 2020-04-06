@@ -2,7 +2,7 @@ require("dotenv").config();
 var sslRedirect = require("heroku-ssl-redirect");
 var twilio = require("twilio")(
   process.env.TWILIO_ACCOUNT_SID,
-  process.env.TWILIO_AUTH_TOKEN
+  process.env.AUTH_TOKEN
 );
 var express = require("express");
 var app = express();
