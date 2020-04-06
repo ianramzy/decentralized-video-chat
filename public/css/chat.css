@@ -28,7 +28,7 @@
   }
 }
 
-/*Fade in page on load*/
+/* End Fade in page on load*/
 
 body {
   background: #16171b;
@@ -60,10 +60,6 @@ video {
   white-space: nowrap;
   top: 20px;
   left: 20px;
-  /*margin-left: 30px;*/
-  /*margin-top: 30px;*/
-  /*-ms-transform: translate(-50%, -50%);*/
-  /*transform: translate(-50%, -50%);*/
   float: left;
 }
 
@@ -79,6 +75,7 @@ a {
   text-decoration: none;
 }
 
+/*Moveable local video id*/
 #moveable {
   z-index: 100;
   position: absolute;
@@ -86,6 +83,7 @@ a {
   cursor: move;
 }
 
+/*Text inside local video*/
 #moveable p {
   z-index: 101;
   position: absolute;
@@ -105,7 +103,7 @@ a {
 #local-video {
   width: 100%;
   height: auto;
-  border-radius: 20px;
+  border-radius: 10px;
   -webkit-transform: scaleX(-1);
   transform: scaleX(-1);
   background: #16171a;
@@ -114,20 +112,15 @@ a {
 /*caption text*/
 #remote-video-text {
   box-sizing: border-box;
-  /*padding: 0;*/
   margin: 0;
   width: 65vw;
   position: absolute;
   top: calc(80%);
   left: 20vw;
-  /*-ms-transform: translate(-50%, -90%);*/
-  /*transform: translate(-50%, -90%);*/
   z-index: 1;
-
   color: white;
   font-family: "Heebo", sans-serif;
   font-size: 1.2rem;
-  /*white-space: nowrap;*/
   font-weight: bold;
   text-align: left;
   background: rgba(0, 0, 0, 0.2);
@@ -145,26 +138,20 @@ a {
   transform: translate(-50%, -50%);
   width: 65%;
   height: auto;
-
   max-height: 100%;
   max-width: 100%;
-
   border-radius: 10px;
   background-image: url(../images/loader.gif);
   background-size: 400px auto;
   background-repeat: no-repeat;
   background-position: center center;
-  /*box-shadow: 9px 9px 16px #0a0b0c, -9px -9px 16px #222328;*/
-  /*-webkit-box-shadow: 9px 9px 16px #0a0b0c, -9px -9px 16px #222328;*/
-  /*object-fit: fill;*/
 }
 
 #remote-video.fullscreen {
-  /*object-fit: fill;*/
   width: 100%;
 }
 
-/*Neomorphic buttons*/
+/*Buttons*/
 .multi-button button {
   border: none;
   font-size: 1.5rem;
@@ -182,8 +169,6 @@ button:focus {
 
 button:hover {
   color: white;
-  /*border-radius: 100px;*/
-  /*background: #16171a;*/
 }
 
 .multi-button {
@@ -192,7 +177,6 @@ button:hover {
   top: 50%;
   -ms-transform: translate(0%, -50%);
   transform: translate(0%, -50%);
-
   z-index: 999;
   border-radius: 10px;
   background: #16171a;
@@ -222,10 +206,13 @@ button:hover {
   margin: 0 auto;
 }
 
-/*Neomorphic buttons*/
+/*.fa-phone-slash {*/
+/*  color: #470000;*/
+/*}*/
 
-/*simple chat*/
+/*End buttons*/
 
+/*Text chat*/
 #entire-chat {
   position: absolute;
   height: 100%;
@@ -280,9 +267,6 @@ button:hover {
   overflow: scroll;
   font-family: "Heebo", sans-serif;
   font-size: 0.8rem;
-  /*background: #1c1d22;*/
-  /*background: #16171a;*/
-  /*box-shadow: 9px 9px 16px #0a0b0c, -9px -9px 16px #222328;*/
 }
 
 #chat-zone::-webkit-scrollbar {
@@ -311,9 +295,6 @@ button:hover {
 
 /*recieved messages*/
 #chat-zone .message-item.moderator .message-bloc {
-  /*background-color: #376df9;*/
-  /*background: linear-gradient(100deg, #376df9 0, #ff5fa0 75%, #ffc55a 100%);*/
-
   background-color: rgb(29, 30, 33);
   color: #fff;
   position: relative;
@@ -373,4 +354,4 @@ button:hover {
   }
 }
 
-/*simple chat*/
+/*End text chat*/

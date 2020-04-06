@@ -10,11 +10,12 @@ var http = require("http").createServer(app);
 var io = require("socket.io")(http);
 var path = require("path");
 var public = path.join(__dirname, "public");
-const url = require("url"); // built-in utility
+const url = require("url");
 
 // enable ssl redirect
 app.use(sslRedirect());
 
+// Remove trailing slashes in url
 app.use(function (req, res, next) {
   if (req.path.substr(-1) === "/" && req.path.length > 1) {
     let query = req.url.slice(req.path.length);
@@ -49,8 +50,10 @@ app.get("/notsupported", function (req, res) {
   res.sendFile(path.join(public, "notsupported.html"));
 });
 
+// Serve static files in the public directory
 app.use(express.static("public"));
 
+// Simple logging function to add room name
 function logIt(msg, room) {
   if (room) {
     console.log(room + ": " + msg);
@@ -73,6 +76,7 @@ io.on("connection", function (socket) {
       socket.join(room);
       // When the client is second to join the room, both clients are ready.
       logIt("Broadcasting ready message", room);
+      // First to join call initiates call
       socket.broadcast.to(room).emit("willInitiateCall", room);
       socket.emit("ready", room).to(room);
       socket.broadcast.to(room).emit("ready", room);
@@ -115,6 +119,7 @@ io.on("connection", function (socket) {
   });
 });
 
+// Listen for Heroku port, otherwise just use 3000
 var port = process.env.PORT || 3000;
 http.listen(port, function () {
   console.log("http://localhost:" + port);
