@@ -15,7 +15,7 @@ technology.
 # Fixme
 
 ![screenshot](public/images/githubpreview.png "Video Calling")
-![Gif of Video Calling](public/images/githubpreview.gif "Gif of Video Calling")
+![Gif of Video Calling](public/images/preview.gif "Gif of Video Calling")
 
 ## Features
 
