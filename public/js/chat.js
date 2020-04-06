@@ -21,6 +21,10 @@ const chatInput = document.querySelector(".compose input");
 const pipVideo = document.getElementById("remote-video");
 const remoteVideo = $("#remote-video");
 const captionText = $("#remote-video-text");
+const localVideoText = $("#local-video-text");
+const captionButtontext = $("#caption-button-text");
+const entireChat = $("#entire-chat");
+const chatZone = $("#chat-zone");
 
 var VideoChat = {
   connected: false,
@@ -45,19 +49,19 @@ var VideoChat = {
       })
       .then((stream) => {
         VideoChat.onMediaStream(stream);
-        $("#local-video-text").text("Drag Me");
-        setTimeout(() => $("#local-video-text").fadeOut(), 5000);
+        localVideoText.text("Drag Me");
+        setTimeout(() => localVideoText.fadeOut(), 5000);
       })
       .catch((error) => {
         logIt(error);
         logIt(
           "Failed to get local webcam video, check webcam privacy settings"
         );
+        // Keep trying to get user media
         setTimeout(VideoChat.requestMediaStream, 1000);
       });
   },
 
-  // The onMediaStream function receives the media stream as an argument.
   onMediaStream: function (stream) {
     logIt("onMediaStream");
     VideoChat.localStream = stream;
@@ -105,8 +109,7 @@ var VideoChat = {
 
   // Set up a callback to run when we have the ephemeral token to use Twilio's TURN server.
   startCall: function (event) {
-    logIt("startCall");
-    logIt(">>> Sending token request...");
+    logIt("startCall >>> Sending token request...");
     VideoChat.socket.on("token", VideoChat.onToken(VideoChat.createOffer));
     VideoChat.socket.emit("token", roomHash);
   },
@@ -170,20 +173,6 @@ var VideoChat = {
           case "disconnected":
           case "failed":
             logIt("failed/disconnected");
-            // dataChanel.close();
-            // logIt("Refreshing page...");
-            // function reloadScript(id) {
-            //   var $el = $("#" + id);
-            //   $("#" + id).replaceWith(
-            //     '<script id="' +
-            //       id +
-            //       '" src="' +
-            //       $el.prop("src") +
-            //       '"></script>'
-            //   );
-            // }
-            // reloadScript("chatJS");
-            // alert("reloding");
             location.reload();
             break;
           case "closed":
@@ -324,6 +313,7 @@ var VideoChat = {
   },
 };
 
+// Get name of browser session using user agent
 function getBrowserName() {
   var name = "Unknown";
   if (window.navigator.userAgent.indexOf("MSIE") !== -1) {
@@ -339,40 +329,47 @@ function getBrowserName() {
   return name;
 }
 
+// Basic logging class wrapper
 function logIt(message, error) {
   console.log(message);
 }
 
+// Called when socket receives message that room is full
 function chatRoomFull() {
   alert(
     "Chat room is full. Check to make sure you don't have multiple open tabs, or try with a new room link"
   );
+  // Exit room and redirect
   window.location.href = "/pickname";
 }
 
+// Reposition local video to top left of remote video
 function rePositionLocalVideo() {
+  // Get position of remote video
   var bounds = remoteVideo.position();
   bounds.top += 10;
   bounds.left += 10;
+  // Set position of local video
   $("#moveable").css(bounds);
 }
 
+// Reposition captions to bottom of video
 function rePositionCaptions() {
+  // Get remote video position
   var bounds = remoteVideo.position();
   bounds.top -= 10;
   bounds.top = bounds.top + remoteVideo.height() - 1 * captionText.height();
+  // Reposition captions
   captionText.css(bounds);
 }
 
+// Called when window is resized
 function windowResized() {
   rePositionLocalVideo();
   rePositionCaptions();
 }
 
-//
 // Fullscreen
-//
-
 // function openFullscreen() {
 //   try {
 //     // var elem = document.getElementById("remote-video");
@@ -415,50 +412,40 @@ function windowResized() {
 //   }
 //   setTimeout(windowResized, 1000);
 // }
-
-//
 // End Fullscreen
-//
 
-//
 // Mute microphone
-//
-
 function muteMicrophone() {
   var audioTrack = null;
+  // Get audio track to mute
   VideoChat.peerConnection.getSenders().find(function (s) {
     if (s.track.kind === "audio") {
       audioTrack = s.track;
     }
   });
-
   isMuted = !audioTrack.enabled;
   audioTrack.enabled = isMuted;
   isMuted = !isMuted;
-
-  const micIcon = document.getElementById("mic-icon");
-  const micText = document.getElementById("mic-text");
+  // select mic button and mic button text
+  const micButtonIcon = document.getElementById("mic-icon");
+  const micButtonText = document.getElementById("mic-text");
+  // Update mute button text and icon
   if (isMuted) {
-    micIcon.classList.remove("fa-microphone");
-    micIcon.classList.add("fa-microphone-slash");
-    micText.innerText = "Unmute";
+    micButtonIcon.classList.remove("fa-microphone");
+    micButtonIcon.classList.add("fa-microphone-slash");
+    micButtonText.innerText = "Unmute";
   } else {
-    micIcon.classList.add("fa-microphone");
-    micIcon.classList.remove("fa-microphone-slash");
-    micText.innerText = "Mute";
+    micButtonIcon.classList.add("fa-microphone");
+    micButtonIcon.classList.remove("fa-microphone-slash");
+    micButtonText.innerText = "Mute";
   }
 }
-
-//
 // End Mute microphone
-//
 
-//
 // Pause Video
-//
-
 function pauseVideo() {
   var videoTrack = null;
+  // Get video track to pause
   VideoChat.peerConnection.getSenders().find(function (s) {
     if (s.track.kind === "video") {
       videoTrack = s.track;
@@ -467,27 +454,23 @@ function pauseVideo() {
   videoIsPaused = !videoTrack.enabled;
   videoTrack.enabled = videoIsPaused;
   videoIsPaused = !videoIsPaused;
-  const micIcon = document.getElementById("video-icon");
-  const micText = document.getElementById("video-text");
+  // select video button and video button text
+  const videoButtonIcon = document.getElementById("video-icon");
+  const videoButtonText = document.getElementById("video-text");
+  // update pause button icon and text
   if (videoIsPaused) {
-    micIcon.classList.remove("fa-video");
-    micIcon.classList.add("fa-video-slash");
-    micText.innerText = "Unpause Video";
+    videoButtonIcon.classList.remove("fa-video");
+    videoButtonIcon.classList.add("fa-video-slash");
+    videoButtonText.innerText = "Unpause Video";
   } else {
-    micIcon.classList.add("fa-video");
-    micIcon.classList.remove("fa-video-slash");
-    micText.innerText = "Pause Video";
+    videoButtonIcon.classList.add("fa-video");
+    videoButtonIcon.classList.remove("fa-video-slash");
+    videoButtonText.innerText = "Pause Video";
   }
 }
-
-//
 // End pause Video
-//
 
-//
 // Swap camera / screen share
-//
-
 function swap() {
   if (!VideoChat.connected) {
     alert("You must join a call before you can share your screen.");
@@ -500,20 +483,13 @@ function swap() {
     Snackbar.show({
       text:
         "Please allow screen share. Click the middle of the picture above and then press share.",
-      // actionText: "Show Me How",
       width: "400px",
       pos: "bottom-center",
       actionTextColor: "#616161",
       duration: 50000,
-
-      // onActionClick: function (element) {
-      //   window.open(
-      //     "https://getacclaim.zendesk.com/hc/en-us/articles/360001547832-Setting-the-default-camera-on-your-browser",
-      //     "_blank"
-      //   );
-      // },
     });
 
+    // Request screen share
     navigator.mediaDevices
       .getDisplayMedia({
         video: true,
@@ -565,38 +541,42 @@ function switchStreamHelper(stream) {
   }
   VideoChat.localStream = videoTrack;
   VideoChat.localVideo.srcObject = stream;
+  // Unpause video on swap
   if (videoIsPaused) {
     pauseVideo();
   }
 }
-
-//
 // End swap camera / screen share
-//
 
-//
 // Live caption
-//
-
+// Request captions from other user, toggles state
 function requestToggleCaptions() {
+  // Handle requesting captions before connected
   if (!VideoChat.connected) {
     alert("You must be connected to a peer to use Live Caption");
     return;
   }
   if (receivingCaptions) {
     captionText.text("").fadeOut();
-    $("#caption-text").text("Start Live Caption");
+    captionButtontext.text("Start Live Caption");
     receivingCaptions = false;
   } else {
-    alert(
-      "This is an experimental feature. Live transcription requires the other user to have chrome."
-    );
-    $("#caption-text").text("End Live Caption");
+    Snackbar.show({
+      text:
+        "This is an experimental feature. Live caption requires the other user to be using Chrome",
+      width: "400px",
+      pos: "bottom-center",
+      actionTextColor: "#616161",
+      duration: 10000,
+    });
+    captionButtontext.text("End Live Caption");
     receivingCaptions = true;
   }
+  // Send request to get captions over data channel
   dataChanel.send("tog:");
 }
 
+// Start/stop sending captions to other user
 function toggleSendCaptions() {
   if (sendingCaptions) {
     sendingCaptions = false;
@@ -607,29 +587,26 @@ function toggleSendCaptions() {
   }
 }
 
+// Start speech recognition
 function startSpeech() {
   try {
     var SpeechRecognition =
       window.SpeechRecognition || window.webkitSpeechRecognition;
-    var recognition = new SpeechRecognition();
-    VideoChat.recognition = recognition;
+    VideoChat.recognition = new SpeechRecognition();
   } catch (e) {
     sendingCaptions = false;
     logIt(e);
     logIt("error importing speech library");
+    // Alert other user that they cannon use live caption
     dataChanel.send("cap:notusingchrome");
     return;
   }
-
-  // If false, the recording will stop after a few seconds of silence.
-  // When true, the silence period is longer (about 15 seconds),
-  // allowing us to keep recording even when the user pauses.
-  recognition.continuous = true;
-  recognition.interimResults = true;
   // recognition.maxAlternatives = 3;
-
+  VideoChat.recognition.continuous = true;
+  // Show results that aren't final
+  VideoChat.recognition.interimResults = true;
   var finalTranscript;
-  recognition.onresult = (event) => {
+  VideoChat.recognition.onresult = (event) => {
     let interimTranscript = "";
     for (let i = event.resultIndex, len = event.results.length; i < len; i++) {
       var transcript = event.results[i][0].transcript;
@@ -638,6 +615,8 @@ function startSpeech() {
       } else {
         interimTranscript += transcript;
         var charsToKeep = interimTranscript.length % 100;
+        // Send captions over data chanel,
+        // subtracting as many complete 100 char slices from start
         dataChanel.send(
           "cap:" +
             interimTranscript.substring(interimTranscript.length - charsToKeep)
@@ -645,117 +624,105 @@ function startSpeech() {
       }
     }
   };
-
-  recognition.onstart = function () {
-    console.log("recording on");
-  };
-
-  recognition.onspeechend = function () {
-    console.log("on speech end");
-  };
-
-  recognition.onerror = function (event) {
-    if (event.error === "no-speech") {
-      console.log("no speech detected");
-    }
-  };
-
-  recognition.onend = function () {
-    console.log("on end");
-    console.log(sendingCaptions);
+  VideoChat.recognition.onend = function () {
+    logIt("on speech recording end");
+    // Restart speech recognition if user has not stopped it
     if (sendingCaptions) {
       startSpeech();
     } else {
       VideoChat.recognition.stop();
     }
   };
-
-  recognition.start();
+  VideoChat.recognition.start();
 }
 
+// Recieve captions over datachannel
 function recieveCaptions(captions) {
   if (receivingCaptions) {
     captionText.text("").fadeIn();
   } else {
     captionText.text("").fadeOut();
   }
+  // Other user is not using chrome
   if (captions === "notusingchrome") {
     alert(
       "Other caller must be using chrome for this feature to work. Live Caption turned off."
     );
     receivingCaptions = false;
     captionText.text("").fadeOut();
-    $("#caption-text").text("Start Live Caption");
+    captionButtontext.text("Start Live Caption");
     return;
   }
   captionText.text(captions);
   rePositionCaptions();
 }
-
-//
 // End Live caption
-//
 
-//
-// Chat
-//
+// Text Chat
+// Add text message to chat screen on page
+function addMessageToScreen(msg) {
+  $(".chat-messages").append(
+    '<div class="message-item customer cssanimation fadeInBottom"><div class="message-bloc"><div class="message">' +
+      msg +
+      "</div></div></div>"
+  );
+}
 
+// Listen for enter press on chat input
 chatInput.addEventListener("keypress", function (event) {
   if (event.keyCode === 13) {
+    // Prevent page refresh on enter
     event.preventDefault();
     var msg = chatInput.value;
+    // Prevent cross site scripting
     msg = msg.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    // Make links clickable
+    msg = msg.autoLink();
+    // Send message over data channel
     dataChanel.send("mes:" + msg);
-    $(".chat-messages").append(
-      '<div class="message-item customer cssanimation fadeInBottom"><div class="message-bloc"><div class="message">' +
-        msg.autoLink() +
-        "</div></div></div>"
-    );
-    $("#chat-zone").scrollTop($("#chat-zone")[0].scrollHeight);
+    // Add message to screen
+    addMessageToScreen(msg);
+    // Auto scroll chat down
+    chatZone.scrollTop(chatZone[0].scrollHeight);
+    // Clear chat input
     chatInput.value = "";
   }
 });
 
+// Called when a message is recieved over the dataChannel
 function handleRecieveMessage(msg) {
-  msg = msg.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  $(".chat-messages").append(
-    '<div class="message-item moderator cssanimation fadeInBottom"><div class="message-bloc"><div class="message">' +
-      msg.autoLink() +
-      "</div></div></div>"
-  );
-  $("#chat-zone").scrollTop($("#chat-zone")[0].scrollHeight);
-  if ($("#entire-chat").is(":hidden")) {
+  // Add message to screen
+  addMessageToScreen(msg);
+  // Auto scroll chat down
+  chatZone.scrollTop(chatZone[0].scrollHeight);
+  // Show chat if hidden
+  if (entireChat.is(":hidden")) {
     toggleChat();
   }
 }
 
+// Show and hide chat
 function toggleChat() {
-  var entireChat = $("#entire-chat");
   var chatIcon = document.getElementById("chat-icon");
   var chatText = $("#chat-text");
   if (entireChat.is(":visible")) {
     entireChat.fadeOut();
+    // Update show chat buttton
     chatText.text("Show Chat");
     chatIcon.classList.remove("fa-comment-slash");
     chatIcon.classList.add("fa-comment");
   } else {
     entireChat.fadeIn();
+    // Update show chat buttton
     chatText.text("Hide Chat");
     chatIcon.classList.remove("fa-comment");
     chatIcon.classList.add("fa-comment-slash");
   }
 }
+// End Text chat
 
-//
-// End chat
-//
-
-//
 //Picture in picture
-//
-
 function togglePictureInPicture() {
-  // pipVideo.webkitSetPresentationMode("picture-in-picture");
   if (
     "pictureInPictureEnabled" in document ||
     pipVideo.webkitSetPresentationMode
@@ -782,27 +749,17 @@ function togglePictureInPicture() {
     );
   }
 }
-// pipVideo.addEventListener("enterpictureinpicture", () => {
-//   $("#pip-text").text("Exit Picture in Picture");
-//   alert("enter pip");
-// });
-//
-// pipVideo.addEventListener("leavepictureinpicture", () => {
-//   $("#pip-text").text("Enter Picture in Picture");
-//   alert("exit pip");
-// });
-//
 //Picture in picture
-//
 
 function startUp() {
+  // Redirect mobile browsers
   if (
     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
       navigator.userAgent
     )
   ) {
     alert(
-      "Zipcall is not currently supported on mobile. Please try again on dekstop."
+      "Zipcall is not currently supported on mobile. Please try again on desktop."
     );
     window.location.href = "/notsupported";
   }
@@ -814,23 +771,25 @@ function startUp() {
     window.location.href = "/notsupported";
   }
 
+  // Set tab title
   document.title = "Zipcall - " + url.substring(url.lastIndexOf("/") + 1);
 
   // get webcam on load
   VideoChat.requestMediaStream();
 
+  // Captions hidden by default
   captionText.text("").fadeOut();
 
+  // Make local video draggable
   $("#moveable").draggable({ containment: "window" });
 
+  // Hide button labels on load
   $(".HoverState").hide();
 
-  $("#entire-chat").hide();
+  // Text chat hidden by default
+  entireChat.hide();
 
-  //
   // Show hide button labels on hover
-  //
-
   $(document).ready(function () {
     $(".hoverButton").mouseover(function () {
       $(".HoverState").hide();
@@ -841,16 +800,8 @@ function startUp() {
     });
   });
 
-  //
-  // End show hide button labels on hover
-  //
-
-  //
   // Fade out / show UI on mouse move
-  //
-
   var timedelay = 1;
-
   function delayCheck() {
     if (timedelay === 5) {
       $(".multi-button").fadeOut();
@@ -859,7 +810,6 @@ function startUp() {
     }
     timedelay = timedelay + 1;
   }
-
   $(document).mousemove(function () {
     $(".multi-button").fadeIn();
     $("#header").fadeIn();
@@ -868,10 +818,6 @@ function startUp() {
     _delay = setInterval(delayCheck, 500);
   });
   _delay = setInterval(delayCheck, 500);
-
-  //
-  // End Fade out / show UI on mouse move
-  //
 
   // Show accept webcam snackbar
   Snackbar.show({
@@ -889,9 +835,13 @@ function startUp() {
     },
   });
 
+  // Set caption text on start
   captionText.text("Waiting for other user to join...").fadeIn();
+
+  // Reposition captions on start
   rePositionCaptions();
 
+  // On change media devices refresh page and switch to system default
   navigator.mediaDevices.ondevicechange = () => window.location.reload();
 }
 
