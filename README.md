@@ -37,13 +37,20 @@ git clone https://github.com/ianramzy/decentralized-video-chat
 cd decentralized-video-chat
 ```
 
-- Install dependencies
+#### Set up credentials
+
+- Rename .env.template to .env
+- Sign up for free twilio account https://www.twilio.com/login
+- Get your Account SID and Auth Token from the Twillio console
+- Fill in your credentials in the .env file
+
+#### Install dependencies
 
 ```
 npm install
 ```
 
-- Start the server
+#### Start the server
 
 ```
 npm start
