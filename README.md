@@ -6,7 +6,6 @@
 [![Repo Link](https://img.shields.io/badge/Repo-Link-black.svg)](https://github.com/ianramzy/decentralized-video-chat)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?)](https://github.com/prettier/prettier)
 
-
 # https://zipcall.io
 
 Decentralized video chat platform powered by WebRTC using Twilio STUN/TURN infrastructure.
