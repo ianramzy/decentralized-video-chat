@@ -619,6 +619,7 @@ function startSpeech() {
     var SpeechRecognition =
       window.SpeechRecognition || window.webkitSpeechRecognition;
     VideoChat.recognition = new SpeechRecognition();
+    // VideoChat.recognition.lang = "en";
   } catch (e) {
     sendingCaptions = false;
     logIt(e);
@@ -683,6 +684,39 @@ function recieveCaptions(captions) {
   rePositionCaptions();
 }
 // End Live caption
+
+// Translation
+// function translate(text) {
+//   let fromLang = "en";
+//   let toLang = "zh";
+//   // let text = "hello how are you?";
+//   const API_KEY = "APIKEYHERE";
+//   let gurl = `https://translation.googleapis.com/language/translate/v2?key=${API_KEY}`;
+//   gurl += "&q=" + encodeURI(text);
+//   gurl += `&source=${fromLang}`;
+//   gurl += `&target=${toLang}`;
+//   fetch(gurl, {
+//     method: "GET",
+//     headers: {
+//       "Content-Type": "application/json",
+//       Accept: "application/json",
+//     },
+//   })
+//     .then((res) => res.json())
+//     .then((response) => {
+//       // console.log("response from google: ", response);
+//       // return response["data"]["translations"][0]["translatedText"];
+//       logIt(response);
+//       var translatedText =
+//         response["data"]["translations"][0]["translatedText"];
+//       console.log(translatedText);
+//       dataChanel.send("cap:" + translatedText);
+//     })
+//     .catch((error) => {
+//       console.log("There was an error with the translation request: ", error);
+//     });
+// }
+// End Translation
 
 // Text Chat
 // Add text message to chat screen on page
