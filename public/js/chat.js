@@ -720,12 +720,20 @@ function recieveCaptions(captions) {
 
 // Text Chat
 // Add text message to chat screen on page
-function addMessageToScreen(msg) {
-  $(".chat-messages").append(
-    '<div class="message-item customer cssanimation fadeInBottom"><div class="message-bloc"><div class="message">' +
-      msg +
-      "</div></div></div>"
-  );
+function addMessageToScreen(msg, isOwnMessage) {
+  if (isOwnMessage) {
+    $(".chat-messages").append(
+      '<div class="message-item customer cssanimation fadeInBottom"><div class="message-bloc"><div class="message">' +
+        msg +
+        "</div></div></div>"
+    );
+  } else {
+    $(".chat-messages").append(
+      '<div class="message-item moderator cssanimation fadeInBottom"><div class="message-bloc"><div class="message">' +
+        msg +
+        "</div></div></div>"
+    );
+  }
 }
 
 // Listen for enter press on chat input
@@ -741,7 +749,7 @@ chatInput.addEventListener("keypress", function (event) {
     // Send message over data channel
     dataChanel.send("mes:" + msg);
     // Add message to screen
-    addMessageToScreen(msg);
+    addMessageToScreen(msg, true);
     // Auto scroll chat down
     chatZone.scrollTop(chatZone[0].scrollHeight);
     // Clear chat input
@@ -752,7 +760,7 @@ chatInput.addEventListener("keypress", function (event) {
 // Called when a message is recieved over the dataChannel
 function handleRecieveMessage(msg) {
   // Add message to screen
-  addMessageToScreen(msg);
+  addMessageToScreen(msg, false);
   // Auto scroll chat down
   chatZone.scrollTop(chatZone[0].scrollHeight);
   // Show chat if hidden
