@@ -293,7 +293,7 @@ button:hover {
   padding-left: 40px;
 }
 
-/*recieved messages*/
+/*received messages*/
 #chat-zone .message-item.moderator .message-bloc {
   background-color: rgb(29, 30, 33);
   color: #fff;
@@ -355,3 +355,137 @@ button:hover {
 }
 
 /*End text chat*/
+
+/* Begin mobile layout */
+
+@media (max-width: 1000px) {
+
+  html, body {
+    font-size: 2.5em;
+  }
+  
+  #header img {
+    width: auto;
+    height: 2rem;
+  }
+  
+  #header p {
+    margin: 0;
+    line-height: 2rem;
+  }
+
+  #remote-video {
+    width: 75vw;
+    height: calc((16/9) * 75vw);
+    /* border: 3px solid red; */
+  }
+
+  #moveable {
+    position: fixed;
+    top: 5rem;
+    left: 5rem;
+  }
+
+  #moveable p {
+    z-index: 101;
+    position: absolute;
+    color: white;
+    font-family: "Heebo", sans-serif;
+    white-space: nowrap;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+    font-size: 1rem;
+    background: rgba(0, 0, 0, 0.12);
+    padding: 10px;
+    border-radius: 5px;
+  }
+
+  .multi-button {
+    position: absolute;
+    left: 0;
+    top: calc(90vh - 3rem - 3vh);
+    width: 80vw;
+    height: 3rem;
+    margin: 0 10vw;
+    -ms-transform: translate(0%, 0%);
+    transform: translate(0%, 0%);
+    z-index: 999;
+    border-radius: 10px;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    /* overflow: hidden; */
+  }
+
+  .buttonContainer {
+    position: relative;
+    height: 100%;
+    font-size: 3rem;
+    display: flex;
+    flex-direction: col;
+    align-items: center;
+    /* line-height: 1.5rem; */
+  }
+
+  .multi-button button {
+    position: relative;
+    border: none;
+    font-size: 2rem;
+    transition: all 0.3s ease-in-out;
+    color: gray;
+    background: transparent;
+    cursor: pointer;
+    padding: 7px;
+    border-radius: 5px;
+  }
+
+  .HoverState {
+    display: none;
+  }
+
+  #entire-chat {
+    position: absolute;
+    top: 20vh;
+    left: 0;
+    height: 50vh;
+    width: 100vw;
+    padding: 1rem 0;
+    /* border: 3px solid green; */
+    text-align: center;
+  }
+
+  #chat-zone {
+    position: relative;
+    padding-top: 20px;
+    width: 90%;
+    height: 100%;
+    margin-left: 5%;
+    box-shadow: 4px 4px 12px #030506, -4px -4px 12px #292a30;
+    /* border: 5px solid blue */
+    border-radius: 10px;
+    background: #16171a;
+  }
+
+  .compose {
+    position: absolute;
+    left: 5%;
+    width: 90%;
+    height: 2rem;
+    margin: .5rem 0;
+  }
+  
+  .compose input {
+    width: 90%;
+    height: calc(100% - 5px);
+  }
+  
+  .compose input::placeholder {
+    color: white;
+  }
+  
+}
+
+/* End mobile layout */
