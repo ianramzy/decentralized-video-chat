@@ -359,8 +359,11 @@ button:hover {
 /* Begin mobile layout */
 
 @media (max-width: 1000px) {
+/* @media (min-width: 320px) and (max-width: 480px) { */
 
   html, body {
+    width: 100%;
+    height: 100%;
     font-size: 2.5em;
   }
   
@@ -386,14 +389,24 @@ button:hover {
     position: fixed;
     top: 5rem;
     left: 5rem;
+    min-width: 5rem;
+    min-height: 2rem;
+    width: auto;
+    height: auto;
+  }
+
+  #moveable #local-video {
+    height: 7rem;
+    width: auto;
   }
 
   #moveable p {
+    text-align: center;
     z-index: 101;
     position: absolute;
     color: white;
     font-family: "Heebo", sans-serif;
-    white-space: nowrap;
+    white-space: pre-wrap;
     top: 50%;
     left: 50%;
     -ms-transform: translate(-50%, -50%);
@@ -403,18 +416,33 @@ button:hover {
     background: rgba(0, 0, 0, 0.12);
     padding: 10px;
     border-radius: 5px;
+    margin: 0;
+  }
+
+  #remote-video-text {
+    position: fixed;
+    top: initial !important;
+    left: initial;
+    bottom: 40%;
+    width: 80%;
+    height: auto;
+    margin: 0;
+    margin-left: 10%;
+    text-align: center;
   }
 
   .multi-button {
-    position: absolute;
+    position: fixed;
     left: 0;
-    top: calc(90vh - 3rem - 3vh);
+    top: initial;
+    bottom: 0;
     width: 80vw;
     height: 3rem;
     margin: 0 10vw;
     -ms-transform: translate(0%, 0%);
     transform: translate(0%, 0%);
     z-index: 999;
+    box-shadow: none;
     border-radius: 10px;
     padding: 0;
     display: flex;
@@ -445,36 +473,41 @@ button:hover {
   }
 
   .HoverState {
-    display: none;
+    display: none !important;
   }
 
-  #entire-chat {
+  #entire-chat {    
     position: absolute;
-    top: 20vh;
-    left: 0;
-    height: 50vh;
-    width: 100vw;
-    padding: 1rem 0;
+    top: 3rem;
+    right: 0;
+    height: calc(100% - 3rem - 3rem);
+    width: 60vw;
+    /* padding: 1rem 0; */
+    padding: 0;
     /* border: 3px solid green; */
     text-align: center;
+    /* background: #16171a; */
   }
 
   #chat-zone {
     position: relative;
     padding-top: 20px;
     width: 90%;
-    height: 100%;
+    height: calc(100% - 2rem);
     margin-left: 5%;
-    box-shadow: 4px 4px 12px #030506, -4px -4px 12px #292a30;
+    /* box-shadow: 4px 4px 12px #030506, -4px -4px 12px #292a30; */
     /* border: 5px solid blue */
     border-radius: 10px;
-    background: #16171a;
+    /* background: #16171a; */
   }
 
   .compose {
     position: absolute;
-    left: 5%;
-    width: 90%;
+    font-size: 1rem;
+    right: 2%;
+    /* bottom: calc(3rem + 2rem); */
+    bottom: 0;
+    width: 60vw;
     height: 2rem;
     margin: .5rem 0;
   }

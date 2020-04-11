@@ -99,3 +99,48 @@
     transform: none;
   }
 }
+
+/* Mobile Styles Start */
+
+@media (max-width: 1000px) {
+
+  .snackbar-container {
+    display: flex;
+    width: 80vw !important;
+    min-width: 80vw;
+    max-width: 80vw;
+    height: auto;
+    word-wrap: break-word;
+    line-height: 1.2rem;
+    font-size: 1rem;
+    position: fixed;
+    justify-content: space-between;
+    align-items: center;
+    padding: .5rem;
+    bottom: initial;
+    top: 5rem;
+    margin: 0;
+    margin-top: 1rem;
+  }
+
+  .snackbar-container p {
+    width: 80%;
+  }
+
+  .snackbar-container .action {
+    width: 15%;
+    padding: .2rem;
+    border-radius: 10px;
+    display: inline-block;
+    border: none;
+    font-size: 1rem;
+    text-transform: uppercase;
+    color: #000000;
+    margin: 0 0 0 24px;
+    /*padding: 0;*/
+    cursor: pointer;
+  }
+  
+}
+
+/* Mobile Styles End */
