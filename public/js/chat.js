@@ -357,8 +357,14 @@ function chatRoomFull() {
 function rePositionLocalVideo() {
   // Get position of remote video
   var bounds = remoteVideo.position();
-  bounds.top += 10;
-  bounds.left += 10;
+  let localVideo = $("#local-video");
+  if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    bounds.top = $(window).height() - localVideo.height()*1.5;
+    bounds.left += 10;
+  } else {
+    bounds.top += 10;
+    bounds.left += 10;
+  }
   // Set position of local video
   $("#moveable").css(bounds);
 }
@@ -469,10 +475,14 @@ function pauseVideo() {
   const videoButtonText = document.getElementById("video-text");
   // update pause button icon and text
   if (videoIsPaused) {
+    localVideoText.text("Video is paused");
+    localVideoText.show();
     videoButtonIcon.classList.remove("fa-video");
     videoButtonIcon.classList.add("fa-video-slash");
     videoButtonText.innerText = "Unpause Video";
   } else {
+    localVideoText.text("Video unpaused");
+    setTimeout(() => localVideoText.fadeOut(), 2000);
     videoButtonIcon.classList.add("fa-video");
     videoButtonIcon.classList.remove("fa-video-slash");
     videoButtonText.innerText = "Pause Video";
@@ -824,7 +834,7 @@ function togglePictureInPicture() {
 function startUp() {
   // Redirect mobile browsers
   if (
-    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    /webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
       navigator.userAgent
     )
   ) {
@@ -874,19 +884,24 @@ function startUp() {
   var timedelay = 1;
   function delayCheck() {
     if (timedelay === 5) {
-      // $(".multi-button").fadeOut();
-      // $("#header").fadeOut();
+      $(".multi-button").fadeOut();
+      $("#header").fadeOut();
       $(".multi-button").style = "display: none;";
-      $("#header").style = "display: none;";
+      // $("#header").style = "display: none;";
       timedelay = 1;
     }
     timedelay = timedelay + 1;
   }
   $(document).mousemove(function () {
-    // $(".multi-button").fadeIn();
-    // $("#header").fadeIn();
+    $(".multi-button").fadeIn(function() {
+      // fix layout on mobile
+      if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        $(this).css("display", "flex");
+      }
+    });
+    $("#header").fadeIn();
     $(".multi-button").style = "";
-    $("#header").style = "";
+    // $("#header").style = "";
     timedelay = 1;
     clearInterval(_delay);
     _delay = setInterval(delayCheck, 500);

@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
+
     <meta charset="UTF-8" />
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+
     <title>ZipChat</title>
     <link rel="shortcut icon" href="/images/logo.svg" />
     <link rel="stylesheet" href="../css/chat.css" />
@@ -12,6 +15,7 @@
     ></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <script src="/js/jquery.ui.touch-punch.js"></script>
     <meta property="og:title" content="Join your friends call - Zipcall" />
     <meta
       property="og:description"
@@ -52,11 +56,11 @@
 
     <div id="entire-chat">
       <div id="chat-zone">
-        <form class="compose">
-          <input type="text" placeholder="Type a message" />
-        </form>
         <div class="chat-messages"></div>
       </div>
+      <form class="compose">
+        <input type="text" placeholder="Type a message" />
+      </form>
     </div>
 
     <div class="multi-button">
