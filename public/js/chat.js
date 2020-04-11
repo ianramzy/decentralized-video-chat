@@ -874,15 +874,19 @@ function startUp() {
   var timedelay = 1;
   function delayCheck() {
     if (timedelay === 5) {
-      $(".multi-button").fadeOut();
-      $("#header").fadeOut();
+      // $(".multi-button").fadeOut();
+      // $("#header").fadeOut();
+      $(".multi-button").style = "display: none;";
+      $("#header").style = "display: none;";
       timedelay = 1;
     }
     timedelay = timedelay + 1;
   }
   $(document).mousemove(function () {
-    $(".multi-button").fadeIn();
-    $("#header").fadeIn();
+    // $(".multi-button").fadeIn();
+    // $("#header").fadeIn();
+    $(".multi-button").style = "";
+    $("#header").style = "";
     timedelay = 1;
     clearInterval(_delay);
     _delay = setInterval(delayCheck, 500);
