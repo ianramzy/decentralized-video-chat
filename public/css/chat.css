@@ -375,8 +375,10 @@ button:hover {
   }
 
   #remote-video {
-    width: 75vw;
-    height: calc((16/9) * 75vw);
+    /* width: 75vw;
+    height: calc((16/9) * 75vw); */
+    width: 100%;
+    height: 100%;
     /* border: 3px solid red; */
   }
 
