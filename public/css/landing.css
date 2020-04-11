@@ -2080,7 +2080,7 @@ textarea.form-input {
 
 @media (max-width: 640px) {
   .header-nav-toggle {
-    display: block;
+    /* display: block; */
   }
 
   .header-nav-toggle + .header-nav {
