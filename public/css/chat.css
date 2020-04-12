@@ -360,13 +360,17 @@ button:hover {
 
 /* Begin mobile layout */
 
-@media (max-width: 1000px) {
+@media (max-width: 640px) {
 /* @media (min-width: 320px) and (max-width: 480px) { */
 
   html, body {
     width: 100%;
     height: 100%;
-    font-size: 2.5em;
+    font-size: 1em;
+  }
+  
+  #header {
+    z-index: 5;
   }
   
   #header img {
@@ -395,7 +399,7 @@ button:hover {
     min-height: 10%;
     width: auto;
     height: auto;
-    max-width: 25%;
+    max-width: 20%;
   }
 
   #moveable #local-video {
@@ -424,9 +428,9 @@ button:hover {
 
   #remote-video-text {
     position: fixed;
-    top: initial !important;
+    top: 60% !important;
+    bottom: initial;
     left: initial;
-    bottom: 40%;
     width: 80%;
     height: auto;
     margin: 0;
@@ -458,8 +462,10 @@ button:hover {
     height: 100%;
     font-size: 3rem;
     display: flex;
-    flex-direction: col;
+    flex-direction: column;
     align-items: center;
+    min-width: 0;
+    margin: 0;
     /* line-height: 1.5rem; */
   }
 
@@ -479,12 +485,17 @@ button:hover {
     display: none !important;
   }
 
+  .buttonContainer:nth-child(3) ,
+  .buttonContainer:nth-child(5) {
+    display: none;
+  }
+
   #entire-chat {    
     position: absolute;
     top: 3rem;
     right: 0;
     height: calc(100% - 3rem - 3rem);
-    width: 60vw;
+    width: 100vw;
     /* padding: 1rem 0; */
     padding: 0;
     /* border: 3px solid green; */
@@ -495,29 +506,38 @@ button:hover {
   #chat-zone {
     position: relative;
     padding-top: 20px;
-    width: 90%;
+    width: 100%;
     height: calc(100% - 2rem);
-    margin-left: 5%;
+    margin-left: 0;
     /* box-shadow: 4px 4px 12px #030506, -4px -4px 12px #292a30; */
     /* border: 5px solid blue */
     border-radius: 10px;
     /* background: #16171a; */
   }
 
+  #chat-zone .message-item.moderator .message-bloc,
+  #chat-zone .message-item.customer .message-bloc {
+    box-shadow: none;
+  }
+
   .compose {
     position: absolute;
     font-size: 1rem;
-    right: 2%;
+    left: 10%;
+    right: initial;
     /* bottom: calc(3rem + 2rem); */
     bottom: 0;
-    width: 60vw;
+    width: 80%;
     height: 2rem;
     margin: .5rem 0;
+    padding: 0;
+    box-shadow: none;
   }
   
   .compose input {
     width: 90%;
-    height: calc(100% - 5px);
+    height: 2rem;
+    line-height: 2rem;
   }
   
   .compose input::placeholder {

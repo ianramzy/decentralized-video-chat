@@ -359,7 +359,7 @@ function rePositionLocalVideo() {
   var bounds = remoteVideo.position();
   let localVideo = $("#local-video");
   if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-    bounds.top = $(window).height() - localVideo.height()*1.5;
+    bounds.top = $(window).height()*0.75;
     bounds.left += 10;
   } else {
     bounds.top += 10;
@@ -884,24 +884,16 @@ function startUp() {
   var timedelay = 1;
   function delayCheck() {
     if (timedelay === 5) {
-      $(".multi-button").fadeOut();
+      // $(".multi-button").fadeOut();
       $("#header").fadeOut();
-      $(".multi-button").style = "display: none;";
-      // $("#header").style = "display: none;";
       timedelay = 1;
     }
     timedelay = timedelay + 1;
   }
   $(document).mousemove(function () {
-    $(".multi-button").fadeIn(function() {
-      // fix layout on mobile
-      if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-        $(this).css("display", "flex");
-      }
-    });
+    $(".multi-button").fadeIn();
     $("#header").fadeIn();
     $(".multi-button").style = "";
-    // $("#header").style = "";
     timedelay = 1;
     clearInterval(_delay);
     _delay = setInterval(delayCheck, 500);
