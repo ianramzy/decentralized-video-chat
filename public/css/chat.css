@@ -398,14 +398,16 @@ button:hover {
     left: 5rem;
     min-width: 20%;
     min-height: 10%;
-    width: auto;
-    height: auto;
-    max-width: 20%;
+    width: initial;
+    height: initial;
+    max-width: 25%;
   }
 
   #moveable #local-video {
-    width: 100%;
+    width: auto;
     height: auto;
+    max-width: 100%;
+    max-height: 100%;
   }
 
   #moveable p {
