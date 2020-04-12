@@ -548,4 +548,22 @@ button:hover {
   }
 }
 
+/*Hide video controls on mobile*/
+/*todo: still buggy on iOS, play/pause button pops up on load for iOS,
+   goes away after you press pause then play again*/
+video ::-webkit-media-controls-panel {
+  display: none !important;
+  -webkit-appearance: none;
+}
+
+video ::--webkit-media-controls-play-button {
+  display: none !important;
+  -webkit-appearance: none;
+}
+
+video ::-webkit-media-controls-start-playback-button {
+  display: none !important;
+  -webkit-appearance: none;
+}
+
 /* End mobile layout */

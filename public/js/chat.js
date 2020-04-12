@@ -838,20 +838,20 @@ function togglePictureInPicture() {
 
 function startUp() {
   // Redirect mobile browsers
-  if (
-    /webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-      navigator.userAgent
-    )
-  ) {
-    alert(
-      "Zipcall is not currently supported on mobile. Please try again on desktop."
-    );
-    window.location.href = "/notsupported";
-  }
+  // if (
+  //   /webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+  //     navigator.userAgent
+  //   )
+  // ) {
+  //   alert(
+  //     "Zipcall is not currently supported on mobile. Please try again on desktop."
+  //   );
+  //   window.location.href = "/notsupported";
+  // }
   // Redirect unsupported browsers
   if (!isWebRTCSupported || browserName === "MSIE") {
     alert(
-      "Your browser doesn't support Zipcall. Please use Chrome, Firefox, or Safari on laptop/desktop."
+      "Your browser doesn't support Zipcall. Please use Chrome, Firefox, or Safari. If using iOS please use Safari"
     );
     window.location.href = "/notsupported";
   }
