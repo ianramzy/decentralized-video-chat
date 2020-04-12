@@ -182,8 +182,10 @@ button:hover {
   background: #16171a;
   box-shadow: 9px 9px 16px #0a0b0c, -9px -9px 16px #222328;
   padding: 15px;
-  display: grid;
-  grid-gap: 0.2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  /* grid-gap: 0.2rem; */
   width: 40px;
 }
 
@@ -389,15 +391,16 @@ button:hover {
     position: fixed;
     top: 5rem;
     left: 5rem;
-    min-width: 5rem;
-    min-height: 2rem;
+    min-width: 20%;
+    min-height: 10%;
     width: auto;
     height: auto;
+    max-width: 25%;
   }
 
   #moveable #local-video {
-    height: 7rem;
-    width: auto;
+    width: 100%;
+    height: auto;
   }
 
   #moveable p {
@@ -445,7 +448,7 @@ button:hover {
     box-shadow: none;
     border-radius: 10px;
     padding: 0;
-    display: flex;
+    /* display: flex; */
     flex-direction: row;
     /* overflow: hidden; */
   }
