@@ -310,16 +310,17 @@ var VideoChat = {
     VideoChat.connected = true;
     // Hide caption status text
     captionText.fadeOut();
-    // Reposition local video repeatedly, as there is often a delay
+    // Reposition local video after a second, as there is often a delay
     // between adding a stream and the height of the video div changing
-    var timesRun = 0;
-    var interval = setInterval(function () {
-      timesRun += 1;
-      if (timesRun === 10) {
-        clearInterval(interval);
-      }
-      rePositionLocalVideo();
-    }, 300);
+    setTimeout(() => rePositionLocalVideo(), 500);
+    // var timesRun = 0;
+    // var interval = setInterval(function () {
+    //   timesRun += 1;
+    //   if (timesRun === 10) {
+    //     clearInterval(interval);
+    //   }
+    //   rePositionLocalVideo();
+    // }, 300);
   },
 };
 
@@ -363,7 +364,7 @@ function rePositionLocalVideo() {
       navigator.userAgent
     )
   ) {
-    bounds.top = $(window).height() * 0.75;
+    bounds.top = $(window).height() * 0.7;
     bounds.left += 10;
   } else {
     bounds.top += 10;
