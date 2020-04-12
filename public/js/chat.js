@@ -310,16 +310,17 @@ var VideoChat = {
     VideoChat.connected = true;
     // Hide caption status text
     captionText.fadeOut();
-    // Reposition local video repeatedly, as there is often a delay
+    // Reposition local video after a second, as there is often a delay
     // between adding a stream and the height of the video div changing
-    var timesRun = 0;
-    var interval = setInterval(function () {
-      timesRun += 1;
-      if (timesRun === 10) {
-        clearInterval(interval);
-      }
-      rePositionLocalVideo();
-    }, 300);
+    setTimeout(() => rePositionLocalVideo(), 500);
+    // var timesRun = 0;
+    // var interval = setInterval(function () {
+    //   timesRun += 1;
+    //   if (timesRun === 10) {
+    //     clearInterval(interval);
+    //   }
+    //   rePositionLocalVideo();
+    // }, 300);
   },
 };
 
@@ -357,8 +358,18 @@ function chatRoomFull() {
 function rePositionLocalVideo() {
   // Get position of remote video
   var bounds = remoteVideo.position();
-  bounds.top += 10;
-  bounds.left += 10;
+  let localVideo = $("#local-video");
+  if (
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    )
+  ) {
+    bounds.top = $(window).height() * 0.7;
+    bounds.left += 10;
+  } else {
+    bounds.top += 10;
+    bounds.left += 10;
+  }
   // Set position of local video
   $("#moveable").css(bounds);
 }
@@ -469,10 +480,14 @@ function pauseVideo() {
   const videoButtonText = document.getElementById("video-text");
   // update pause button icon and text
   if (videoIsPaused) {
+    localVideoText.text("Video is paused");
+    localVideoText.show();
     videoButtonIcon.classList.remove("fa-video");
     videoButtonIcon.classList.add("fa-video-slash");
     videoButtonText.innerText = "Unpause Video";
   } else {
+    localVideoText.text("Video unpaused");
+    setTimeout(() => localVideoText.fadeOut(), 2000);
     videoButtonIcon.classList.add("fa-video");
     videoButtonIcon.classList.remove("fa-video-slash");
     videoButtonText.innerText = "Pause Video";
@@ -824,7 +839,7 @@ function togglePictureInPicture() {
 function startUp() {
   // Redirect mobile browsers
   if (
-    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    /webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
       navigator.userAgent
     )
   ) {
@@ -874,7 +889,7 @@ function startUp() {
   var timedelay = 1;
   function delayCheck() {
     if (timedelay === 5) {
-      $(".multi-button").fadeOut();
+      // $(".multi-button").fadeOut();
       $("#header").fadeOut();
       timedelay = 1;
     }
@@ -883,6 +898,7 @@ function startUp() {
   $(document).mousemove(function () {
     $(".multi-button").fadeIn();
     $("#header").fadeIn();
+    $(".multi-button").style = "";
     timedelay = 1;
     clearInterval(_delay);
     _delay = setInterval(delayCheck, 500);

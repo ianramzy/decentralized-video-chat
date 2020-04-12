@@ -2080,7 +2080,7 @@ textarea.form-input {
 
 @media (max-width: 640px) {
   .header-nav-toggle {
-    display: block;
+    /* display: block; */
   }
 
   .header-nav-toggle + .header-nav {
@@ -2326,8 +2326,8 @@ textarea.form-input {
 
 .section-inner {
   position: relative;
-  padding-top: 48px;
-  padding-bottom: 48px;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 .section-header {
@@ -2567,12 +2567,12 @@ ul.pricing-item-features-list li {
 }
 
 .cta .section-inner {
-  padding-top: 48px;
-  padding-bottom: 48px;
+  padding-top: 24px;
+  padding-bottom: 24px;
 }
 
 .cta-slogan {
-  margin-bottom: 40px;
+  margin-bottom: 15px;
 }
 
 @media (min-width: 641px) {

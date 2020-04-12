@@ -70,9 +70,9 @@
     $p.style.margin = 0;
     $p.style.padding = 0;
     $p.style.color = options.textColor;
-    $p.style.fontSize = "14px";
     $p.style.fontWeight = 300;
-    $p.style.lineHeight = "1em";
+    // $p.style.fontSize = "14px";
+    // $p.style.lineHeight = "1em";
     $p.innerHTML = options.text;
     Snackbar.snackbar.appendChild($p);
     // Snackbar.snackbar.style.background = options.backgroundColor;

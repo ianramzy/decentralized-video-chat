@@ -182,8 +182,10 @@ button:hover {
   background: #16171a;
   box-shadow: 9px 9px 16px #0a0b0c, -9px -9px 16px #222328;
   padding: 15px;
-  display: grid;
-  grid-gap: 0.2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  /* grid-gap: 0.2rem; */
   width: 40px;
 }
 
@@ -293,7 +295,7 @@ button:hover {
   padding-left: 40px;
 }
 
-/*recieved messages*/
+/*received messages*/
 #chat-zone .message-item.moderator .message-bloc {
   background-color: rgb(29, 30, 33);
   color: #fff;
@@ -355,3 +357,195 @@ button:hover {
 }
 
 /*End text chat*/
+
+/* Begin mobile layout */
+
+@media (max-width: 640px) {
+  /* @media (min-width: 320px) and (max-width: 480px) { */
+
+  html,
+  body {
+    width: 100%;
+    height: 100%;
+    font-size: 1em;
+  }
+
+  #header {
+    z-index: 5;
+  }
+
+  #header img {
+    width: auto;
+    height: 2rem;
+  }
+
+  #header p {
+    margin: 0;
+    line-height: 2rem;
+  }
+
+  #remote-video {
+    /* width: 75vw;
+    height: calc((16/9) * 75vw); */
+    width: 100%;
+    height: 100%;
+    /* border: 3px solid red; */
+  }
+
+  #moveable {
+    position: fixed;
+    top: 5rem;
+    left: 5rem;
+    min-width: 20%;
+    min-height: 10%;
+    width: initial;
+    height: initial;
+    max-width: 25%;
+  }
+
+  #moveable #local-video {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  #moveable p {
+    text-align: center;
+    z-index: 101;
+    position: absolute;
+    color: white;
+    font-family: "Heebo", sans-serif;
+    white-space: pre-wrap;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+    font-size: 1rem;
+    background: rgba(0, 0, 0, 0.12);
+    padding: 10px;
+    border-radius: 5px;
+    margin: 0;
+  }
+
+  #remote-video-text {
+    position: fixed;
+    top: 60% !important;
+    bottom: initial;
+    left: initial;
+    width: 80%;
+    height: auto;
+    margin: 0;
+    margin-left: 10%;
+    text-align: center;
+  }
+
+  .multi-button {
+    position: fixed;
+    left: 0;
+    top: initial;
+    bottom: 0;
+    width: 80vw;
+    height: 3rem;
+    margin: 0 10vw;
+    -ms-transform: translate(0%, 0%);
+    transform: translate(0%, 0%);
+    z-index: 999;
+    box-shadow: none;
+    border-radius: 10px;
+    padding: 0;
+    /* display: flex; */
+    flex-direction: row;
+    /* overflow: hidden; */
+  }
+
+  .buttonContainer {
+    position: relative;
+    height: 100%;
+    font-size: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 0;
+    margin: 0;
+    /* line-height: 1.5rem; */
+  }
+
+  .multi-button button {
+    position: relative;
+    border: none;
+    font-size: 2rem;
+    transition: all 0.3s ease-in-out;
+    color: gray;
+    background: transparent;
+    cursor: pointer;
+    padding: 7px;
+    border-radius: 5px;
+  }
+
+  .HoverState {
+    display: none !important;
+  }
+
+  .buttonContainer:nth-child(3),
+  .buttonContainer:nth-child(5) {
+    display: none;
+  }
+
+  #entire-chat {
+    position: absolute;
+    top: 3rem;
+    right: 0;
+    height: calc(100% - 3rem - 3rem);
+    width: 100vw;
+    /* padding: 1rem 0; */
+    padding: 0;
+    /* border: 3px solid green; */
+    text-align: center;
+    /* background: #16171a; */
+  }
+
+  #chat-zone {
+    position: relative;
+    padding-top: 20px;
+    width: 100%;
+    height: calc(100% - 2rem);
+    margin-left: 0;
+    /* box-shadow: 4px 4px 12px #030506, -4px -4px 12px #292a30; */
+    /* border: 5px solid blue */
+    border-radius: 10px;
+    /* background: #16171a; */
+  }
+
+  #chat-zone .message-item.moderator .message-bloc,
+  #chat-zone .message-item.customer .message-bloc {
+    box-shadow: none;
+  }
+
+  .compose {
+    position: absolute;
+    font-size: 1rem;
+    left: 10%;
+    right: initial;
+    /* bottom: calc(3rem + 2rem); */
+    bottom: 0;
+    width: 80%;
+    height: 2rem;
+    margin: 0.5rem 0;
+    padding: 0;
+    box-shadow: none;
+  }
+
+  .compose input {
+    width: 90%;
+    height: 2rem;
+    line-height: 2rem;
+  }
+
+  .compose input::placeholder {
+    color: white;
+  }
+}
+
+/* End mobile layout */
