@@ -1999,11 +1999,9 @@ textarea.form-input {
 }
 
 @media (max-width: 640px) {
-
   .section:first-of-type {
-    min-height: calc(100vh - (80px/2));
+    min-height: calc(100vh - (80px / 2));
   }
-  
 }
 
 .site-header {
