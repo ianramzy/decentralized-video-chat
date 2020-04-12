@@ -5,6 +5,7 @@
 [![Donate](https://img.shields.io/badge/Donate-PayPal-brightgreen.svg)](https://paypal.me/ianramzy)
 [![Repo Link](https://img.shields.io/badge/Repo-Link-black.svg)](https://github.com/ianramzy/decentralized-video-chat)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?)](https://github.com/prettier/prettier)
+[![Join the chat at https://gitter.im/zipcall](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/zipcall)
 
 # https://zipcall.io
 
@@ -59,3 +60,10 @@ npm start
 - Open `localhost:3000` in browser
 - If you want to use a client on another computer/network, make sure you publish your server on an HTTPS connection.
   You can use a service like [ngrok](https://ngrok.com/) for that.
+  
+## Contributing
+Pull Requests are welcome!
+
+Please run prettier on all of your PRs before submitting, this can be done with `` prettier --write`` in the project directory
+
+For communication we use Glitter Chat we can be found here: [![Join the chat at https://gitter.im/zipcall](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/zipcall)
