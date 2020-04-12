@@ -1319,12 +1319,6 @@ textarea.form-input {
   color: #292b32;
 }
 
-.invert-color .form-checkbox input:checked,
-.invert-color .form-radio input:checked {
-  /*background-color: !important;*/
-  /*border-color: !important*/
-}
-
 .form-group {
   display: flex;
 }
@@ -2079,9 +2073,6 @@ textarea.form-input {
 }
 
 @media (max-width: 640px) {
-  .header-nav-toggle {
-    /* display: block; */
-  }
 
   .header-nav-toggle + .header-nav {
     flex-direction: column;
