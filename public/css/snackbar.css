@@ -95,7 +95,6 @@
 /* Mobile Styles Start */
 
 @media (max-width: 640px) {
-
   .snackbar-container {
     position: fixed;
     top: 5rem;
@@ -110,7 +109,7 @@
     height: auto;
     margin: 0;
     margin-top: 1rem;
-    padding: .5rem;
+    padding: 0.5rem;
     word-wrap: break-word;
     line-height: 1.2rem;
     font-size: 1rem;
@@ -122,7 +121,7 @@
 
   .snackbar-container .action {
     width: 15%;
-    padding: .2rem;
+    padding: 0.2rem;
     border-radius: 10px;
     display: inline-block;
     border: none;
@@ -136,10 +135,9 @@
 
   .snackbar-pos.bottom-center,
   .snackbar-pos.top-center {
-    left: calc(10vw - 0.5rem);;
+    left: calc(10vw - 0.5rem);
     transform: none;
   }
-  
 }
 
 /* Mobile Styles End */

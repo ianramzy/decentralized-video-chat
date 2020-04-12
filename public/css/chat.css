@@ -361,23 +361,24 @@ button:hover {
 /* Begin mobile layout */
 
 @media (max-width: 640px) {
-/* @media (min-width: 320px) and (max-width: 480px) { */
+  /* @media (min-width: 320px) and (max-width: 480px) { */
 
-  html, body {
+  html,
+  body {
     width: 100%;
     height: 100%;
     font-size: 1em;
   }
-  
+
   #header {
     z-index: 5;
   }
-  
+
   #header img {
     width: auto;
     height: 2rem;
   }
-  
+
   #header p {
     margin: 0;
     line-height: 2rem;
@@ -485,12 +486,12 @@ button:hover {
     display: none !important;
   }
 
-  .buttonContainer:nth-child(3) ,
+  .buttonContainer:nth-child(3),
   .buttonContainer:nth-child(5) {
     display: none;
   }
 
-  #entire-chat {    
+  #entire-chat {
     position: absolute;
     top: 3rem;
     right: 0;
@@ -529,21 +530,20 @@ button:hover {
     bottom: 0;
     width: 80%;
     height: 2rem;
-    margin: .5rem 0;
+    margin: 0.5rem 0;
     padding: 0;
     box-shadow: none;
   }
-  
+
   .compose input {
     width: 90%;
     height: 2rem;
     line-height: 2rem;
   }
-  
+
   .compose input::placeholder {
     color: white;
   }
-  
 }
 
 /* End mobile layout */

@@ -358,8 +358,12 @@ function rePositionLocalVideo() {
   // Get position of remote video
   var bounds = remoteVideo.position();
   let localVideo = $("#local-video");
-  if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-    bounds.top = $(window).height()*0.75;
+  if (
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    )
+  ) {
+    bounds.top = $(window).height() * 0.75;
     bounds.left += 10;
   } else {
     bounds.top += 10;
