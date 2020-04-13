@@ -52,6 +52,10 @@ app.get("/notsupported", function (req, res) {
   res.sendFile(path.join(public, "notsupported.html"));
 });
 
+app.get("/notsupportedios", function (req, res) {
+  res.sendFile(path.join(public, "notsupportedios.html"));
+});
+
 // Serve static files in the public directory
 app.use(express.static("public"));
 
