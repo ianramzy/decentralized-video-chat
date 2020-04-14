@@ -67,4 +67,4 @@ Pull Requests are welcome!
 
 Please run prettier on all of your PRs before submitting, this can be done with `prettier --write` in the project directory
 
-For communication we use Gitter Chat we can be found here: [![Join the chat at https://gitter.im/zipcall](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/zipcall)
+For communication we use Gitter Chat which can be found here: [![Join the chat at https://gitter.im/zipcall](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/zipcall)
