@@ -8,13 +8,13 @@ var twillioAccountSID =
 
 var iceServer =
   process.env.ICE_SERVER_URLS && process.env.ICE_SERVER_URLS.length > 0
-    ? undefined
-    : {
+    ? {
         urls: process.env.ICE_SERVER_URLS.split(",").map((s) => s.trim()),
         username: process.env.ICE_SERVER_USERNAME,
         credential: process.env.ICE_SERVER_CREDENTIAL,
         credentialType: process.env.ICE_SERVER_CREDENTIALTYPE,
-      };
+      }
+    : undefined;
 
 var twilio = iceServer
   ? undefined
