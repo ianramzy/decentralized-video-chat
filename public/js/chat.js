@@ -39,9 +39,11 @@ var VideoChat = {
   // asking for access to both the video and audio streams. If the request is
   // accepted callback to the onMediaStream function, otherwise callback to the
   // noMediaStream function.
-  requestMediaStream: function (event) {
+  requestMediaStream: function (reposition = true) {
     logIt("requestMediaStream");
-    rePositionLocalVideo();
+    if (reposition) {
+      rePositionLocalVideo();
+    }
     navigator.mediaDevices
       .getUserMedia({
         video: true,
@@ -58,7 +60,7 @@ var VideoChat = {
           "Failed to get local webcam video, check webcam privacy settings"
         );
         // Keep trying to get user media
-        setTimeout(VideoChat.requestMediaStream, 1000);
+        // setTimeout(VideoChat.requestMediaStream, 1000);
       });
   },
 
@@ -91,16 +93,13 @@ var VideoChat = {
       },
     });
     VideoChat.localVideo.srcObject = stream;
-    // Now we're ready to join the chat room.
-    VideoChat.socket.emit("join", roomHash);
-    // Add listeners to the websocket
-    VideoChat.socket.on("full", chatRoomFull);
-    VideoChat.socket.on("offer", VideoChat.onOffer);
-    VideoChat.socket.on("ready", VideoChat.readyToCall);
-    VideoChat.socket.on(
-      "willInitiateCall",
-      () => (VideoChat.willInitiateCall = true)
-    );
+
+    if (VideoChat.peerConnection && VideoChat.localStream) {
+      VideoChat.localStream.getTracks().forEach(function (track) {
+        VideoChat.peerConnection.addTrack(track, VideoChat.localStream);
+      });
+    }
+    
   },
 
   // When we are ready to call, enable the Call button.
@@ -120,6 +119,18 @@ var VideoChat = {
     VideoChat.socket.emit("token", roomHash);
   },
 
+  joinRoom: function () {
+    VideoChat.socket.emit("join", roomHash);
+    // Add listeners to the websocket
+    VideoChat.socket.on("full", chatRoomFull);
+    VideoChat.socket.on("offer", VideoChat.onOffer);
+    VideoChat.socket.on("ready", VideoChat.readyToCall);
+    VideoChat.socket.on(
+      "willInitiateCall",
+      () => (VideoChat.willInitiateCall = true)
+    );
+  },
+
   // When we receive the ephemeral token back from the server.
   onToken: function (callback) {
     logIt("onToken");
@@ -130,9 +141,11 @@ var VideoChat = {
         iceServers: token.iceServers,
       });
       // Add the local video stream to the peerConnection.
-      VideoChat.localStream.getTracks().forEach(function (track) {
-        VideoChat.peerConnection.addTrack(track, VideoChat.localStream);
-      });
+      if (VideoChat.localStream) {
+        VideoChat.localStream.getTracks().forEach(function (track) {
+          VideoChat.peerConnection.addTrack(track, VideoChat.localStream);
+        });
+      }
       // Add general purpose data channel to peer connection,
       // used for text chats, captions, and toggling sending captions
       dataChanel = VideoChat.peerConnection.createDataChannel("chat", {
@@ -342,7 +355,7 @@ function getBrowserName() {
 
 // Basic logging class wrapper
 function logIt(message, error) {
-  console.log(message);
+  console.trace(message);
 }
 
 // Called when socket receives message that room is full
@@ -869,6 +882,8 @@ function startUp() {
   // get webcam on load
   VideoChat.requestMediaStream();
 
+  VideoChat.joinRoom();
+
   // Captions hidden by default
   captionText.text("").fadeOut();
 
@@ -935,7 +950,11 @@ function startUp() {
   rePositionCaptions();
 
   // On change media devices refresh page and switch to system default
-  navigator.mediaDevices.ondevicechange = () => window.location.reload();
+  navigator.mediaDevices.ondevicechange = () => {
+
+    VideoChat.requestMediaStream(false);
+    
+  }
 }
 
 startUp();
