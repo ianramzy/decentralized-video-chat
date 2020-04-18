@@ -111,7 +111,7 @@ io.on("connection", function (socket) {
   socket.on("token", function (room) {
     logIt("Received token request", room);
     if (iceServer) {
-      socket.emit("token", [iceServer]);
+      socket.emit("token", {iceServers: [iceServer]);
       return;
     }
     twilio.tokens.create(function (err, response) {
