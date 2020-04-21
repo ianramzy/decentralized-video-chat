@@ -244,8 +244,8 @@ button:hover {
 }
 
 .compose input {
-  font-family: inherit;
-  font-size: inherit;
+  /*font-family: inherit;*/
+  font-size: 0.8rem;
   border: none;
   width: 100%;
   height: calc(100% - 5px);
@@ -257,6 +257,7 @@ button:hover {
 
 .compose input::placeholder {
   color: white;
+  font-size: 0.8rem;
 }
 
 #chat-zone {
@@ -527,7 +528,7 @@ button:hover {
 
   .compose {
     position: absolute;
-    font-size: 1rem;
+    font-size: 0.8rem;
     left: 10%;
     right: initial;
     /* bottom: calc(3rem + 2rem); */

@@ -178,9 +178,12 @@ var VideoChat = {
             VideoChat.socket.disconnect();
             break;
           case "disconnected":
+            logIt("disconnected");
           case "failed":
-            logIt("failed/disconnected");
-            // Refresh page if connection is lost
+            logIt("failed");
+            // VideoChat.socket.connect
+            // VideoChat.createOffer();
+            // Refresh page if connection has failed
             location.reload();
             break;
           case "closed":
