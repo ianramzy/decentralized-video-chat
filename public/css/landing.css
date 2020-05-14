@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Fira+Sans:600|Heebo:400,500,700&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Fira+Sans:600|Lato:400&display=swap");
 
 html {
   line-height: 1.15;
@@ -429,7 +429,7 @@ button,
 input,
 select,
 textarea {
-  font-family: "Heebo", sans-serif;
+  font-family: "Lato", sans-serif;
   font-weight: 400;
 }
 
