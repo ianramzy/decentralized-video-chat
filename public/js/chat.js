@@ -20,6 +20,7 @@ const isWebRTCSupported =
 const chatInput = document.querySelector(".compose input");
 const remoteVideoVanilla = document.getElementById("remote-video");
 const remoteVideo = $("#remote-video");
+const remoteVideosWrapper = $("#wrapper");
 const captionText = $("#remote-video-text");
 const localVideoText = $("#local-video-text");
 const captionButtontext = $("#caption-button-text");
@@ -31,7 +32,7 @@ var VideoChat = {
   willInitiateCall: false,
   localICECandidates: [],
   socket: io(),
-  remoteVideo: document.getElementById("remote-video"),
+  remoteVideoWrapper: document.getElementById("wrapper"),
   localVideo: document.getElementById("local-video"),
   recognition: undefined,
 
@@ -303,12 +304,20 @@ var VideoChat = {
   // Called when a stream is added to the peer connection
   onAddStream: function (event) {
     logIt("onAddStream <<< Received new stream from remote. Adding it...");
+    // Create new remote video source in wrapper
+    // Create a <video> node
+    var node = document.createElement("video");
+    node.setAttribute("autoplay", "");
+    node.setAttribute("playsinline", "");
+    node.setAttribute("id", "remote-video");
+    VideoChat.remoteVideoWrapper.appendChild(node);
     // Update remote video source
-    VideoChat.remoteVideo.srcObject = event.stream;
+    console.log(VideoChat.remoteVideoWrapper.children);
+    VideoChat.remoteVideoWrapper.lastChild.srcObject = event.stream;
     // Close the initial share url snackbar
     Snackbar.close();
     // Remove the loading gif from video
-    VideoChat.remoteVideo.style.background = "none";
+    VideoChat.remoteVideoWrapper.lastChild.style.background = "none";
     // Update connection status
     VideoChat.connected = true;
     // Hide caption status text
@@ -360,7 +369,7 @@ function chatRoomFull() {
 // Reposition local video to top left of remote video
 function rePositionLocalVideo() {
   // Get position of remote video
-  var bounds = remoteVideo.position();
+  var bounds = remoteVideosWrapper.position();
   let localVideo = $("#local-video");
   if (
     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -380,9 +389,9 @@ function rePositionLocalVideo() {
 // Reposition captions to bottom of video
 function rePositionCaptions() {
   // Get remote video position
-  var bounds = remoteVideo.position();
+  var bounds = remoteVideosWrapper.position();
   bounds.top -= 10;
-  bounds.top = bounds.top + remoteVideo.height() - 1 * captionText.height();
+  bounds.top = bounds.top + remoteVideosWrapper.height() - 1 * captionText.height();
   // Reposition captions
   captionText.css(bounds);
 }

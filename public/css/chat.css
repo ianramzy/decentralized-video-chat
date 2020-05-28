@@ -109,11 +109,26 @@ a {
   background: #16171a;
 }
 
+#wrapper {
+  display: grid;
+  grid-gap: 10px;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  width: 65%;
+  max-height: 100%;
+  max-width: 100%;
+}
+
 /*caption text*/
 #remote-video-text {
   box-sizing: border-box;
   margin: 0;
-  width: 65vw;
   position: absolute;
   top: calc(80%);
   left: 20vw;
@@ -131,15 +146,8 @@ a {
 #remote-video {
   padding: 0;
   margin: 0;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  width: 65%;
+  width: 100%;
   height: auto;
-  max-height: 100%;
-  max-width: 100%;
   border-radius: 10px;
   background-image: url(../images/loader.gif);
   background-size: 400px auto;
