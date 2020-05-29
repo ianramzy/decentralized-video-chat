@@ -78,6 +78,15 @@ io.on("connection", function (socket) {
     var numClients = typeof clients !== "undefined" ? clients.length : 0;
     if (numClients === 0) {
       socket.join(room);
+      twilio.tokens.create(function (err, response) {
+        if (err) {
+          logIt(err, room);
+        } else {
+          logIt("Token generated. Returning it to the browser client", room);
+          socket.emit("token", response);
+          // Existing callers initiates call with user
+        }
+      });
     } else if (numClients < 3) {
       socket.join(room);
       logIt("Connected clients", room)
@@ -87,10 +96,17 @@ io.on("connection", function (socket) {
 
       // When the client is not the first to join the room, all clients are ready.
       logIt("Broadcasting ready message", room);
-      // Existing callers initiates call with user
-      socket.broadcast.to(room).emit("willInitiateCall", socket.id, room);
 
-      // Send its uui
+      twilio.tokens.create(function (err, response) {
+        if (err) {
+          logIt(err, room);
+        } else {
+          logIt("Token generated. Returning it to the browser client", room);
+          socket.emit("token", response);
+          // Existing callers initiates call with user
+          socket.broadcast.to(room).emit("willInitiateCall", socket.id, room);
+        }
+      });
       // socket.emit("uuid", socket.id);
       socket.emit("ready", room).to(room);
       socket.broadcast.to(room).emit("ready", room);
@@ -109,7 +125,7 @@ io.on("connection", function (socket) {
         logIt(err, room);
       } else {
         logIt("Token generated. Returning it to the browser client", room);
-        socket.emit("token", response).to(room);
+        socket.emit("token", response);
       }
     });
   });
