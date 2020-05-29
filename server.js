@@ -78,16 +78,24 @@ io.on("connection", function (socket) {
     var numClients = typeof clients !== "undefined" ? clients.length : 0;
     if (numClients === 0) {
       socket.join(room);
-    } else if (numClients === 1) {
+    } else if (numClients < 3) {
       socket.join(room);
-      // When the client is second to join the room, both clients are ready.
+      logIt("Connected clients", room)
+      for (var clientId in clients.sockets) {
+        logIt('ID: ' + clientId, room);
+      }
+
+      // When the client is not the first to join the room, all clients are ready.
       logIt("Broadcasting ready message", room);
-      // First to join call initiates call
-      socket.broadcast.to(room).emit("willInitiateCall", room);
+      // Existing callers initiates call with user
+      socket.broadcast.to(room).emit("willInitiateCall", socket.id, room);
+
+      // Send its uui
+      // socket.emit("uuid", socket.id);
       socket.emit("ready", room).to(room);
       socket.broadcast.to(room).emit("ready", room);
     } else {
-      logIt("room already full", room);
+      logIt("room already full with " + numClients + " people in the room.", room);
       socket.emit("full", room);
     }
   });
@@ -107,21 +115,21 @@ io.on("connection", function (socket) {
   });
 
   // Relay candidate messages
-  socket.on("candidate", function (candidate, room) {
+  socket.on("candidate", function (candidate, room, uuid) {
     logIt("Received candidate. Broadcasting...", room);
-    socket.broadcast.to(room).emit("candidate", candidate);
+    io.to(uuid).emit("candidate", candidate, socket.id);
   });
 
   // Relay offers
-  socket.on("offer", function (offer, room) {
-    logIt("Received offer. Broadcasting...", room);
-    socket.broadcast.to(room).emit("offer", offer);
+  socket.on("offer", function (offer, room, uuid) {
+    logIt("Received offer from " + socket.id + " and emitting to " + uuid, room);
+    io.to(uuid).emit("offer", offer, socket.id);
   });
 
   // Relay answers
-  socket.on("answer", function (answer, room) {
-    logIt("Received answer. Broadcasting...", room);
-    socket.broadcast.to(room).emit("answer", answer);
+  socket.on("answer", function (answer, room, uuid) {
+    logIt("Received answer from " + socket.id + " and emitting to " + uuid, room);
+    io.to(uuid).emit("answer", answer, socket.id);
   });
 });
 
