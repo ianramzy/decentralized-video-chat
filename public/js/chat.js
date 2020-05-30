@@ -29,6 +29,8 @@ const chatZone = $("#chat-zone");
 
 var VideoChat = {
   nickname: undefined,
+  videoEnabled: true, 
+  audioEnabled: true, 
   connected: new Map(),
   localICECandidates: {},
   socket: io(),
@@ -480,21 +482,23 @@ function isConnected() {
 
 // Mute microphone
 function muteMicrophone() {
+  VideoChat.audioEnabled = !VideoChat.audioEnabled;
   var audioTrack = null;
-  // Get audio track to mute
-  VideoChat.peerConnections.first.getSenders().find(function (s) {
-    if (s.track.kind === "audio") {
-      audioTrack = s.track;
-    }
+
+  VideoChat.peerConnections.forEach(function(value, key, map) {
+    value.getSenders().find(function (s) {
+      if (s.track.kind === "audio") {
+        audioTrack = s.track;
+      }
+    })
+    audioTrack.enabled = VideoChat.audioEnabled;
   });
-  isMuted = !audioTrack.enabled;
-  audioTrack.enabled = isMuted;
-  isMuted = !isMuted;
+
   // select mic button and mic button text
   const micButtonIcon = document.getElementById("mic-icon");
   const micButtonText = document.getElementById("mic-text");
   // Update mute button text and icon
-  if (isMuted) {
+  if (!VideoChat.audioEnabled) {
     micButtonIcon.classList.remove("fa-microphone");
     micButtonIcon.classList.add("fa-microphone-slash");
     micButtonText.innerText = "Unmute";
@@ -508,21 +512,25 @@ function muteMicrophone() {
 
 // Pause Video
 function pauseVideo() {
-  var videoTrack = null;
-  // Get video track to pause
-  VideoChat.peerConnection.getSenders().find(function (s) {
-    if (s.track.kind === "video") {
-      videoTrack = s.track;
-    }
+  VideoChat.videoEnabled = !VideoChat.videoEnabled;
+
+  // Communicate pause to all the peers' video tracks
+  VideoChat.peerConnections.forEach(function(value, key, map) {
+    console.log("pausing video for ", key);
+    value.getSenders().find(function (s) {
+      if (s.track.kind === "video") {
+        console.log("found video track")
+        videoTrack = s.track;
+      }
+    })
+    videoTrack.enabled = VideoChat.videoEnabled;
   });
-  videoIsPaused = !videoTrack.enabled;
-  videoTrack.enabled = videoIsPaused;
-  videoIsPaused = !videoIsPaused;
+
   // select video button and video button text
   const videoButtonIcon = document.getElementById("video-icon");
   const videoButtonText = document.getElementById("video-text");
   // update pause button icon and text
-  if (videoIsPaused) {
+  if (!VideoChat.videoEnabled) {
     localVideoText.text("Video is paused");
     localVideoText.show();
     videoButtonIcon.classList.remove("fa-video");
