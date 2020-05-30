@@ -94,12 +94,9 @@ var VideoChat = {
     VideoChat.localVideo.srcObject = stream;
     // Now we're ready to join the chat room.
     VideoChat.socket.emit("join", roomHash);
-    // Receive its own uuid
-    VideoChat.socket.on("uuid", (uuid) => (VideoChat.uuid = uuid));
     // Add listeners to the websocket
     VideoChat.socket.on("full", chatRoomFull);
     VideoChat.socket.on("offer", VideoChat.onOffer);
-    VideoChat.socket.on("ready", VideoChat.readyToCall);
     VideoChat.socket.on("willInitiateCall", VideoChat.call);
     // Set up listeners on the socket
     VideoChat.socket.on("candidate", VideoChat.onCandidate);
@@ -110,17 +107,9 @@ var VideoChat = {
     );
   },
 
-  // When we are ready to call, enable the Call button.
-  readyToCall: function (event) {
-    logIt("readyToCall");
-  },
-  call: function (uuid, room) {
-    logIt("Initiating call");
-    VideoChat.startCall(uuid);
-  },
 
-  // Set up a callback to run when we have the ephemeral token to use Twilio's TURN server.
-  startCall: function (uuid) {
+  call: function (uuid, room) {
+    logIt("Initiating call with " + uuid);
     VideoChat.socket.on(
       "token",
       VideoChat.establishConnection(uuid, function (a) {
@@ -136,8 +125,8 @@ var VideoChat = {
         return;
       }
       console.log("establishing connection to", uuid);
-
-      VideoChat.localICECandidates[uuid] = []; // initialise uuid with empty array
+      // Initialise localICEcandidates for node uuid with empty array
+      VideoChat.localICECandidates[uuid] = [];
       VideoChat.connected[uuid] = false;
 
       // Set up a new RTCPeerConnection using the token's iceServers.
@@ -191,8 +180,6 @@ var VideoChat = {
           case "connected":
             logIt("connected");
             // Once connected we no longer have a need for the signaling server, so disconnect
-            // VideoChat.socket.off("token");
-            // VideoChat.socket.off("offer");
             break;
           case "disconnected":
             logIt("disconnected");
@@ -251,12 +238,7 @@ var VideoChat = {
 
   // Create an offer that contains the media capabilities of the browser.
   createOffer: function (uuid) {
-    console.log(
-      ">>> Creating offer to UUID: ",
-      uuid,
-      ". my UUID is",
-      VideoChat.socket.id
-    );
+    logIt(`createOffer to ${uuid} >>> Creating offer...`);
     VideoChat.peerConnections[uuid].createOffer(
       function (offer) {
         // If the offer is created successfully, set it as the local description
@@ -280,22 +262,11 @@ var VideoChat = {
   createAnswer: function (offer, uuid) {
     logIt("createAnswer");
     rtcOffer = new RTCSessionDescription(JSON.parse(offer));
-    console.log(
-      "createAnswer: setting remote description of " +
-        uuid +
-        " on " +
-        VideoChat.socket.id
-    );
+    logIt(`>>> Creating answer to ${uuid}`);
     VideoChat.peerConnections[uuid].setRemoteDescription(rtcOffer);
     VideoChat.peerConnections[uuid].createAnswer(
       function (answer) {
         VideoChat.peerConnections[uuid].setLocalDescription(answer);
-        console.log(
-          ">>> Creating answer to UUID: ",
-          uuid,
-          ". my UUID is",
-          VideoChat.socket.id
-        );
         VideoChat.socket.emit("answer", JSON.stringify(answer), roomHash, uuid);
       },
       function (err) {
@@ -321,22 +292,9 @@ var VideoChat = {
 
   // When an answer is received, add it to the peerConnection as the remote description.
   onAnswer: function (answer, uuid) {
-    console.log(
-      "onAnswer <<< Received answer",
-      uuid,
-      ". my UUID is",
-      VideoChat.socket.id
-    );
-
-    // logIt("onAnswer <<< Received answer" + "");
+    logIt(`onAnswer <<< Received answer from ${uuid}`);
     var rtcAnswer = new RTCSessionDescription(JSON.parse(answer));
     // Set remote description of RTCSession
-    console.log(
-      "onAnswer: setting remote description of " +
-        uuid +
-        " on " +
-        VideoChat.socket.id
-    );
     VideoChat.peerConnections[uuid].setRemoteDescription(rtcAnswer);
     // The caller now knows that the callee is ready to accept new ICE candidates, so sending the buffer over
     VideoChat.localICECandidates[uuid].forEach((candidate) => {
@@ -353,14 +311,8 @@ var VideoChat = {
 
   // Called when a stream is added to the peer connection
   onAddStream: function (event, uuid) {
-    // if(VideoChat.counter > 4) {
-    //     VideoChat.socket.disconnect();
-    // }else{
-    //   VideoChat.counter++;
-    // }
     logIt(
-      "onAddStream <<< Received new stream from remote. Adding it..." + event
-    );
+      "onAddStream <<< Received new stream from remote. Adding it...");
     // Create new remote video source in wrapper
     // Create a <video> node
     var node = document.createElement("video");

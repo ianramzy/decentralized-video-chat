@@ -92,7 +92,7 @@ io.on("connection", function (socket) {
           // Existing callers initiates call with user
         }
       });
-    } else if (numClients < 4) {
+    } else if (numClients < 5) {
       socket.join(room);
       logIt("Connected clients", room);
       for (var clientId in clients.sockets) {
@@ -102,9 +102,6 @@ io.on("connection", function (socket) {
       // When the client is not the first to join the room, all clients are ready.
       logIt("Broadcasting ready message", room);
       socket.broadcast.to(room).emit("willInitiateCall", socket.id, room);
-      // socket.emit("uuid", socket.id);
-      socket.emit("ready", room).to(room);
-      socket.broadcast.to(room).emit("ready", room);
     } else {
       logIt(
         "room already full with " + numClients + " people in the room.",
