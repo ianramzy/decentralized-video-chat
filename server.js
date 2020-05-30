@@ -9,11 +9,11 @@ var twilio = require("twilio")(twillioAccountSID, twillioAuthToken);
 var express = require("express");
 var app = express();
 const fs = require('fs');
-var http = require("https").createServer({
-  key: fs.readFileSync('/Users/khushjammu/certs/privkey.pem'),
-  cert: fs.readFileSync('/Users/khushjammu/certs/cert.pem')
-}, app);
-// var http = require("http").createServer(app);
+// var http = require("https").createServer({
+//   key: fs.readFileSync('/Users/khushjammu/certs/privkey.pem'),
+//   cert: fs.readFileSync('/Users/khushjammu/certs/cert.pem')
+// }, app);
+var http = require("http").createServer(app);
 var io = require("socket.io")(http);
 var path = require("path");
 var public = path.join(__dirname, "public");
