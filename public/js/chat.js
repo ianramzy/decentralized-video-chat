@@ -183,8 +183,8 @@ var VideoChat = {
           case "connected":
             logIt("connected");
             // Once connected we no longer have a need for the signaling server, so disconnect
-            VideoChat.socket.off("token");
-            VideoChat.socket.off("offer");
+            // VideoChat.socket.off("token");
+            // VideoChat.socket.off("offer");
             break;
           case "disconnected":
             logIt("disconnected");
@@ -308,13 +308,6 @@ var VideoChat = {
         // Send ice candidate over websocket
         VideoChat.socket.emit("candidate", JSON.stringify(candidate), roomHash, uuid);
       });
-      // Reset the buffer of local ICE candidates. This is not really needed, but it's good practice
-      // VideoChat.localICECandidates[uuid] = [];
-    // } else {
-    //   console.log("attemped to run onAnswer on UUID ", uuid, " which already happened");
-    // }
-
-    
   },
 
   // Called when a stream is added to the peer connection
