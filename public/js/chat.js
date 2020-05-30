@@ -216,7 +216,8 @@ var VideoChat = {
         VideoChat.socket.emit(
           "candidate",
           JSON.stringify(event.candidate),
-          roomHash
+          roomHash,
+          uuid
         );
       } else {
         // If we are not 'connected' to the other peer, we are buffering the local ICE candidates.
