@@ -145,7 +145,7 @@ io.on("connection", function (socket) {
 });
 
 // Listen for Heroku port, otherwise just use 3000
-var port = process.env.PORT || 443;
+var port = process.env.PORT || 3000;
 http.listen(port, function () {
   console.log("http://localhost:" + port);
 });
