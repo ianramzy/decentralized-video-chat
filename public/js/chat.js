@@ -647,7 +647,7 @@ function switchStreamHelper(stream) {
   // Update local video object
   VideoChat.localVideo.srcObject = stream;
   // Unpause video on swap
-  if (videoIsPaused) {
+  if (!VideoChat.videoEnabled) {
     pauseVideo();
   }
 }
