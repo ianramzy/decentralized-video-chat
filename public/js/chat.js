@@ -28,10 +28,8 @@ const entireChat = $("#entire-chat");
 const chatZone = $("#chat-zone");
 
 var VideoChat = {
-  connected: false,
-  counter: 0,
-  willInitiateCall: false,
-  localICECandidates: [],
+  connected: [],
+  localICECandidates: {},
   socket: io(),
   remoteVideoWrapper: document.getElementById("wrapper"),
   localVideo: document.getElementById("local-video"),
@@ -134,14 +132,17 @@ var VideoChat = {
         return;
       }
       console.log("establishing connection to", uuid);
+      
+
+      VideoChat.localICECandidates[uuid] = []; // initialise uuid with empty array
+      VideoChat.connected[uuid] = false;
+
       // Set up a new RTCPeerConnection using the token's iceServers.
-      console.log(VideoChat.peerConnections)
       VideoChat.peerConnections[uuid] = new RTCPeerConnection({
         iceServers: token.iceServers,
       });
       // Add the local video stream to the peerConnection.
       VideoChat.localStream.getTracks().forEach(function (track) {
-        console.log("local stream: ", track);
         VideoChat.peerConnections[uuid].addTrack(track, VideoChat.localStream);
       });
       // Add general purpose data channel to peer connection,
@@ -172,8 +173,8 @@ var VideoChat = {
 
       // Set up callbacks for the connection generating iceCandidates or
       // receiving the remote media stream.
-      VideoChat.peerConnections[uuid].onicecandidate = VideoChat.onIceCandidate;
-      VideoChat.peerConnections[uuid].onaddstream = VideoChat.onAddStream;
+      VideoChat.peerConnections[uuid].onicecandidate = function(u) {VideoChat.onIceCandidate(u, uuid)};
+      VideoChat.peerConnections[uuid].onaddstream = function(u) {VideoChat.onAddStream(u, uuid)};
       
 
       // Called when there is a change in connection state
@@ -204,13 +205,13 @@ var VideoChat = {
   },
 
   // When the peerConnection generates an ice candidate, send it over the socket to the peer.
-  onIceCandidate: function (event) {
+  onIceCandidate: function (event, uuid) {
     logIt("onIceCandidate");
     if (event.candidate) {
       logIt(
-        `<<< Received local ICE candidate from STUN/TURN server (${event.candidate.address})`
+        `<<< Received local ICE candidate from STUN/TURN server (${event.candidate.address}) associated with UUID (${uuid})`
       );
-      if (VideoChat.connected) {
+      if (VideoChat.connected[uuid]) {
         logIt(`>>> Sending local ICE candidate (${event.candidate.address})`);
         VideoChat.socket.emit(
           "candidate",
@@ -222,7 +223,8 @@ var VideoChat = {
         // This most likely is happening on the "caller" side.
         // The peer may not have created the RTCPeerConnection yet, so we are waiting for the 'answer'
         // to arrive. This will signal that the peer is ready to receive signaling.
-        VideoChat.localICECandidates.push(event.candidate);
+        VideoChat.localICECandidates[uuid].push(event.candidate);
+        
       }
     }
   },
@@ -301,13 +303,13 @@ var VideoChat = {
       console.log("onAnswer: setting remote description of " + uuid + " on " + VideoChat.socket.id);
       VideoChat.peerConnections[uuid].setRemoteDescription(rtcAnswer);
       // The caller now knows that the callee is ready to accept new ICE candidates, so sending the buffer over
-      VideoChat.localICECandidates.forEach((candidate) => {
+      VideoChat.localICECandidates[uuid].forEach((candidate) => {
         logIt(`>>> Sending local ICE candidate (${candidate.address})`);
         // Send ice candidate over websocket
         VideoChat.socket.emit("candidate", JSON.stringify(candidate), roomHash, uuid);
       });
       // Reset the buffer of local ICE candidates. This is not really needed, but it's good practice
-      VideoChat.localICECandidates = [];
+      // VideoChat.localICECandidates[uuid] = [];
     // } else {
     //   console.log("attemped to run onAnswer on UUID ", uuid, " which already happened");
     // }
@@ -316,13 +318,13 @@ var VideoChat = {
   },
 
   // Called when a stream is added to the peer connection
-  onAddStream: function (event) {
+  onAddStream: function (event, uuid) {
     // if(VideoChat.counter > 4) {
     //     VideoChat.socket.disconnect();
     // }else{
     //   VideoChat.counter++;
     // }
-    logIt("onAddStream <<< Received new stream from remote. Adding it...");
+    logIt("onAddStream <<< Received new stream from remote. Adding it..." + event);
     // Create new remote video source in wrapper
     // Create a <video> node
     var node = document.createElement("video");
@@ -331,14 +333,13 @@ var VideoChat = {
     node.setAttribute("id", "remote-video");
     VideoChat.remoteVideoWrapper.appendChild(node);
     // Update remote video source
-    console.log(VideoChat.remoteVideoWrapper.children.length, event.stream);
     VideoChat.remoteVideoWrapper.lastChild.srcObject = event.stream;
     // Close the initial share url snackbar
     Snackbar.close();
     // Remove the loading gif from video
     VideoChat.remoteVideoWrapper.lastChild.style.background = "none";
     // Update connection status
-    VideoChat.connected = true;
+    VideoChat.connected[uuid] = true;
     // Hide caption status text
     captionText.fadeOut();
     // Reposition local video after a second, as there is often a delay
