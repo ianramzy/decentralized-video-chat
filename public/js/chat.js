@@ -28,6 +28,7 @@ const entireChat = $("#entire-chat");
 const chatZone = $("#chat-zone");
 
 var VideoChat = {
+  nickname: undefined,
   connected: new Map(),
   localICECandidates: {},
   socket: io(),
@@ -92,6 +93,13 @@ var VideoChat = {
         Snackbar.close();
       },
     });
+
+    VideoChat.nickname = prompt("Please enter a nickname", "");
+
+    while (VideoChat.nickname == null || VideoChat.nickname.trim() === "") {
+      VideoChat.nickname = prompt("Nickname cannot be empty. Please enter a nickname", "");
+    }
+
     VideoChat.localVideo.srcObject = stream;
     // Now we're ready to join the chat room.
     VideoChat.socket.emit("join", roomHash);
@@ -136,7 +144,6 @@ var VideoChat = {
 
       VideoChat.localICECandidates[uuid] = []; // initialise uuid with empty array
       VideoChat.connected.set(uuid, false);
-      // VideoChat.connected[uuid] = false;
 
       // Set up a new RTCPeerConnection using the token's iceServers.
       VideoChat.peerConnections.set(uuid, new RTCPeerConnection({
@@ -412,6 +419,20 @@ function windowResized() {
   rePositionCaptions();
 }
 
+// Checks if connected to at least one peer
+function isConnected() {
+  var connected = false;
+
+  // No way to 'break' forEach -> we go through all anyway
+  VideoChat.connected.forEach(function(value, key, map) {
+    if (value) {
+      connected = true;
+    }
+  });
+
+  return connected;
+}
+
 // Fullscreen
 // function openFullscreen() {
 //   try {
@@ -520,15 +541,7 @@ function pauseVideo() {
 // Swap camera / screen share
 function swap() {
   // Handle swap video before video call is connected by checking that there's at least one peer connected
-  var cannot_join = true;
-
-  VideoChat.connected.forEach(function(value, key, map) {
-    if (value) {
-      cannot_join = false;
-    }
-  });
-
-  if (cannot_join) {
+  if (!isConnected()) {
     alert("You must join a call before you can share your screen.");
     return;
   }
@@ -770,6 +783,7 @@ function recieveCaptions(captions) {
 // Text Chat
 // Add text message to chat screen on page
 function addMessageToScreen(msg, isOwnMessage) {
+  // If nickname is undefined or null, user didn't input a nickname
   if (isOwnMessage) {
     $(".chat-messages").append(
       '<div class="message-item customer cssanimation fadeInBottom"><div class="message-bloc"><div class="message">' +
@@ -796,7 +810,7 @@ chatInput.addEventListener("keypress", function (event) {
     // Make links clickable
     msg = msg.autoLink();
     // Send message over data channel
-    dataChanel.send("mes:" + msg);
+    dataChanel.send("mes:" + VideoChat.nickname + ": " + msg);
     // Add message to screen
     addMessageToScreen(msg, true);
     // Auto scroll chat down
