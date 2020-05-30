@@ -1,7 +1,6 @@
 // Vars
 var isMuted;
 var videoIsPaused;
-var dataChanel = null;
 const browserName = getBrowserName();
 const url = window.location.href;
 const roomHash = url.substring(url.lastIndexOf("/") + 1).toLowerCase();
@@ -26,6 +25,9 @@ const localVideoText = $("#local-video-text");
 const captionButtontext = $("#caption-button-text");
 const entireChat = $("#entire-chat");
 const chatZone = $("#chat-zone");
+
+var dataChannel = new Map();
+
 
 var VideoChat = {
   nickname: undefined,
@@ -157,17 +159,17 @@ var VideoChat = {
       });
       // Add general purpose data channel to peer connection,
       // used for text chats, captions, and toggling sending captions
-      dataChanel = VideoChat.peerConnections.get(uuid).createDataChannel("chat", {
+      dataChannel.set(uuid, VideoChat.peerConnections.get(uuid).createDataChannel("chat", {
         negotiated: true,
         // both peers must have same id
         id: 0,
-      });
+      }));
       // Called when dataChannel is successfully opened
-      dataChanel.onopen = function (event) {
+      dataChannel.get(uuid).onopen = function (event) {
         logIt("dataChannel opened");
       };
       // Handle different dataChannel types
-      dataChanel.onmessage = function (event) {
+      dataChannel.get(uuid).onmessage = function (event) {
         const receivedData = event.data;
         // First 4 chars represent data type
         const dataType = receivedData.substring(0, 4);
@@ -435,6 +437,13 @@ function isConnected() {
   return connected;
 }
 
+function sendToAllDataChannels(message) {
+  // key is UUID, value is dataChannel object
+  dataChannel.forEach(function(value, key, map) {
+    value.send(message);
+  });
+}
+
 // Fullscreen
 // function openFullscreen() {
 //   try {
@@ -648,7 +657,7 @@ function switchStreamHelper(stream) {
 // Request captions from other user, toggles state
 function requestToggleCaptions() {
   // Handle requesting captions before connected
-  if (!VideoChat.connected) {
+  if (!isConnected()) {
     alert("You must be connected to a peer to use Live Caption");
     return;
   }
@@ -669,7 +678,7 @@ function requestToggleCaptions() {
     receivingCaptions = true;
   }
   // Send request to get captions over data channel
-  dataChanel.send("tog:");
+  sendToAllDataChannels("tog:");
 }
 
 // Start/stop sending captions to other user
@@ -695,7 +704,7 @@ function startSpeech() {
     logIt(e);
     logIt("error importing speech library");
     // Alert other user that they cannon use live caption
-    dataChanel.send("cap:notusingchrome");
+    sendToAllDataChannels("cap:notusingchrome");
     return;
   }
   // recognition.maxAlternatives = 3;
@@ -707,6 +716,7 @@ function startSpeech() {
     let interimTranscript = "";
     for (let i = event.resultIndex, len = event.results.length; i < len; i++) {
       var transcript = event.results[i][0].transcript;
+      console.log(transcript);
       if (event.results[i].isFinal) {
         finalTranscript += transcript;
       } else {
@@ -714,10 +724,10 @@ function startSpeech() {
         var charsToKeep = interimTranscript.length % 100;
         // Send captions over data chanel,
         // subtracting as many complete 100 char slices from start
-        dataChanel.send(
+        sendToAllDataChannels(
           "cap:" +
             interimTranscript.substring(interimTranscript.length - charsToKeep)
-        );
+          );
       }
     }
   };
@@ -818,7 +828,7 @@ chatInput.addEventListener("keypress", function (event) {
     // Make links clickable
     msg = msg.autoLink();
     // Send message over data channel
-    dataChanel.send("mes:" + VideoChat.nickname + ": " + msg);
+    sendToAllDataChannels("mes:" + VideoChat.nickname + ": " + msg);
     // Add message to screen
     addMessageToScreen(msg, true);
     // Auto scroll chat down
