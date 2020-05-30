@@ -96,17 +96,7 @@ io.on("connection", function (socket) {
 
       // When the client is not the first to join the room, all clients are ready.
       logIt("Broadcasting ready message", room);
-
-      twilio.tokens.create(function (err, response) {
-        if (err) {
-          logIt(err, room);
-        } else {
-          logIt("Token generated. Returning it to the browser client", room);
-          socket.emit("token", response);
-          // Existing callers initiates call with user
-          socket.broadcast.to(room).emit("willInitiateCall", socket.id, room);
-        }
-      });
+      socket.broadcast.to(room).emit("willInitiateCall", socket.id, room);
       // socket.emit("uuid", socket.id);
       socket.emit("ready", room).to(room);
       socket.broadcast.to(room).emit("ready", room);
@@ -118,14 +108,14 @@ io.on("connection", function (socket) {
 
   // When receiving the token message, use the Twilio REST API to request an
   // token to get ephemeral credentials to use the TURN server.
-  socket.on("token", function (room) {
+  socket.on("token", function (room, uuid) {
     logIt("Received token request", room);
     twilio.tokens.create(function (err, response) {
       if (err) {
         logIt(err, room);
       } else {
         logIt("Token generated. Returning it to the browser client", room);
-        socket.emit("token", response);
+        socket.emit("token", response, uuid);
       }
     });
   });
