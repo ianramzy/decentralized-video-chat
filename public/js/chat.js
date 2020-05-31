@@ -30,7 +30,6 @@ const chatZone = $("#chat-zone");
 var dataChannel = new Map();
 
 var VideoChat = {
-  nickname: undefined,
   videoEnabled: true,
   audioEnabled: true,
   connected: new Map(),
@@ -96,16 +95,6 @@ var VideoChat = {
         Snackbar.close();
       },
     });
-
-    // Used to identify client to other peers in chats, captions etc.
-    VideoChat.nickname = prompt("Please enter a nickname", "");
-
-    while (VideoChat.nickname == null || VideoChat.nickname.trim() === "") {
-      VideoChat.nickname = prompt(
-        "Nickname cannot be empty. Please enter a nickname",
-        ""
-      );
-    }
 
     VideoChat.localVideo.srcObject = stream;
 
@@ -806,7 +795,6 @@ function recieveCaptions(captions) {
 // Text Chat
 // Add text message to chat screen on page
 function addMessageToScreen(msg, isOwnMessage) {
-  // If nickname is undefined or null, user didn't input a nickname
   if (isOwnMessage) {
     $(".chat-messages").append(
       '<div class="message-item customer cssanimation fadeInBottom"><div class="message-bloc"><div class="message">' +
@@ -833,7 +821,7 @@ chatInput.addEventListener("keypress", function (event) {
     // Make links clickable
     msg = msg.autoLink();
     // Send message over data channel
-    sendToAllDataChannels("mes:" + VideoChat.nickname + ": " + msg);
+    sendToAllDataChannels("mes:" + msg);
     // Add message to screen
     addMessageToScreen(msg, true);
     // Auto scroll chat down
