@@ -9,14 +9,7 @@ var twilio = require("twilio")(twillioAccountSID, twillioAuthToken);
 var express = require("express");
 var app = express();
 const fs = require("fs");
-var http = require("https").createServer(
-  {
-    key: fs.readFileSync("/Users/khushjammu/certs/privkey.pem"),
-    cert: fs.readFileSync("/Users/khushjammu/certs/cert.pem"),
-  },
-  app
-);
-// var http = require("http").createServer(app);
+var http = require("http").createServer(app);
 var io = require("socket.io")(http);
 var path = require("path");
 var public = path.join(__dirname, "public");
@@ -86,28 +79,11 @@ io.on("connection", function (socket) {
     var numClients = typeof clients !== "undefined" ? clients.length : 0;
     if (numClients === 0) {
       socket.join(room);
-      twilio.tokens.create(function (err, response) {
-        if (err) {
-          logIt(err, room);
-        } else {
-          logIt("Token generated. Returning it to the browser client", room);
-          socket.emit("token", response);
-          // Existing callers initiates call with user
-        }
-      });
-    } else if (numClients < 4) {
+    } else if (numClients < 5) {
       socket.join(room);
-      logIt("Connected clients", room);
-      for (var clientId in clients.sockets) {
-        logIt("ID: " + clientId, room);
-      }
-
       // When the client is not the first to join the room, all clients are ready.
       logIt("Broadcasting ready message", room);
       socket.broadcast.to(room).emit("willInitiateCall", socket.id, room);
-      // socket.emit("uuid", socket.id);
-      socket.emit("ready", room).to(room);
-      socket.broadcast.to(room).emit("ready", room);
     } else {
       logIt(
         "room already full with " + numClients + " people in the room.",
@@ -157,7 +133,7 @@ io.on("connection", function (socket) {
 });
 
 // Listen for Heroku port, otherwise just use 3000
-var port = process.env.PORT || 443;
+var port = process.env.PORT || 3000;
 http.listen(port, function () {
   console.log("http://localhost:" + port);
 });
