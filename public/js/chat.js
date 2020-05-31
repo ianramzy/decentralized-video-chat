@@ -501,6 +501,8 @@ function sendToAllDataChannels(message) {
 function muteMicrophone() {
   var audioTrack = null;
 
+  VideoChat.audioEnabled = !VideoChat.audioEnabled;
+
   VideoChat.peerConnections.forEach(function (value, key, map) {
     value.getSenders().find(function (s) {
       if (s.track.kind === "audio") {
@@ -509,8 +511,6 @@ function muteMicrophone() {
     });
     audioTrack.enabled = VideoChat.audioEnabled;
   });
-
-  VideoChat.audioEnabled = !VideoChat.audioEnabled;
 
   // select mic button and mic button text
   const micButtonIcon = document.getElementById("mic-icon");
@@ -865,7 +865,7 @@ function handleRecieveMessage(msg) {
 
 // Sets the border color of uuid's stream upon receiving color
 function setStreamColor(uuid, color) {
-  document.querySelectorAll(`[uuid="${uuid}"]`)[0].style.border = `4px solid ${color}`;
+  document.querySelectorAll(`[uuid="${uuid}"]`)[0].style.border = `3px solid ${color}`;
 }
 
 // Show and hide chat

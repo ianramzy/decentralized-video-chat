@@ -8,7 +8,11 @@ var twillioAccountSID =
 var twilio = require("twilio")(twillioAccountSID, twillioAuthToken);
 var express = require("express");
 var app = express();
-var http = require("http").createServer(app);
+const fs = require('fs');
+var http = require("https").createServer({
+  key: fs.readFileSync('/Users/khushjammu/certs/privkey.pem'),
+  cert: fs.readFileSync('/Users/khushjammu/certs/cert.pem')
+}, app);
 var io = require("socket.io")(http);
 var path = require("path");
 var public = path.join(__dirname, "public");
@@ -132,7 +136,7 @@ io.on("connection", function (socket) {
 });
 
 // Listen for Heroku port, otherwise just use 3000
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 443;
 http.listen(port, function () {
   console.log("http://localhost:" + port);
 });
