@@ -206,7 +206,16 @@ var VideoChat = {
             logIt("connected");
             break;
           case "disconnected":
-            logIt("disconnected");
+            logIt("disconnected - UUID " + uuid);
+            VideoChat.remoteVideoWrapper.removeChild(document.querySelectorAll(`[uuid="${uuid}"]`)[0]);
+            VideoChat.connected.delete(uuid);
+            VideoChat.peerConnections.delete(uuid);
+            dataChannel.delete(uuid);
+
+            if (VideoChat.peerConnections.size === 0) {
+              displayWaitingCaption();
+            }
+            break;
           case "failed":
             logIt("failed");
             // VideoChat.socket.connect
@@ -343,6 +352,7 @@ var VideoChat = {
     node.setAttribute("autoplay", "");
     node.setAttribute("playsinline", "");
     node.setAttribute("id", "remote-video");
+    node.setAttribute("uuid", uuid);
     VideoChat.remoteVideoWrapper.appendChild(node);
     // Update remote video source
     VideoChat.remoteVideoWrapper.lastChild.srcObject = event.stream;
@@ -875,7 +885,7 @@ function toggleChat() {
 }
 // End Text chat
 
-//Picture in picture
+// Picture in picture
 function togglePictureInPicture() {
   if (
     "pictureInPictureEnabled" in document ||
@@ -905,7 +915,15 @@ function togglePictureInPicture() {
     );
   }
 }
-//Picture in picture
+
+// Helper function for displaying waiting caption
+function displayWaitingCaption() {
+  // Set caption text on start
+  captionText.text("Waiting for other user to join...").fadeIn();
+
+  // Reposition captions on start
+  rePositionCaptions();
+}
 
 function startUp() {
   //  Try and detect in-app browsers and redirect
@@ -999,11 +1017,7 @@ function startUp() {
     },
   });
 
-  // Set caption text on start
-  captionText.text("Waiting for other user to join...").fadeIn();
-
-  // Reposition captions on start
-  rePositionCaptions();
+  displayWaitingCaption();
 
   // On change media devices refresh page and switch to system default
   navigator.mediaDevices.ondevicechange = () => window.location.reload();

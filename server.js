@@ -8,7 +8,6 @@ var twillioAccountSID =
 var twilio = require("twilio")(twillioAccountSID, twillioAuthToken);
 var express = require("express");
 var app = express();
-const fs = require("fs");
 var http = require("http").createServer(app);
 var io = require("socket.io")(http);
 var path = require("path");
