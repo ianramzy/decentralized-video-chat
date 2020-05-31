@@ -30,9 +30,9 @@ const chatZone = $("#chat-zone");
 var dataChannel = new Map();
 
 var VideoChat = {
-  nickname: undefined,
   videoEnabled: true,
   audioEnabled: true,
+  borderColor: `hsl(${Math.floor(Math.random() * 360)}, 70%, 80%)`,
   connected: new Map(),
   localICECandidates: {},
   socket: io(),
@@ -97,17 +97,8 @@ var VideoChat = {
       },
     });
 
-    // Used to identify client to other peers in chats, captions etc.
-    VideoChat.nickname = prompt("Please enter a nickname", "");
-
-    while (VideoChat.nickname == null || VideoChat.nickname.trim() === "") {
-      VideoChat.nickname = prompt(
-        "Nickname cannot be empty. Please enter a nickname",
-        ""
-      );
-    }
-
     VideoChat.localVideo.srcObject = stream;
+    VideoChat.localVideo.style.border = `4px solid ${VideoChat.borderColor}`;
 
     // Now we're ready to join the chat room.
     VideoChat.socket.emit("join", roomHash);
@@ -170,10 +161,6 @@ var VideoChat = {
           id: 0,
         })
       );
-      // Called when dataChannel is successfully opened
-      dataChannel.get(uuid).onopen = function (event) {
-        logIt("dataChannel opened");
-      };
       // Handle different dataChannel types
       dataChannel.get(uuid).onmessage = function (event) {
         const receivedData = event.data;
@@ -186,7 +173,15 @@ var VideoChat = {
           recieveCaptions(cleanedMessage);
         } else if (dataType === "tog:") {
           toggleSendCaptions();
+        } else if (dataType === "clr:") {
+          setStreamColor(uuid, cleanedMessage);
         }
+      };
+      // Called when dataChannel is successfully opened
+      dataChannel.get(uuid).onopen = function (event) {
+        logIt("dataChannel opened");
+        // Sending our identifier color to the other peers
+        dataChannel.get(uuid).send("clr:" + VideoChat.borderColor);
       };
       // Set up callbacks for the connection generating iceCandidates or
       // receiving the remote media stream. Wrapping callback functions
@@ -815,17 +810,16 @@ function recieveCaptions(captions) {
 
 // Text Chat
 // Add text message to chat screen on page
-function addMessageToScreen(msg, isOwnMessage) {
-  // If nickname is undefined or null, user didn't input a nickname
+function addMessageToScreen(msg, border, isOwnMessage) {
   if (isOwnMessage) {
     $(".chat-messages").append(
-      '<div class="message-item customer cssanimation fadeInBottom"><div class="message-bloc"><div class="message">' +
+      `<div class="message-item customer cssanimation fadeInBottom"><div class="message-bloc" style="--bloc-color: ${border}"><div class="message">` +
         msg +
         "</div></div></div>"
     );
   } else {
     $(".chat-messages").append(
-      '<div class="message-item moderator cssanimation fadeInBottom"><div class="message-bloc"><div class="message">' +
+      `<div class="message-item moderator cssanimation fadeInBottom"><div class="message-bloc" style="--bloc-color: ${border}"><div class="message">` +
         msg +
         "</div></div></div>"
     );
@@ -843,9 +837,9 @@ chatInput.addEventListener("keypress", function (event) {
     // Make links clickable
     msg = msg.autoLink();
     // Send message over data channel
-    sendToAllDataChannels("mes:" + VideoChat.nickname + ": " + msg);
+    sendToAllDataChannels("mes:" + VideoChat.borderColor + msg);
     // Add message to screen
-    addMessageToScreen(msg, true);
+    addMessageToScreen(msg, VideoChat.borderColor, true);
     // Auto scroll chat down
     chatZone.scrollTop(chatZone[0].scrollHeight);
     // Clear chat input
@@ -855,14 +849,23 @@ chatInput.addEventListener("keypress", function (event) {
 
 // Called when a message is recieved over the dataChannel
 function handleRecieveMessage(msg) {
+  // Slice border color for message
+  const endIndex = msg.indexOf(')');
+  const color = msg.slice(0, endIndex);
+  msg = msg.slice(endIndex+1, msg.length);
   // Add message to screen
-  addMessageToScreen(msg, false);
+  addMessageToScreen(msg, color, false);
   // Auto scroll chat down
   chatZone.scrollTop(chatZone[0].scrollHeight);
   // Show chat if hidden
   if (entireChat.is(":hidden")) {
     toggleChat();
   }
+}
+
+// Sets the border color of uuid's stream upon receiving color
+function setStreamColor(uuid, color) {
+  document.querySelectorAll(`[uuid="${uuid}"]`)[0].style.border = `4px solid ${color}`;
 }
 
 // Show and hide chat

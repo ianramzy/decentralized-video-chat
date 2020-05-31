@@ -337,6 +337,9 @@ button:hover {
   justify-content: center;
   padding: 12px;
   max-width: 100%;
+  border-style: solid;
+  border-width: 2px;
+  border-color: var(--bloc-color);
   border-radius: 20px 20px 20px 5px;
   box-shadow: 6px 6px 12px #030506, -6px -6px 12px #23242a;
 }
@@ -345,6 +348,9 @@ button:hover {
 #chat-zone .message-item.customer .message-bloc {
   background-color: rgb(47, 48, 52);
   color: #fff;
+  border-style: solid;
+  border-width: 2px;
+  border-color: var(--bloc-color);
   border-radius: 20px 20px 5px 20px;
   box-shadow: 6px 6px 12px #030506, -6px -6px 12px #22232a;
 }
