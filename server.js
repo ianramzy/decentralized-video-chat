@@ -8,11 +8,14 @@ var twillioAccountSID =
 var twilio = require("twilio")(twillioAccountSID, twillioAuthToken);
 var express = require("express");
 var app = express();
-const fs = require('fs');
-var http = require("https").createServer({
-  key: fs.readFileSync('/Users/khushjammu/certs/privkey.pem'),
-  cert: fs.readFileSync('/Users/khushjammu/certs/cert.pem')
-}, app);
+const fs = require("fs");
+var http = require("https").createServer(
+  {
+    key: fs.readFileSync("/Users/khushjammu/certs/privkey.pem"),
+    cert: fs.readFileSync("/Users/khushjammu/certs/cert.pem"),
+  },
+  app
+);
 // var http = require("http").createServer(app);
 var io = require("socket.io")(http);
 var path = require("path");
@@ -94,9 +97,9 @@ io.on("connection", function (socket) {
       });
     } else if (numClients < 4) {
       socket.join(room);
-      logIt("Connected clients", room)
+      logIt("Connected clients", room);
       for (var clientId in clients.sockets) {
-        logIt('ID: ' + clientId, room);
+        logIt("ID: " + clientId, room);
       }
 
       // When the client is not the first to join the room, all clients are ready.
@@ -106,7 +109,10 @@ io.on("connection", function (socket) {
       socket.emit("ready", room).to(room);
       socket.broadcast.to(room).emit("ready", room);
     } else {
-      logIt("room already full with " + numClients + " people in the room.", room);
+      logIt(
+        "room already full with " + numClients + " people in the room.",
+        room
+      );
       socket.emit("full", room);
     }
   });
@@ -133,13 +139,19 @@ io.on("connection", function (socket) {
 
   // Relay offers
   socket.on("offer", function (offer, room, uuid) {
-    logIt("Received offer from " + socket.id + " and emitting to " + uuid, room);
+    logIt(
+      "Received offer from " + socket.id + " and emitting to " + uuid,
+      room
+    );
     io.to(uuid).emit("offer", offer, socket.id);
   });
 
   // Relay answers
   socket.on("answer", function (answer, room, uuid) {
-    logIt("Received answer from " + socket.id + " and emitting to " + uuid, room);
+    logIt(
+      "Received answer from " + socket.id + " and emitting to " + uuid,
+      room
+    );
     io.to(uuid).emit("answer", answer, socket.id);
   });
 });
