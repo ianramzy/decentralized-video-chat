@@ -98,7 +98,7 @@ var VideoChat = {
     });
 
     VideoChat.localVideo.srcObject = stream;
-    VideoChat.localVideo.style.border = `4px solid ${VideoChat.borderColor}`;
+    VideoChat.localVideo.style.border = `3px solid ${VideoChat.borderColor}`;
 
     // Now we're ready to join the chat room.
     VideoChat.socket.emit("join", roomHash);
