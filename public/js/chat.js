@@ -499,6 +499,12 @@ function sendToAllDataChannels(message) {
 // }
 // End Fullscreen
 
+
+// Downscale own stream
+function downscaleStreams() {
+  // To be implemented
+}
+
 // Mute microphone
 function muteMicrophone() {
   var audioTrack = null;
