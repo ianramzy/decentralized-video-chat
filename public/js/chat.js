@@ -40,7 +40,7 @@ var VideoChat = {
   peerConnections: new Map(),
   recognition: undefined,
   borderColor: undefined,
-  peerColors: {},
+  peerColors: new Map(),
 
   // Call to getUserMedia (provided by adapter.js for cross browser compatibility)
   // asking for access to both the video and audio streams. If the request is
@@ -861,15 +861,28 @@ function uuidToColor(uuid) {
   var hash = 0;
   for (var i = 0; i < uuid.length; i++) {
       hash = uuid.charCodeAt(i) + ((hash << 5) - hash);
-      hash &= hash; // Convert to 32bit integer
+      hash = hash & hash;
   }
-  return `hsl(${hash % 360},100%,40%)`;
+  var hue = Math.abs(hash % 360);
+  console.log(hue);
+  // Ensure color is not similar to other colors
+  var availColors = Array.from({length: 18}, (x,i) => i*20);
+  VideoChat.peerColors.forEach(function(value, key, map) {availColors[Math.floor(value/20)] = null});
+  if (availColors[Math.floor(hue/20)] == null) {
+    for (var i = 0; i < availColors.length; i++) {
+      if (availColors[i] != null) {
+        hue = (hue % 20) + availColors[i];
+        availColors[i] = null;
+        break;
+      }
+    }
+  }
+  return `hsl(${hue},100%,70%)`;
 }
 
 // Sets the border color of uuid's stream
 function setStreamColor(uuid) {
   const color = uuidToColor(uuid);
-  console.log(color);
   document.querySelectorAll(`[uuid="${uuid}"]`)[0].style.border = `3px solid ${color}`;
   VideoChat.peerColors[uuid] = color;
 }
