@@ -39,6 +39,8 @@ var VideoChat = {
   localVideo: document.getElementById("local-video"),
   peerConnections: new Map(),
   recognition: undefined,
+  borderColor: undefined,
+  peerColors: {},
 
   // Call to getUserMedia (provided by adapter.js for cross browser compatibility)
   // asking for access to both the video and audio streams. If the request is
@@ -96,7 +98,9 @@ var VideoChat = {
       },
     });
 
+    VideoChat.borderColor = uuidToColor(VideoChat.socket.id);
     VideoChat.localVideo.srcObject = stream;
+    VideoChat.localVideo.style.border = `3px solid ${VideoChat.borderColor}`;
 
     // Now we're ready to join the chat room.
     VideoChat.socket.emit("join", roomHash);
@@ -159,10 +163,6 @@ var VideoChat = {
           id: 0,
         })
       );
-      // Called when dataChannel is successfully opened
-      dataChannel.get(uuid).onopen = function (event) {
-        logIt("dataChannel opened");
-      };
       // Handle different dataChannel types
       dataChannel.get(uuid).onmessage = function (event) {
         const receivedData = event.data;
@@ -170,12 +170,17 @@ var VideoChat = {
         const dataType = receivedData.substring(0, 4);
         const cleanedMessage = receivedData.slice(4);
         if (dataType === "mes:") {
-          handleRecieveMessage(cleanedMessage);
+          handleRecieveMessage(cleanedMessage, VideoChat.peerColors[uuid]);
         } else if (dataType === "cap:") {
           recieveCaptions(cleanedMessage);
         } else if (dataType === "tog:") {
           toggleSendCaptions();
         }
+      };
+      // Called when dataChannel is successfully opened
+      dataChannel.get(uuid).onopen = function (event) {
+        logIt("dataChannel opened");
+        setStreamColor(uuid);
       };
       // Set up callbacks for the connection generating iceCandidates or
       // receiving the remote media stream. Wrapping callback functions
@@ -494,7 +499,7 @@ function sendToAllDataChannels(message) {
 // Mute microphone
 function muteMicrophone() {
   var audioTrack = null;
-
+  VideoChat.audioEnabled = !VideoChat.audioEnabled;
   VideoChat.peerConnections.forEach(function (value, key, map) {
     value.getSenders().find(function (s) {
       if (s.track.kind === "audio") {
@@ -503,9 +508,7 @@ function muteMicrophone() {
     });
     audioTrack.enabled = VideoChat.audioEnabled;
   });
-
-  VideoChat.audioEnabled = !VideoChat.audioEnabled;
-
+  
   // select mic button and mic button text
   const micButtonIcon = document.getElementById("mic-icon");
   const micButtonText = document.getElementById("mic-text");
@@ -804,16 +807,16 @@ function recieveCaptions(captions) {
 
 // Text Chat
 // Add text message to chat screen on page
-function addMessageToScreen(msg, isOwnMessage) {
+function addMessageToScreen(msg, border, isOwnMessage) {
   if (isOwnMessage) {
     $(".chat-messages").append(
-      '<div class="message-item customer cssanimation fadeInBottom"><div class="message-bloc"><div class="message">' +
+      `<div class="message-item customer cssanimation fadeInBottom"><div class="message-bloc" style="--bloc-color: ${border}"><div class="message">` +
         msg +
         "</div></div></div>"
     );
   } else {
     $(".chat-messages").append(
-      '<div class="message-item moderator cssanimation fadeInBottom"><div class="message-bloc"><div class="message">' +
+      `<div class="message-item moderator cssanimation fadeInBottom"><div class="message-bloc" style="--bloc-color: ${border}"><div class="message">` +
         msg +
         "</div></div></div>"
     );
@@ -833,7 +836,7 @@ chatInput.addEventListener("keypress", function (event) {
     // Send message over data channel
     sendToAllDataChannels("mes:" + msg);
     // Add message to screen
-    addMessageToScreen(msg, true);
+    addMessageToScreen(msg, VideoChat.borderColor, true);
     // Auto scroll chat down
     chatZone.scrollTop(chatZone[0].scrollHeight);
     // Clear chat input
@@ -842,15 +845,33 @@ chatInput.addEventListener("keypress", function (event) {
 });
 
 // Called when a message is recieved over the dataChannel
-function handleRecieveMessage(msg) {
+function handleRecieveMessage(msg, color) {
   // Add message to screen
-  addMessageToScreen(msg, false);
+  addMessageToScreen(msg, color, false);
   // Auto scroll chat down
   chatZone.scrollTop(chatZone[0].scrollHeight);
   // Show chat if hidden
   if (entireChat.is(":hidden")) {
     toggleChat();
   }
+}
+
+function uuidToColor(uuid) {
+  // Using uuid to generate random. unique pastel color
+  var hash = 0;
+  for (var i = 0; i < uuid.length; i++) {
+      hash = uuid.charCodeAt(i) + ((hash << 5) - hash);
+      hash &= hash; // Convert to 32bit integer
+  }
+  return `hsl(${hash % 360},100%,40%)`;
+}
+
+// Sets the border color of uuid's stream
+function setStreamColor(uuid) {
+  const color = uuidToColor(uuid);
+  console.log(color);
+  document.querySelectorAll(`[uuid="${uuid}"]`)[0].style.border = `3px solid ${color}`;
+  VideoChat.peerColors[uuid] = color;
 }
 
 // Show and hide chat
