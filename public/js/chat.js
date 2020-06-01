@@ -914,21 +914,21 @@ function toggleChat() {
 function togglePictureInPicture() {
   if (
     "pictureInPictureEnabled" in document ||
-    remoteVideoVanilla.webkitSetPresentationMode
+    VideoChat.remoteVideoWrapper.lastChild.webkitSetPresentationMode
   ) {
     if (document.pictureInPictureElement) {
       document.exitPictureInPicture().catch((error) => {
         logIt("Error exiting pip.");
         logIt(error);
       });
-    } else if (remoteVideoVanilla.webkitPresentationMode === "inline") {
-      remoteVideoVanilla.webkitSetPresentationMode("picture-in-picture");
+    } else if (VideoChat.remoteVideoWrapper.lastChild.webkitPresentationMode === "inline") {
+      VideoChat.remoteVideoWrapper.lastChild.webkitSetPresentationMode("picture-in-picture");
     } else if (
-      remoteVideoVanilla.webkitPresentationMode === "picture-in-picture"
+      VideoChat.remoteVideoWrapper.lastChild.webkitPresentationMode === "picture-in-picture"
     ) {
-      remoteVideoVanilla.webkitSetPresentationMode("inline");
+      VideoChat.remoteVideoWrapper.lastChild.webkitSetPresentationMode("inline");
     } else {
-      remoteVideoVanilla.requestPictureInPicture().catch((error) => {
+      VideoChat.remoteVideoWrapper.lastChild.requestPictureInPicture().catch((error) => {
         alert(
           "You must be connected to another person to enter picture in picture."
         );
