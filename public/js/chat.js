@@ -40,6 +40,8 @@ var VideoChat = {
   localVideo: document.getElementById("local-video"),
   peerConnections: new Map(),
   recognition: undefined,
+  borderColor: undefined,
+  peerColors: new Map(),
 
   // Call to getUserMedia (provided by adapter.js for cross browser compatibility)
   // asking for access to both the video and audio streams. If the request is
@@ -97,6 +99,7 @@ var VideoChat = {
       },
     });
 
+    VideoChat.borderColor = uuidToColor(VideoChat.socket.id);
     VideoChat.localVideo.srcObject = stream;
     VideoChat.localVideo.style.border = `3px solid ${VideoChat.borderColor}`;
 
@@ -168,7 +171,7 @@ var VideoChat = {
         const dataType = receivedData.substring(0, 4);
         const cleanedMessage = receivedData.slice(4);
         if (dataType === "mes:") {
-          handleRecieveMessage(cleanedMessage);
+          handleRecieveMessage(cleanedMessage, VideoChat.peerColors[uuid]);
         } else if (dataType === "cap:") {
           recieveCaptions(cleanedMessage);
         } else if (dataType === "tog:") {
@@ -180,8 +183,7 @@ var VideoChat = {
       // Called when dataChannel is successfully opened
       dataChannel.get(uuid).onopen = function (event) {
         logIt("dataChannel opened");
-        // Sending our identifier color to the other peers
-        dataChannel.get(uuid).send("clr:" + VideoChat.borderColor);
+        setStreamColor(uuid);
       };
       // Set up callbacks for the connection generating iceCandidates or
       // receiving the remote media stream. Wrapping callback functions
@@ -500,9 +502,7 @@ function sendToAllDataChannels(message) {
 // Mute microphone
 function muteMicrophone() {
   var audioTrack = null;
-
   VideoChat.audioEnabled = !VideoChat.audioEnabled;
-
   VideoChat.peerConnections.forEach(function (value, key, map) {
     value.getSenders().find(function (s) {
       if (s.track.kind === "audio") {
@@ -511,7 +511,7 @@ function muteMicrophone() {
     });
     audioTrack.enabled = VideoChat.audioEnabled;
   });
-
+  
   // select mic button and mic button text
   const micButtonIcon = document.getElementById("mic-icon");
   const micButtonText = document.getElementById("mic-text");
@@ -837,7 +837,7 @@ chatInput.addEventListener("keypress", function (event) {
     // Make links clickable
     msg = msg.autoLink();
     // Send message over data channel
-    sendToAllDataChannels("mes:" + VideoChat.borderColor + msg);
+    sendToAllDataChannels("mes:" + msg);
     // Add message to screen
     addMessageToScreen(msg, VideoChat.borderColor, true);
     // Auto scroll chat down
@@ -848,11 +848,7 @@ chatInput.addEventListener("keypress", function (event) {
 });
 
 // Called when a message is recieved over the dataChannel
-function handleRecieveMessage(msg) {
-  // Slice border color for message
-  const endIndex = msg.indexOf(')');
-  const color = msg.slice(0, endIndex);
-  msg = msg.slice(endIndex+1, msg.length);
+function handleRecieveMessage(msg, color) {
   // Add message to screen
   addMessageToScreen(msg, color, false);
   // Auto scroll chat down
@@ -863,9 +859,35 @@ function handleRecieveMessage(msg) {
   }
 }
 
-// Sets the border color of uuid's stream upon receiving color
-function setStreamColor(uuid, color) {
+function uuidToColor(uuid) {
+  // Using uuid to generate random. unique pastel color
+  var hash = 0;
+  for (var i = 0; i < uuid.length; i++) {
+      hash = uuid.charCodeAt(i) + ((hash << 5) - hash);
+      hash = hash & hash;
+  }
+  var hue = Math.abs(hash % 360);
+  console.log(hue);
+  // Ensure color is not similar to other colors
+  var availColors = Array.from({length: 18}, (x,i) => i*20);
+  VideoChat.peerColors.forEach(function(value, key, map) {availColors[Math.floor(value/20)] = null});
+  if (availColors[Math.floor(hue/20)] == null) {
+    for (var i = 0; i < availColors.length; i++) {
+      if (availColors[i] != null) {
+        hue = (hue % 20) + availColors[i];
+        availColors[i] = null;
+        break;
+      }
+    }
+  }
+  return `hsl(${hue},100%,70%)`;
+}
+
+// Sets the border color of uuid's stream
+function setStreamColor(uuid) {
+  const color = uuidToColor(uuid);
   document.querySelectorAll(`[uuid="${uuid}"]`)[0].style.border = `3px solid ${color}`;
+  VideoChat.peerColors[uuid] = color;
 }
 
 // Show and hide chat
