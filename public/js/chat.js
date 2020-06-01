@@ -32,6 +32,7 @@ var dataChannel = new Map();
 var VideoChat = {
   videoEnabled: true,
   audioEnabled: true,
+  borderColor: `hsl(${Math.floor(Math.random() * 360)}, 70%, 80%)`,
   connected: new Map(),
   localICECandidates: {},
   socket: io(),
@@ -175,6 +176,8 @@ var VideoChat = {
           recieveCaptions(cleanedMessage);
         } else if (dataType === "tog:") {
           toggleSendCaptions();
+        } else if (dataType === "clr:") {
+          setStreamColor(uuid, cleanedMessage);
         }
       };
       // Called when dataChannel is successfully opened
