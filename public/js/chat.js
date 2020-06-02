@@ -225,6 +225,15 @@ var VideoChat = {
             break;
         }
       };
+
+
+      // Downscale send resolution and bitrate if num in room > 4
+      if (VideoChat.peerConnections.size > 3) {
+        for (var pc in VideoChat.peerConnections) {
+          downscaleStream(pc);
+        }
+      }
+
       callback(uuid);
     };
   },
@@ -500,9 +509,25 @@ function sendToAllDataChannels(message) {
 // End Fullscreen
 
 
-// Downscale own stream
-function downscaleStreams() {
-  // To be implemented
+// Downscale single stream
+async function downscaleStream(pc) {
+  height = 480;
+  rate = 800000;
+  try {
+    do {
+      h = height;
+      r = rate;
+      const [sender] = pc.getSenders();
+      const ratio = sender.track.getSettings().height / height;
+      const params = sender.getParameters();
+      if (!params.encodings) params.encodings = [{}]; // Firefox workaround!
+      params.encodings[0].scaleResolutionDownBy = Math.max(ratio, 1);
+      params.encodings[0].maxBitrate = rate;
+      await sender.setParameters(params);
+    } while (h != height);
+  } catch (e) {
+    logIt(e);
+  }
 }
 
 // Mute microphone
