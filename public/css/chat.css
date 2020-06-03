@@ -147,8 +147,8 @@ a {
   padding: 10px;
 }
 #remote-video:first-child:nth-last-child(1) {
-/* -or- li:only-child { */
-width: 80vw;
+  width: min(calc(80vh * 4/3), 80vw);
+  max-height: 80vh;
 }
 
 /* two items */
