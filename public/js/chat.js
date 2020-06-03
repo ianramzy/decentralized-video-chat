@@ -32,7 +32,6 @@ var dataChannel = new Map();
 var VideoChat = {
   videoEnabled: true,
   audioEnabled: true,
-  borderColor: `hsl(${Math.floor(Math.random() * 360)}, 70%, 80%)`,
   connected: new Map(),
   localICECandidates: {},
   socket: io(),
@@ -364,11 +363,11 @@ var VideoChat = {
     // Hide caption status text
     captionText.fadeOut();
     // Downscale send resolution and bitrate if num in room > 4
-    if (VideoChat.peerConnections.size > 3) {
-      VideoChat.peerConnections.forEach(function (value, key, map) {
-        downscaleStream(value);
-      });
-    }
+    // if (VideoChat.peerConnections.size > 3) {
+    //   VideoChat.peerConnections.forEach(function (value, key, map) {
+    //     downscaleStream(value);
+    //   });
+    // }
     // Reposition local video after a second, as there is often a delay
     // between adding a stream and the height of the video div changing
     setTimeout(() => rePositionLocalVideo(), 500);
@@ -508,30 +507,30 @@ function sendToAllDataChannels(message) {
 // End Fullscreen
 
 // Downscale single stream
-async function downscaleStream(pc, applying = false) {
-  height = 240;
-  rate = 800000;
-  if (applying) return;
-  try {
-    applying = true;
-    do {
-      h = height;
-      const sender = pc.getSenders().find(function (s) {
-        return s.track.kind === "video";
-      });
-      const ratio = sender.track.getSettings().height / height;
-      const params = sender.getParameters();
-      if (!params.encodings) params.encodings = [{}]; // Firefox workaround!
-      params.encodings[0].scaleResolutionDownBy = Math.max(ratio, 1);
-      params.encodings[0].maxBitrate = rate;
-      await sender.setParameters(params);
-    } while (h != height);
-  } catch (e) {
-    logIt(e);
-  } finally {
-    applying = false;
-  }
-}
+// async function downscaleStream(pc, applying = false) {
+//   height = 240;
+//   rate = 800000;
+//   if (applying) return;
+//   try {
+//     applying = true;
+//     do {
+//       h = height;
+//       const sender = pc.getSenders().find(function (s) {
+//         return s.track.kind === "video";
+//       });
+//       const ratio = sender.track.getSettings().height / height;
+//       const params = sender.getParameters();
+//       if (!params.encodings) params.encodings = [{}]; // Firefox workaround!
+//       params.encodings[0].scaleResolutionDownBy = Math.max(ratio, 1);
+//       params.encodings[0].maxBitrate = rate;
+//       await sender.setParameters(params);
+//     } while (h != height);
+//   } catch (e) {
+//     logIt(e);
+//   } finally {
+//     applying = false;
+//   }
+// }
 
 // Mute microphone
 function muteMicrophone() {
@@ -902,20 +901,20 @@ function uuidToColor(uuid) {
   }
   var hue = Math.abs(hash % 360);
   // Ensure color is not similar to other colors
-  var availColors = Array.from({ length: 18 }, (x, i) => i * 20);
+  var availColors = Array.from({ length: 9 }, (x, i) => i * 40);
   VideoChat.peerColors.forEach(function (value, key, map) {
-    availColors[Math.floor(value / 20)] = null;
+    availColors[Math.floor(value / 40)] = null;
   });
-  if (availColors[Math.floor(hue / 20)] == null) {
+  if (availColors[Math.floor(hue / 40)] == null) {
     for (var i = 0; i < availColors.length; i++) {
       if (availColors[i] != null) {
-        hue = (hue % 20) + availColors[i];
+        hue = (hue % 40) + availColors[i];
         availColors[i] = null;
         break;
       }
     }
   }
-  return `hsl(${hue},100%,70%)`;
+  return `hsl(${hue},100%,60%)`;
 }
 
 // Sets the border color of uuid's stream
