@@ -204,7 +204,7 @@ var VideoChat = {
             break;
           case "disconnected":
             // First possibility: we disconnected from the peer
-            if (VideoChat.socket.connect().connected === false) {
+            if (VideoChat.socket.connected === false) {
               location.reload();
             }
 
