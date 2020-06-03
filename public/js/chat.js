@@ -364,11 +364,11 @@ var VideoChat = {
     // Hide caption status text
     captionText.fadeOut();
     // Downscale send resolution and bitrate if num in room > 4
-    if (VideoChat.peerConnections.size > 3) {
-      VideoChat.peerConnections.forEach(function (value, key, map) {
-        downscaleStream(value);
-      });
-    }
+    // if (VideoChat.peerConnections.size > 3) {
+    //   VideoChat.peerConnections.forEach(function (value, key, map) {
+    //     downscaleStream(value);
+    //   });
+    // }
     // Reposition local video after a second, as there is often a delay
     // between adding a stream and the height of the video div changing
     setTimeout(() => rePositionLocalVideo(), 500);
@@ -508,30 +508,30 @@ function sendToAllDataChannels(message) {
 // End Fullscreen
 
 // Downscale single stream
-async function downscaleStream(pc, applying = false) {
-  height = 240;
-  rate = 800000;
-  if (applying) return;
-  try {
-    applying = true;
-    do {
-      h = height;
-      const sender = pc.getSenders().find(function (s) {
-        return s.track.kind === "video";
-      });
-      const ratio = sender.track.getSettings().height / height;
-      const params = sender.getParameters();
-      if (!params.encodings) params.encodings = [{}]; // Firefox workaround!
-      params.encodings[0].scaleResolutionDownBy = Math.max(ratio, 1);
-      params.encodings[0].maxBitrate = rate;
-      await sender.setParameters(params);
-    } while (h != height);
-  } catch (e) {
-    logIt(e);
-  } finally {
-    applying = false;
-  }
-}
+// async function downscaleStream(pc, applying = false) {
+//   height = 240;
+//   rate = 800000;
+//   if (applying) return;
+//   try {
+//     applying = true;
+//     do {
+//       h = height;
+//       const sender = pc.getSenders().find(function (s) {
+//         return s.track.kind === "video";
+//       });
+//       const ratio = sender.track.getSettings().height / height;
+//       const params = sender.getParameters();
+//       if (!params.encodings) params.encodings = [{}]; // Firefox workaround!
+//       params.encodings[0].scaleResolutionDownBy = Math.max(ratio, 1);
+//       params.encodings[0].maxBitrate = rate;
+//       await sender.setParameters(params);
+//     } while (h != height);
+//   } catch (e) {
+//     logIt(e);
+//   } finally {
+//     applying = false;
+//   }
+// }
 
 // Mute microphone
 function muteMicrophone() {
