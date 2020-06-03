@@ -202,6 +202,12 @@ var VideoChat = {
             logIt("connected");
             break;
           case "disconnected":
+            // First possibility: we disconnected from the peer
+            if (VideoChat.socket.connect().connected === false) {
+              location.reload();
+            }
+
+            // Second possibility: the peer disconnected from us
             logIt("disconnected - UUID " + uuid);
             VideoChat.remoteVideoWrapper.removeChild(
               document.querySelectorAll(`[uuid="${uuid}"]`)[0]
