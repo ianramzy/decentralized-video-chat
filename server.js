@@ -93,6 +93,11 @@ io.on("connection", function (socket) {
     }
   });
 
+  socket.on("leave", function (room) {
+    logIt("A client has left the room", room);
+    socket.broadcast.to(room).emit("leave", socket.id);
+  });
+
   // When receiving the token message, use the Twilio REST API to request an
   // token to get ephemeral credentials to use the TURN server.
   socket.on("token", function (room, uuid) {

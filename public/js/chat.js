@@ -106,11 +106,10 @@ var VideoChat = {
     VideoChat.localVideo.style.border = `3px solid ${VideoChat.borderColor}`;
 
     // Add listeners to the websocket
+    VideoChat.socket.on("leave", VideoChat.onLeave);
     VideoChat.socket.on("full", chatRoomFull);
     VideoChat.socket.on("offer", VideoChat.onOffer);
     VideoChat.socket.on("initiateCall", VideoChat.call);
-
-    // Set up listeners on the socket
     VideoChat.socket.on("candidate", VideoChat.onCandidate);
     VideoChat.socket.on("answer", VideoChat.onAnswer);
     VideoChat.socket.on("requestToggleCaptions", () => toggleSendCaptions());
@@ -119,6 +118,7 @@ var VideoChat = {
     );
   },
 
+  // Initiate a call with newly joined peer
   call: function (uuid, room) {
     logIt(`call >>> Initiating call with ${uuid}...`);
     VideoChat.socket.on(
@@ -128,6 +128,24 @@ var VideoChat = {
       })
     );
     VideoChat.socket.emit("token", roomHash, uuid);
+  },
+
+  // Handle a peer leaving the room
+  onLeave: function(uuid) {
+    logIt("disconnected - UUID " + uuid);
+    // Remove video element
+    VideoChat.remoteVideoWrapper.removeChild(
+      document.querySelectorAll(`[uuid="${uuid}"]`)[0]
+    );
+
+    // Delete connection & metadata
+    VideoChat.connected.delete(uuid);
+    VideoChat.peerConnections.delete(uuid);
+    dataChannel.delete(uuid);
+
+    if (VideoChat.peerConnections.size === 0) {
+      displayWaitingCaption();
+    }
   },
 
   establishConnection: function (correctUuid, callback) {
@@ -202,22 +220,11 @@ var VideoChat = {
             logIt("connected");
             break;
           case "disconnected":
-            // First possibility: we disconnected from the peer
-            if (VideoChat.socket.connected === false) {
+            // Remove UUID if connection to server is intact
+            if (VideoChat.socket.connected) {
+              VideoChat.onLeave(uuid);
+            } else {
               location.reload();
-            }
-
-            // Second possibility: the peer disconnected from us
-            logIt("disconnected - UUID " + uuid);
-            VideoChat.remoteVideoWrapper.removeChild(
-              document.querySelectorAll(`[uuid="${uuid}"]`)[0]
-            );
-            VideoChat.connected.delete(uuid);
-            VideoChat.peerConnections.delete(uuid);
-            dataChannel.delete(uuid);
-
-            if (VideoChat.peerConnections.size === 0) {
-              displayWaitingCaption();
             }
             break;
           case "failed":
@@ -1000,6 +1007,11 @@ function displayWaitingCaption() {
   // Reposition captions on start
   rePositionCaptions();
 }
+
+window.onbeforeunload = function () {
+  VideoChat.socket.emit("leave", roomHash);
+  return null;
+};
 
 function startUp() {
   //  Try and detect in-app browsers and redirect
