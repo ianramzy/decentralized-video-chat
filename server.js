@@ -8,6 +8,7 @@ var twillioAccountSID =
 var twilio = require("twilio")(twillioAccountSID, twillioAuthToken);
 var express = require("express");
 var app = express();
+const fs = require('fs');
 var http = require("http").createServer(app);
 var io = require("socket.io")(http);
 var path = require("path");
@@ -80,9 +81,9 @@ io.on("connection", function (socket) {
       socket.join(room);
     } else if (numClients < 5) {
       socket.join(room);
-      // When the client is not the first to join the room, all clients are ready.
-      logIt("Broadcasting ready message", room);
-      socket.broadcast.to(room).emit("willInitiateCall", socket.id, room);
+      logIt("Broadcasting request to connect with new peer...", room);
+      // Emits message to ask peers in room to connect with joining peer
+      socket.broadcast.to(room).emit("initiateCall", socket.id, room);
     } else {
       logIt(
         "room already full with " + numClients + " people in the room.",
@@ -132,7 +133,7 @@ io.on("connection", function (socket) {
 });
 
 // Listen for Heroku port, otherwise just use 3000
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 443;
 http.listen(port, function () {
   console.log("http://localhost:" + port);
 });
