@@ -37,10 +37,10 @@ var VideoChat = {
   socket: io(),
   remoteVideoWrapper: document.getElementById("wrapper"),
   localVideo: document.getElementById("local-video"),
+  peerColors: new Map(),
   peerConnections: new Map(),
   recognition: undefined,
   borderColor: undefined,
-  peerColors: new Map(),
 
   // Call to getUserMedia (provided by adapter.js for cross browser compatibility)
   // asking for access to both the video and audio streams. If the request is
@@ -98,17 +98,17 @@ var VideoChat = {
       },
     });
 
-    VideoChat.borderColor = uuidToColor(VideoChat.socket.id);
     VideoChat.localVideo.srcObject = stream;
-    VideoChat.localVideo.style.border = `3px solid ${VideoChat.borderColor}`;
 
     // Now we're ready to join the chat room.
     VideoChat.socket.emit("join", roomHash);
+    VideoChat.borderColor = uuidToColor(VideoChat.socket.id);
+    VideoChat.localVideo.style.border = `3px solid ${VideoChat.borderColor}`;
 
     // Add listeners to the websocket
     VideoChat.socket.on("full", chatRoomFull);
     VideoChat.socket.on("offer", VideoChat.onOffer);
-    VideoChat.socket.on("willInitiateCall", VideoChat.call);
+    VideoChat.socket.on("initiateCall", VideoChat.call);
 
     // Set up listeners on the socket
     VideoChat.socket.on("candidate", VideoChat.onCandidate);
