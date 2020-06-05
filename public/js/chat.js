@@ -107,6 +107,7 @@ var VideoChat = {
     VideoChat.socket.emit("join", roomHash);
 
     // Add listeners to the websocket
+    VideoChat.socket.on("leave", VideoChat.onLeave);
     VideoChat.socket.on("full", chatRoomFull);
     VideoChat.socket.on("offer", VideoChat.onOffer);
     VideoChat.socket.on("willInitiateCall", VideoChat.call);
@@ -129,6 +130,21 @@ var VideoChat = {
       })
     );
     VideoChat.socket.emit("token", roomHash, uuid);
+  },
+
+  onLeave: function(uuid) {
+    logIt("disconnected - UUID " + uuid);
+    // Remove video element
+    VideoChat.remoteVideoWrapper.removeChild(
+      document.querySelectorAll(`[uuid="${uuid}"]`)[0]
+    );
+    // Delete connection & metadata
+    VideoChat.connected.delete(uuid);
+    VideoChat.peerConnections.delete(uuid);
+    dataChannel.delete(uuid);
+    if (VideoChat.peerConnections.size === 0) {
+      displayWaitingCaption();
+    }
   },
 
   establishConnection: function (correctUuid, callback) {
@@ -203,14 +219,11 @@ var VideoChat = {
             logIt("connected");
             break;
           case "disconnected":
-            logIt("disconnected - UUID " + uuid);
-            VideoChat.remoteVideoWrapper.removeChild(document.querySelectorAll(`[uuid="${uuid}"]`)[0]);
-            VideoChat.connected.delete(uuid);
-            VideoChat.peerConnections.delete(uuid);
-            dataChannel.delete(uuid);
-
-            if (VideoChat.peerConnections.size === 0) {
-              displayWaitingCaption();
+            // Remove UUID if connection to server is intact
+            if (VideoChat.socket.connected) {
+              VideoChat.onLeave(uuid);
+            } else {
+              location.reload();
             }
             break;
           case "failed":
@@ -867,7 +880,6 @@ function uuidToColor(uuid) {
       hash = hash & hash;
   }
   var hue = Math.abs(hash % 360);
-  console.log(hue);
   // Ensure color is not similar to other colors
   var availColors = Array.from({length: 18}, (x,i) => i*20);
   VideoChat.peerColors.forEach(function(value, key, map) {availColors[Math.floor(value/20)] = null});
