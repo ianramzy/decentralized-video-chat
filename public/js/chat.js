@@ -139,6 +139,7 @@ var VideoChat = {
     );
     // Delete connection & metadata
     VideoChat.connected.delete(uuid);
+    VideoChat.peerConnections.get(uuid).close(); // This is necessary, because otherwise the RTC connection isn't closed
     VideoChat.peerConnections.delete(uuid);
     dataChannel.delete(uuid);
     if (VideoChat.peerConnections.size === 0) {
@@ -787,39 +788,6 @@ function recieveCaptions(captions) {
 }
 // End Live caption
 
-// Translation
-// function translate(text) {
-//   let fromLang = "en";
-//   let toLang = "zh";
-//   // let text = "hello how are you?";
-//   const API_KEY = "APIKEYHERE";
-//   let gurl = `https://translation.googleapis.com/language/translate/v2?key=${API_KEY}`;
-//   gurl += "&q=" + encodeURI(text);
-//   gurl += `&source=${fromLang}`;
-//   gurl += `&target=${toLang}`;
-//   fetch(gurl, {
-//     method: "GET",
-//     headers: {
-//       "Content-Type": "application/json",
-//       Accept: "application/json",
-//     },
-//   })
-//     .then((res) => res.json())
-//     .then((response) => {
-//       // console.log("response from google: ", response);
-//       // return response["data"]["translations"][0]["translatedText"];
-//       logIt(response);
-//       var translatedText =
-//         response["data"]["translations"][0]["translatedText"];
-//       console.log(translatedText);
-//       dataChanel.send("cap:" + translatedText);
-//     })
-//     .catch((error) => {
-//       console.log("There was an error with the translation request: ", error);
-//     });
-// }
-// End Translation
-
 // Text Chat
 // Add text message to chat screen on page
 function addMessageToScreen(msg, border, isOwnMessage) {
@@ -960,6 +928,12 @@ function displayWaitingCaption() {
   // Reposition captions on start
   rePositionCaptions();
 }
+
+window.onbeforeunload = function () {
+  VideoChat.socket.emit("leave", roomHash);
+  return null;
+};
+
 
 function startUp() {
   //  Try and detect in-app browsers and redirect
