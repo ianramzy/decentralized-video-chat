@@ -32,7 +32,6 @@ var dataChannel = new Map();
 var VideoChat = {
   videoEnabled: true,
   audioEnabled: true,
-  borderColor: `hsl(${Math.floor(Math.random() * 360)}, 70%, 80%)`,
   connected: new Map(),
   localICECandidates: {},
   socket: io(),
@@ -40,7 +39,7 @@ var VideoChat = {
   localVideo: document.getElementById("local-video"),
   peerConnections: new Map(),
   recognition: undefined,
-  borderColor: undefined,
+  borderColor: "hsl(120,100%,70%)",
   peerColors: new Map(),
 
   // Call to getUserMedia (provided by adapter.js for cross browser compatibility)
@@ -99,7 +98,7 @@ var VideoChat = {
       },
     });
 
-    VideoChat.borderColor = uuidToColor(VideoChat.socket.id);
+    // VideoChat.borderColor = uuidToColor(VideoChat.socket.id);
     VideoChat.localVideo.srcObject = stream;
     VideoChat.localVideo.style.border = `3px solid ${VideoChat.borderColor}`;
 
@@ -666,7 +665,7 @@ function switchStreamHelper(stream) {
     }
   });
   // Update local video stream
-  VideoChat.localStream = videoTrack;
+  VideoChat.localStream = stream;
   // Update local video object
   VideoChat.localVideo.srcObject = stream;
   // Unpause video on swap
