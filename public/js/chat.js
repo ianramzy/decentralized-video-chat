@@ -37,10 +37,10 @@ var VideoChat = {
   socket: io(),
   remoteVideoWrapper: document.getElementById("wrapper"),
   localVideo: document.getElementById("local-video"),
+  peerColors: new Map(),
   peerConnections: new Map(),
   recognition: undefined,
-  borderColor: "hsl(120,100%,70%)",
-  peerColors: new Map(),
+  borderColor: undefined,
 
   // Call to getUserMedia (provided by adapter.js for cross browser compatibility)
   // asking for access to both the video and audio streams. If the request is
@@ -97,21 +97,18 @@ var VideoChat = {
         Snackbar.close();
       },
     });
-
-    // VideoChat.borderColor = uuidToColor(VideoChat.socket.id);
     VideoChat.localVideo.srcObject = stream;
-    VideoChat.localVideo.style.border = `3px solid ${VideoChat.borderColor}`;
 
     // Now we're ready to join the chat room.
     VideoChat.socket.emit("join", roomHash);
+    VideoChat.borderColor = uuidToColor(VideoChat.socket.id);
+    VideoChat.localVideo.style.border = `3px solid ${VideoChat.borderColor}`;
 
     // Add listeners to the websocket
     VideoChat.socket.on("leave", VideoChat.onLeave);
     VideoChat.socket.on("full", chatRoomFull);
     VideoChat.socket.on("offer", VideoChat.onOffer);
-    VideoChat.socket.on("willInitiateCall", VideoChat.call);
-
-    // Set up listeners on the socket
+    VideoChat.socket.on("initiateCall", VideoChat.call);
     VideoChat.socket.on("candidate", VideoChat.onCandidate);
     VideoChat.socket.on("answer", VideoChat.onAnswer);
     VideoChat.socket.on("requestToggleCaptions", () => toggleSendCaptions());
@@ -120,6 +117,7 @@ var VideoChat = {
     );
   },
 
+  // Initiate a call with newly joined peer
   call: function (uuid, room) {
     logIt(`call >>> Initiating call with ${uuid}...`);
     VideoChat.socket.on(
@@ -131,6 +129,7 @@ var VideoChat = {
     VideoChat.socket.emit("token", roomHash, uuid);
   },
 
+  // Handle a peer leaving the room
   onLeave: function(uuid) {
     logIt("disconnected - UUID " + uuid);
     // Remove video element
@@ -374,6 +373,12 @@ var VideoChat = {
     VideoChat.connected.set(uuid, true);
     // Hide caption status text
     captionText.fadeOut();
+    // Downscale send resolution and bitrate if num in room > 4
+    // if (VideoChat.peerConnections.size > 3) {
+    //   VideoChat.peerConnections.forEach(function (value, key, map) {
+    //     downscaleStream(value);
+    //   });
+    // }
     // Reposition local video after a second, as there is often a delay
     // between adding a stream and the height of the video div changing
     setTimeout(() => rePositionLocalVideo(), 500);
@@ -512,6 +517,32 @@ function sendToAllDataChannels(message) {
 // }
 // End Fullscreen
 
+// Downscale single stream
+// async function downscaleStream(pc, applying = false) {
+//   height = 240;
+//   rate = 800000;
+//   if (applying) return;
+//   try {
+//     applying = true;
+//     do {
+//       h = height;
+//       const sender = pc.getSenders().find(function (s) {
+//         return s.track.kind === "video";
+//       });
+//       const ratio = sender.track.getSettings().height / height;
+//       const params = sender.getParameters();
+//       if (!params.encodings) params.encodings = [{}]; // Firefox workaround!
+//       params.encodings[0].scaleResolutionDownBy = Math.max(ratio, 1);
+//       params.encodings[0].maxBitrate = rate;
+//       await sender.setParameters(params);
+//     } while (h != height);
+//   } catch (e) {
+//     logIt(e);
+//   } finally {
+//     applying = false;
+//   }
+// }
+
 // Mute microphone
 function muteMicrophone() {
   var audioTrack = null;
@@ -524,7 +555,7 @@ function muteMicrophone() {
     });
     audioTrack.enabled = VideoChat.audioEnabled;
   });
-  
+
   // select mic button and mic button text
   const micButtonIcon = document.getElementById("mic-icon");
   const micButtonText = document.getElementById("mic-text");
@@ -843,29 +874,33 @@ function uuidToColor(uuid) {
   // Using uuid to generate random. unique pastel color
   var hash = 0;
   for (var i = 0; i < uuid.length; i++) {
-      hash = uuid.charCodeAt(i) + ((hash << 5) - hash);
-      hash = hash & hash;
+    hash = uuid.charCodeAt(i) + ((hash << 5) - hash);
+    hash = hash & hash;
   }
   var hue = Math.abs(hash % 360);
   // Ensure color is not similar to other colors
-  var availColors = Array.from({length: 18}, (x,i) => i*20);
-  VideoChat.peerColors.forEach(function(value, key, map) {availColors[Math.floor(value/20)] = null});
-  if (availColors[Math.floor(hue/20)] == null) {
+  var availColors = Array.from({ length: 9 }, (x, i) => i * 40);
+  VideoChat.peerColors.forEach(function (value, key, map) {
+    availColors[Math.floor(value / 40)] = null;
+  });
+  if (availColors[Math.floor(hue / 40)] == null) {
     for (var i = 0; i < availColors.length; i++) {
       if (availColors[i] != null) {
-        hue = (hue % 20) + availColors[i];
+        hue = (hue % 40) + availColors[i];
         availColors[i] = null;
         break;
       }
     }
   }
-  return `hsl(${hue},100%,70%)`;
+  return `hsl(${hue},100%,60%)`;
 }
 
 // Sets the border color of uuid's stream
 function setStreamColor(uuid) {
   const color = uuidToColor(uuid);
-  document.querySelectorAll(`[uuid="${uuid}"]`)[0].style.border = `3px solid ${color}`;
+  document.querySelectorAll(
+    `[uuid="${uuid}"]`
+  )[0].style.border = `3px solid ${color}`;
   VideoChat.peerColors[uuid] = color;
 }
 
@@ -900,18 +935,27 @@ function togglePictureInPicture() {
         logIt("Error exiting pip.");
         logIt(error);
       });
-    } else if (VideoChat.remoteVideoWrapper.lastChild.webkitPresentationMode === "inline") {
-      VideoChat.remoteVideoWrapper.lastChild.webkitSetPresentationMode("picture-in-picture");
     } else if (
-      VideoChat.remoteVideoWrapper.lastChild.webkitPresentationMode === "picture-in-picture"
+      VideoChat.remoteVideoWrapper.lastChild.webkitPresentationMode === "inline"
     ) {
-      VideoChat.remoteVideoWrapper.lastChild.webkitSetPresentationMode("inline");
+      VideoChat.remoteVideoWrapper.lastChild.webkitSetPresentationMode(
+        "picture-in-picture"
+      );
+    } else if (
+      VideoChat.remoteVideoWrapper.lastChild.webkitPresentationMode ===
+      "picture-in-picture"
+    ) {
+      VideoChat.remoteVideoWrapper.lastChild.webkitSetPresentationMode(
+        "inline"
+      );
     } else {
-      VideoChat.remoteVideoWrapper.lastChild.requestPictureInPicture().catch((error) => {
-        alert(
-          "You must be connected to another person to enter picture in picture."
-        );
-      });
+      VideoChat.remoteVideoWrapper.lastChild
+        .requestPictureInPicture()
+        .catch((error) => {
+          alert(
+            "You must be connected to another person to enter picture in picture."
+          );
+        });
     }
   } else {
     alert(
@@ -933,7 +977,6 @@ window.onbeforeunload = function () {
   VideoChat.socket.emit("leave", roomHash);
   return null;
 };
-
 
 function startUp() {
   //  Try and detect in-app browsers and redirect
