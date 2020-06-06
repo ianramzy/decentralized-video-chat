@@ -835,7 +835,7 @@ function handleRecieveMessage(msg, color) {
 }
 
 function uuidToHue(uuid) {
-  // Using uuid to generate random. unique pastel color
+  // Using uuid to generate random, unique pastel color
   var hash = 0;
   for (var i = 0; i < uuid.length; i++) {
       hash = uuid.charCodeAt(i) + ((hash << 5) - hash);
@@ -854,6 +854,7 @@ function uuidToHue(uuid) {
       }
     }
   }
+  VideoChat.peerColors.set(uuid, hue);
   return hue;
 }
 
@@ -865,7 +866,6 @@ function hueToColor(hue) {
 function setStreamColor(uuid) {
   const hue = uuidToHue(uuid);
   document.querySelectorAll(`[uuid="${uuid}"]`)[0].style.border = `3px solid ${hueToColor(hue)}`;
-  VideoChat.peerColors.set(uuid, hue);
 }
 
 // Show and hide chat
