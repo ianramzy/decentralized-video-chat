@@ -515,6 +515,7 @@ function sendToAllDataChannels(message) {
 // }
 // End Fullscreen
 
+
 // Mute microphone
 function muteMicrophone() {
   var audioTrack = null;
