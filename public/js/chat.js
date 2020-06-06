@@ -98,12 +98,12 @@ var VideoChat = {
       },
     });
 
-    // VideoChat.borderColor = uuidToColor(VideoChat.socket.id);
     VideoChat.localVideo.srcObject = stream;
-    VideoChat.localVideo.style.border = `3px solid ${VideoChat.borderColor}`;
 
     // Now we're ready to join the chat room.
     VideoChat.socket.emit("join", roomHash);
+    VideoChat.borderColor = hueToColor(uuidToHue(VideoChat.socket.id));
+    VideoChat.localVideo.style.border = `3px solid ${VideoChat.borderColor}`;
 
     // Add listeners to the websocket
     VideoChat.socket.on("leave", VideoChat.onLeave);
@@ -187,7 +187,7 @@ var VideoChat = {
         const dataType = receivedData.substring(0, 4);
         const cleanedMessage = receivedData.slice(4);
         if (dataType === "mes:") {
-          handleRecieveMessage(cleanedMessage, VideoChat.peerColors[uuid]);
+          handleRecieveMessage(cleanedMessage, hueToColor(VideoChat.peerColors[uuid]));
         } else if (dataType === "cap:") {
           recieveCaptions(cleanedMessage);
         } else if (dataType === "tog:") {
@@ -839,7 +839,7 @@ function handleRecieveMessage(msg, color) {
   }
 }
 
-function uuidToColor(uuid) {
+function uuidToHue(uuid) {
   // Using uuid to generate random. unique pastel color
   var hash = 0;
   for (var i = 0; i < uuid.length; i++) {
@@ -848,25 +848,29 @@ function uuidToColor(uuid) {
   }
   var hue = Math.abs(hash % 360);
   // Ensure color is not similar to other colors
-  var availColors = Array.from({length: 18}, (x,i) => i*20);
-  VideoChat.peerColors.forEach(function(value, key, map) {availColors[Math.floor(value/20)] = null});
-  if (availColors[Math.floor(hue/20)] == null) {
+  var availColors = Array.from({length: 12}, (x,i) => i*30);
+  VideoChat.peerColors.forEach(function(value, key, map) {availColors[Math.floor(value/30)] = null});
+  if (availColors[Math.floor(hue/30)] == null) {
     for (var i = 0; i < availColors.length; i++) {
       if (availColors[i] != null) {
-        hue = (hue % 20) + availColors[i];
+        hue = (hue % 30) + availColors[i];
         availColors[i] = null;
         break;
       }
     }
   }
-  return `hsl(${hue},100%,70%)`;
+  return hue;
+}
+
+function hueToColor(hue) {
+  return `hsl(${hue},100%,70%)`
 }
 
 // Sets the border color of uuid's stream
 function setStreamColor(uuid) {
-  const color = uuidToColor(uuid);
-  document.querySelectorAll(`[uuid="${uuid}"]`)[0].style.border = `3px solid ${color}`;
-  VideoChat.peerColors[uuid] = color;
+  const hue = uuidToHue(uuid);
+  document.querySelectorAll(`[uuid="${uuid}"]`)[0].style.border = `3px solid ${hueToColor(hue)}`;
+  VideoChat.peerColors[uuid] = hue;
 }
 
 // Show and hide chat
