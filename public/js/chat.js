@@ -188,7 +188,7 @@ var VideoChat = {
         const dataType = receivedData.substring(0, 4);
         const cleanedMessage = receivedData.slice(4);
         if (dataType === "mes:") {
-          handleRecieveMessage(cleanedMessage, hueToColor(VideoChat.peerColors[uuid]));
+          handleRecieveMessage(cleanedMessage, hueToColor(VideoChat.peerColors.get(uuid)));
         } else if (dataType === "cap:") {
           recieveCaptions(cleanedMessage);
         } else if (dataType === "tog:") {
@@ -871,7 +871,7 @@ function hueToColor(hue) {
 function setStreamColor(uuid) {
   const hue = uuidToHue(uuid);
   document.querySelectorAll(`[uuid="${uuid}"]`)[0].style.border = `3px solid ${hueToColor(hue)}`;
-  VideoChat.peerColors[uuid] = hue;
+  VideoChat.peerColors.set(uuid, hue);
 }
 
 // Show and hide chat
