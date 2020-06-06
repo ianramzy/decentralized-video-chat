@@ -39,7 +39,7 @@ var VideoChat = {
   localVideo: document.getElementById("local-video"),
   peerConnections: new Map(),
   recognition: undefined,
-  borderColor: "hsl(120,100%,70%)",
+  borderColor: undefined,
   peerColors: new Map(),
 
   // Call to getUserMedia (provided by adapter.js for cross browser compatibility)
@@ -101,9 +101,10 @@ var VideoChat = {
     VideoChat.localVideo.srcObject = stream;
 
     // Now we're ready to join the chat room.
-    VideoChat.socket.emit("join", roomHash);
-    VideoChat.borderColor = hueToColor(uuidToHue(VideoChat.socket.id));
-    VideoChat.localVideo.style.border = `3px solid ${VideoChat.borderColor}`;
+    VideoChat.socket.emit("join", roomHash, function() {
+      VideoChat.borderColor = hueToColor(uuidToHue(VideoChat.socket.id));
+      VideoChat.localVideo.style.border = `3px solid ${VideoChat.borderColor}`;
+    });
 
     // Add listeners to the websocket
     VideoChat.socket.on("leave", VideoChat.onLeave);
@@ -848,12 +849,12 @@ function uuidToHue(uuid) {
   }
   var hue = Math.abs(hash % 360);
   // Ensure color is not similar to other colors
-  var availColors = Array.from({length: 12}, (x,i) => i*30);
-  VideoChat.peerColors.forEach(function(value, key, map) {availColors[Math.floor(value/30)] = null});
-  if (availColors[Math.floor(hue/30)] == null) {
+  var availColors = Array.from({length: 9}, (x,i) => i*40);
+  VideoChat.peerColors.forEach(function(value, key, map) {availColors[Math.floor(value/40)] = null});
+  if (availColors[Math.floor(hue/40)] == null) {
     for (var i = 0; i < availColors.length; i++) {
       if (availColors[i] != null) {
-        hue = (hue % 30) + availColors[i];
+        hue = (hue % 40) + availColors[i];
         availColors[i] = null;
         break;
       }

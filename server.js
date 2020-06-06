@@ -72,8 +72,10 @@ function logIt(msg, room) {
 io.on("connection", function (socket) {
   // When a client tries to join a room, only allow them if they are first or
   // second in the room. Otherwise it is full.
-  socket.on("join", function (room) {
+  socket.on("join", function (room, acknowledgement) {
     logIt("A client joined the room", room);
+    acknowledgement();
+
     var clients = io.sockets.adapter.rooms[room];
     var numClients = typeof clients !== "undefined" ? clients.length : 0;
     if (numClients === 0) {
