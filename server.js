@@ -94,8 +94,10 @@ io.on("connection", function (socket) {
     }
   });
 
-  socket.on("leave", function (room) {
-    logIt("A client has left the room", room);
+  // Client is disconnecting from the server
+  socket.on('disconnecting', () => {
+    var room = Object.keys(socket.rooms).filter(item => item != socket.id); // Socket joins a room of itself, remove that
+    logIt("A client has disconnected from the room", room);
     socket.broadcast.to(room).emit("leave", socket.id);
   });
 

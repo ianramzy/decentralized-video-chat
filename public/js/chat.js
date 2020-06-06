@@ -220,17 +220,11 @@ var VideoChat = {
             logIt("connected");
             break;
           case "disconnected":
-            // Remove UUID if connection to server is intact
-            if (VideoChat.socket.connected) {
-              VideoChat.onLeave(uuid);
-            } else {
-              location.reload();
-            }
+            // Disconnects are handled server-side
+            logIt("disconnected - UUID " + uuid);
             break;
           case "failed":
             logIt("failed");
-            // VideoChat.socket.connect
-            // VideoChat.createOffer();
             // Refresh page if connection has failed
             location.reload();
             break;
@@ -849,12 +843,12 @@ function uuidToHue(uuid) {
   }
   var hue = Math.abs(hash % 360);
   // Ensure color is not similar to other colors
-  var availColors = Array.from({length: 9}, (x,i) => i*40);
-  VideoChat.peerColors.forEach(function(value, key, map) {availColors[Math.floor(value/40)] = null});
-  if (availColors[Math.floor(hue/40)] == null) {
+  var availColors = Array.from({length: 6}, (x,i) => i*60);
+  VideoChat.peerColors.forEach(function(value, key, map) {availColors[Math.floor(value/60)] = null});
+  if (availColors[Math.floor(hue/60)] == null) {
     for (var i = 0; i < availColors.length; i++) {
       if (availColors[i] != null) {
-        hue = (hue % 40) + availColors[i];
+        hue = (hue % 60) + availColors[i];
         availColors[i] = null;
         break;
       }
