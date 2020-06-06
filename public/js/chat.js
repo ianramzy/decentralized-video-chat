@@ -73,6 +73,7 @@ var VideoChat = {
   onMediaStream: function (stream) {
     logIt("onMediaStream");
     VideoChat.localStream = stream;
+    VideoChat.localAudio = stream.getAudioTracks()[0];
     // Add the stream as video's srcObject.
     // Now that we have webcam video sorted, prompt user to share URL
     Snackbar.show({
@@ -610,6 +611,8 @@ function swap() {
         swapIcon.classList.remove("fa-desktop");
         swapIcon.classList.add("fa-camera");
         swapText.innerText = "Share Webcam";
+        stream.addTrack(VideoChat.localAudio);
+        console.log(stream);
         switchStreamHelper(stream);
       })
       .catch(function (err) {
@@ -620,7 +623,7 @@ function swap() {
     // If mode is screenshare then switch to webcam
   } else {
     // Stop the screen share track
-    VideoChat.localVideo.srcObject.getTracks().forEach((track) => track.stop());
+    VideoChat.localVideo.srcObject.getVideoTracks().forEach((track) => track.stop());
     // Get webcam input
     navigator.mediaDevices
       .getUserMedia({
