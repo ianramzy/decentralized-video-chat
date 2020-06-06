@@ -73,7 +73,14 @@ var VideoChat = {
   onMediaStream: function (stream) {
     logIt("onMediaStream");
     VideoChat.localStream = stream;
-    VideoChat.localAudio = stream.getAudioTracks()[0];
+
+    // We need to store the local audio track, because
+    // the screen sharing MediaStream doesn't have audio
+    // by default, which is problematic for peer C who joins
+    // while another peer A/B is screen sharing (C won't receive
+    // A/Bs audio).
+    VideoChat.localAudio = stream.getAudioTracks()[0]; 
+
     // Add the stream as video's srcObject.
     // Now that we have webcam video sorted, prompt user to share URL
     Snackbar.show({
@@ -611,6 +618,10 @@ function swap() {
         swapIcon.classList.remove("fa-desktop");
         swapIcon.classList.add("fa-camera");
         swapText.innerText = "Share Webcam";
+
+        // Add audio track to screen sharing MediaStream,
+        // in case another peer joins while screen is being
+        // shared.
         stream.addTrack(VideoChat.localAudio);
         console.log(stream);
         switchStreamHelper(stream);
@@ -622,7 +633,8 @@ function swap() {
       });
     // If mode is screenshare then switch to webcam
   } else {
-    // Stop the screen share track
+    // Stop the screen share video track. (We don't want to 
+    // stop the audio track obviously.)
     VideoChat.localVideo.srcObject.getVideoTracks().forEach((track) => track.stop());
     // Get webcam input
     navigator.mediaDevices
