@@ -39,14 +39,11 @@ var VideoChat = {
   // asking for access to both the video and audio streams. If the request is
   // accepted callback to the onMediaStream function, otherwise callback to the
   // noMediaStream function.
-  requestMediaStream: function (event) {
+  requestMediaStream: function (constraints) {
     logIt("requestMediaStream");
     rePositionLocalVideo();
     navigator.mediaDevices
-      .getUserMedia({
-        video: true,
-        audio: true,
-      })
+      .getUserMedia(constraints)
       .then((stream) => {
         VideoChat.onMediaStream(stream);
         localVideoText.text("Drag Me");
@@ -58,7 +55,7 @@ var VideoChat = {
           "Failed to get local webcam video, check webcam privacy settings"
         );
         // Keep trying to get user media
-        setTimeout(VideoChat.requestMediaStream, 1000);
+        setTimeout(VideoChat.requestMediaStream(constraints), 1000);
       });
   },
 
@@ -664,7 +661,7 @@ function startSpeech() {
         // subtracting as many complete 100 char slices from start
         dataChanel.send(
           "cap:" +
-            interimTranscript.substring(interimTranscript.length - charsToKeep)
+          interimTranscript.substring(interimTranscript.length - charsToKeep)
         );
       }
     }
@@ -742,14 +739,14 @@ function addMessageToScreen(msg, isOwnMessage) {
   if (isOwnMessage) {
     $(".chat-messages").append(
       '<div class="message-item customer cssanimation fadeInBottom"><div class="message-bloc"><div class="message">' +
-        msg +
-        "</div></div></div>"
+      msg +
+      "</div></div></div>"
     );
   } else {
     $(".chat-messages").append(
       '<div class="message-item moderator cssanimation fadeInBottom"><div class="message-bloc"><div class="message">' +
-        msg +
-        "</div></div></div>"
+      msg +
+      "</div></div></div>"
     );
   }
 }
@@ -870,7 +867,12 @@ function startUp() {
   document.title = "Zipcall - " + url.substring(url.lastIndexOf("/") + 1);
 
   // get webcam on load
-  VideoChat.requestMediaStream();
+  VideoChat.requestMediaStream({
+    video: true,
+  });
+  VideoChat.requestMediaStream({
+    audio: true,
+  });
 
   // Captions hidden by default
   captionText.text("").fadeOut();
