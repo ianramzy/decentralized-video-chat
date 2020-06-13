@@ -98,7 +98,7 @@
               <div class="cta-action">
                 <div class="mb-24">
                   <label class="form-label screen-reader" for="input-01"
-                    >This is a label</label
+                    >Room Name</label
                   >
                   <div class="form-group-desktop">
                     <input
@@ -107,6 +107,12 @@
                       id="input-01"
                       value="PurpleSquid"
                     />
+                    <button
+                      class="button button-primary mr-12"
+                      onclick="{refreshRoomName()}"
+                    >
+                      Refresh
+                    </button>
                     <button
                       class="button button-primary pulse"
                       onclick="{window.location.href = '/join/' + document.getElementById('input-01').value}"
