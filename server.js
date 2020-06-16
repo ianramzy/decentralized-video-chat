@@ -72,56 +72,71 @@ function logIt(msg, room) {
 io.on("connection", function (socket) {
   // When a client tries to join a room, only allow them if they are first or
   // second in the room. Otherwise it is full.
-  socket.on("join", function (room) {
+  socket.on("join", function (room, acknowledgement) {
     logIt("A client joined the room", room);
+    acknowledgement();
+
     var clients = io.sockets.adapter.rooms[room];
     var numClients = typeof clients !== "undefined" ? clients.length : 0;
     if (numClients === 0) {
       socket.join(room);
-    } else if (numClients === 1) {
+    } else if (numClients < 5) {
       socket.join(room);
-      // When the client is second to join the room, both clients are ready.
+      // When the client is not the first to join the room, all clients are ready.
       logIt("Broadcasting ready message", room);
-      // First to join call initiates call
-      socket.broadcast.to(room).emit("willInitiateCall", room);
-      socket.emit("ready", room).to(room);
-      socket.broadcast.to(room).emit("ready", room);
+      socket.broadcast.to(room).emit("willInitiateCall", socket.id, room);
     } else {
-      logIt("room already full", room);
+      logIt(
+        "room already full with " + numClients + " people in the room.",
+        room
+      );
       socket.emit("full", room);
     }
   });
 
+  // Client is disconnecting from the server
+  socket.on('disconnecting', () => {
+    var room = Object.keys(socket.rooms).filter(item => item != socket.id); // Socket joins a room of itself, remove that
+    logIt("A client has disconnected from the room", room);
+    socket.broadcast.to(room).emit("leave", socket.id);
+  });
+
   // When receiving the token message, use the Twilio REST API to request an
   // token to get ephemeral credentials to use the TURN server.
-  socket.on("token", function (room) {
+  socket.on("token", function (room, uuid) {
     logIt("Received token request", room);
     twilio.tokens.create(function (err, response) {
       if (err) {
         logIt(err, room);
       } else {
         logIt("Token generated. Returning it to the browser client", room);
-        socket.emit("token", response).to(room);
+        socket.emit("token", response, uuid);
       }
     });
   });
 
   // Relay candidate messages
-  socket.on("candidate", function (candidate, room) {
+  socket.on("candidate", function (candidate, room, uuid) {
     logIt("Received candidate. Broadcasting...", room);
-    socket.broadcast.to(room).emit("candidate", candidate);
+    io.to(uuid).emit("candidate", candidate, socket.id);
   });
 
   // Relay offers
-  socket.on("offer", function (offer, room) {
-    logIt("Received offer. Broadcasting...", room);
-    socket.broadcast.to(room).emit("offer", offer);
+  socket.on("offer", function (offer, room, uuid) {
+    logIt(
+      "Received offer from " + socket.id + " and emitting to " + uuid,
+      room
+    );
+    io.to(uuid).emit("offer", offer, socket.id);
   });
 
   // Relay answers
-  socket.on("answer", function (answer, room) {
-    logIt("Received answer. Broadcasting...", room);
-    socket.broadcast.to(room).emit("answer", answer);
+  socket.on("answer", function (answer, room, uuid) {
+    logIt(
+      "Received answer from " + socket.id + " and emitting to " + uuid,
+      room
+    );
+    io.to(uuid).emit("answer", answer, socket.id);
   });
 });
 

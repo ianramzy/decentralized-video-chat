@@ -20,12 +20,14 @@ technology.
 <img align="right" width="400" height="auto" src="public/images/preview.gif">
 
 - Screen sharing
+- Group call with up to 4 peers
 - Picture in picture
 - Live captions
 - Text chat
 - Auto-scaling video quality
 - No download required, entirely browser based
 - Direct peer to peer connection ensures lowest latency
+- No SFU servers, group calls use mesh networks
 - Single use disposable chat rooms
 
 ## Quick start

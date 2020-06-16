@@ -109,11 +109,30 @@ a {
   background: #16171a;
 }
 
+#wrapper {
+  display: flex;
+  /* flex: 1 1 20em; */
+  /* flex-basis: 30%; */
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-height: 90vh;
+  max-width: 100%;
+}
+
 /*caption text*/
 #remote-video-text {
   box-sizing: border-box;
   margin: 0;
-  width: 65vw;
   position: absolute;
   top: calc(80%);
   left: 20vw;
@@ -127,19 +146,33 @@ a {
   border-radius: 0 0 10px 10px;
   padding: 10px;
 }
+#remote-video:first-child:nth-last-child(1) {
+  width: min(calc(80vh * 4/3), 80vw);
+  max-height: 80vh;
+}
+
+/* two items */
+#remote-video:first-child:nth-last-child(2),
+#remote-video:first-child:nth-last-child(2) ~ #remote-video {
+  max-height: 40vh;
+}
+
+/* three items */
+#remote-video:first-child:nth-last-child(3),
+#remote-video:first-child:nth-last-child(3) ~ #remote-video {
+  max-height: 40vh;
+}
+
+/* four items */
+#remote-video:first-child:nth-last-child(4),
+#remote-video:first-child:nth-last-child(4) ~ #remote-video {
+  max-height: 40vh;
+}
 
 #remote-video {
   padding: 0;
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  width: 65%;
-  height: auto;
-  max-height: 100%;
-  max-width: 100%;
+  margin: 10px;
+  width: auto;
   border-radius: 10px;
   background-image: url(../images/loader.gif);
   background-size: 400px auto;
@@ -306,6 +339,9 @@ button:hover {
   justify-content: center;
   padding: 12px;
   max-width: 100%;
+  border-style: solid;
+  border-width: 2px;
+  border-color: var(--bloc-color);
   border-radius: 20px 20px 20px 5px;
   box-shadow: 6px 6px 12px #030506, -6px -6px 12px #23242a;
 }
@@ -314,6 +350,9 @@ button:hover {
 #chat-zone .message-item.customer .message-bloc {
   background-color: rgb(47, 48, 52);
   color: #fff;
+  border-style: solid;
+  border-width: 2px;
+  border-color: var(--bloc-color);
   border-radius: 20px 20px 5px 20px;
   box-shadow: 6px 6px 12px #030506, -6px -6px 12px #22232a;
 }
@@ -384,7 +423,22 @@ button:hover {
     margin: 0;
     line-height: 2rem;
   }
-
+  #wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, calc(-50% - 3rem));
+    max-height: 90%;
+    max-width: 100%;
+  }
   #remote-video {
     /* width: 75vw;
     height: calc((16/9) * 75vw); */
