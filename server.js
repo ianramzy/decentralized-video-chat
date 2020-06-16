@@ -5,7 +5,21 @@ var twillioAuthToken =
   process.env.HEROKU_AUTH_TOKEN || process.env.LOCAL_AUTH_TOKEN;
 var twillioAccountSID =
   process.env.HEROKU_TWILLIO_SID || process.env.LOCAL_TWILLIO_SID;
-var twilio = require("twilio")(twillioAccountSID, twillioAuthToken);
+
+var iceServer =
+  process.env.ICE_SERVER_URLS && process.env.ICE_SERVER_URLS.length > 0
+    ? {
+        urls: process.env.ICE_SERVER_URLS.split(",").map((s) => s.trim()),
+        username: process.env.ICE_SERVER_USERNAME,
+        credential: process.env.ICE_SERVER_CREDENTIAL,
+        credentialType: process.env.ICE_SERVER_CREDENTIALTYPE,
+      }
+    : undefined;
+
+var twilio = iceServer
+  ? undefined
+  : require("twilio")(twillioAccountSID, twillioAuthToken);
+
 var express = require("express");
 var app = express();
 var http = require("http").createServer(app);
@@ -96,6 +110,10 @@ io.on("connection", function (socket) {
   // token to get ephemeral credentials to use the TURN server.
   socket.on("token", function (room) {
     logIt("Received token request", room);
+    if (iceServer) {
+      socket.emit("token", { iceServers: [iceServer] });
+      return;
+    }
     twilio.tokens.create(function (err, response) {
       if (err) {
         logIt(err, room);
