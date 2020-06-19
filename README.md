@@ -1,3 +1,4 @@
+[![Run on Repl.it](https://repl.it/badge/github/ianramzy/decentralized-video-chat)](https://repl.it/github/ianramzy/decentralized-video-chat)
 # Zipcall - Decentralized Video Chat
 
 [![Author](https://img.shields.io/badge/Author-ianramzy-brightgreen.svg)](https://ianramzy.com)
