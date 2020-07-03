@@ -41,29 +41,44 @@ const Footer = () => {
     </div>
   );
 
-  const renderNav = () => (
-    <nav className="footer-nav">
-      <ul className="list-reset">
-        <li>
-          <a target="_blank" href="https://ianramzy.com">
-            Made with ❤️ by Ian Ramzy
-          </a>
-        </li>
-        <li>
-          <a href="#">Contact</a>
-        </li>
-        <li>
-          <a href="#">About us</a>
-        </li>
-        <li>
-          <a href="#">FAQ's</a>
-        </li>
-        <li>
-          <a href="#">Support</a>
-        </li>
-      </ul>
-    </nav>
-  );
+  const renderNav = () => {
+    const links = [
+      {
+        text: "Made with ❤️ by Ian Ramzy",
+        href: "https://ianramzy.com",
+      },
+      //   {
+      //     text: 'Contact',
+      //     href: '#'
+      //   },
+      //   {
+      //     text: 'About Us',
+      //     href: '#'
+      //   },
+      //   {
+      //     text: "FAQ's",
+      //     href: '#'
+      //   },
+      //   {
+      //     text: 'Support',
+      //     href: '#'
+      //   },
+    ];
+
+    return (
+      <nav className="footer-nav">
+        <ul className="list-reset">
+          {links.map(({ href, text }) => (
+            <li>
+              <a target="_blank" href={href}>
+                {text}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    );
+  };
 
   return (
     <footer className="site-footer center-content-mobile">

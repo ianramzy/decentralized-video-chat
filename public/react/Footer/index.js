@@ -64,6 +64,9 @@ var Footer = function Footer() {
   };
 
   var renderNav = function renderNav() {
+    var links = [
+      {
+        text: "Made with ❤️ by Ian Ramzy",
     return React.createElement(
       "nav",
       { className: "footer-nav" },
@@ -71,34 +74,15 @@ var Footer = function Footer() {
         "ul",
         { className: "list-reset" },
         React.createElement(
-          "li",
-          null,
-          React.createElement(
-            "a",
-            { target: "_blank", href: "https://ianramzy.com" },
-            "Made with \u2764\uFE0F by Ian Ramzy"
-          )
-        ),
-        React.createElement(
-          "li",
-          null,
-          React.createElement("a", { href: "#" }, "Contact")
-        ),
-        React.createElement(
-          "li",
-          null,
-          React.createElement("a", { href: "#" }, "About us")
-        ),
-        React.createElement(
-          "li",
-          null,
-          React.createElement("a", { href: "#" }, "FAQ's")
-        ),
-        React.createElement(
-          "li",
-          null,
-          React.createElement("a", { href: "#" }, "Support")
-        )
+        links.map(function (_ref) {
+          var href = _ref.href,
+            text = _ref.text;
+          return React.createElement(
+            "li",
+            null,
+            React.createElement("a", { target: "_blank", href: href }, text)
+          );
+        })
       )
     );
   };
