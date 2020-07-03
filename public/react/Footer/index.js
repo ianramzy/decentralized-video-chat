@@ -67,13 +67,16 @@ var Footer = function Footer() {
     var links = [
       {
         text: "Made with ❤️ by Ian Ramzy",
+        href: "https://ianramzy.com",
+      },
+    ];
+
     return React.createElement(
       "nav",
       { className: "footer-nav" },
       React.createElement(
         "ul",
         { className: "list-reset" },
-        React.createElement(
         links.map(function (_ref) {
           var href = _ref.href,
             text = _ref.text;
