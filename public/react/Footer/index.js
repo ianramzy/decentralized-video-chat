@@ -144,5 +144,5 @@ var Footer = function Footer() {
     );
 };
 
-var domContainer = document.getElementById('react-footer');
+var domContainer = document.getElementById('react-footer-container');
 ReactDOM.render(React.createElement(Footer, null), domContainer);

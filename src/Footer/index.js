@@ -78,5 +78,5 @@ const Footer = () => {
     );
 }
 
-const domContainer = document.getElementById('react-footer');
+const domContainer = document.getElementById('react-footer-container');
 ReactDOM.render(<Footer />, domContainer);
