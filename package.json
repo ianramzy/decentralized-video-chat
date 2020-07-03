@@ -10,6 +10,8 @@
   "author": "",
   "license": "See License",
   "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-react-app": "^3.1.2",
     "dotenv": "^8.1.0",
     "express": "^4.17.1",
     "heroku-ssl-redirect": "0.0.4",
