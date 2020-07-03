@@ -53,4 +53,5 @@ var MediumPost = function MediumPost() {
   );
 };
 
-var domContainer = document.querySelector('#medium_blog_container');ReactDOM.render(React.createElement(MediumPost, null), domContainer);
+var domContainer = document.getElementById('react-container');
+ReactDOM.render(React.createElement(MediumPost, null), domContainer);

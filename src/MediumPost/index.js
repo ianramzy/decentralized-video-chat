@@ -37,4 +37,5 @@ const MediumPost = () => {
       );
   }
 
-  const domContainer = document.querySelector('#medium_blog_container');ReactDOM.render(<MediumPost/>, domContainer);
+  const domContainer = document.getElementById('react-container');
+  ReactDOM.render(<MediumPost/>, domContainer);
