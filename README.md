@@ -59,7 +59,7 @@ npm start
 
 - Open `localhost:3000` in browser
 - If you want to use a client on another computer/network, make sure you publish your server on an HTTPS connection.
-  You can use a service like [ngrok](https://ngrok.com/) for that.
+  You can use a service like [ngrok](https://ngrok.com/) or [nginx](https://jerrington.me/posts/2019-01-29-self-hosted-ngrok.html) for that.
 
 ## Contributing
 
