@@ -768,9 +768,8 @@ chatInput.addEventListener("keypress", function (event) {
     if (isEmptyOrSpaces(msg) == false) {
     dataChanel.send("mes:" + msg);
     addMessageToScreen(msg, true);
-
-    }
     // Add message to screen
+    }
     // Auto scroll chat down
     chatZone.scrollTop(chatZone[0].scrollHeight);
     // Clear chat input
