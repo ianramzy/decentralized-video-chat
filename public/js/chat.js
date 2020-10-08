@@ -765,15 +765,21 @@ chatInput.addEventListener("keypress", function (event) {
     // Make links clickable
     msg = msg.autoLink();
     // Send message over data channel
+    if (isEmptyOrSpaces(msg) == false) {
     dataChanel.send("mes:" + msg);
     // Add message to screen
     addMessageToScreen(msg, true);
+    }
     // Auto scroll chat down
     chatZone.scrollTop(chatZone[0].scrollHeight);
     // Clear chat input
-    chatInput.value = "";
+    chatInput.value = ""; 
   }
 });
+
+function isEmptyOrSpaces(str){
+    return str === null || str.match(/^ *$/) !== null;
+}
 
 // Called when a message is recieved over the dataChannel
 function handleRecieveMessage(msg) {
