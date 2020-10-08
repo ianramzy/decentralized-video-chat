@@ -767,14 +767,13 @@ chatInput.addEventListener("keypress", function (event) {
     // Send message over data channel
     if (isEmptyOrSpaces(msg) == false) {
     dataChanel.send("mes:" + msg);
-    addMessageToScreen(msg, true);
     // Add message to screen
+    addMessageToScreen(msg, true);
     }
     // Auto scroll chat down
     chatZone.scrollTop(chatZone[0].scrollHeight);
     // Clear chat input
-    chatInput.value = "";
-    
+    chatInput.value = ""; 
   }
 });
 
